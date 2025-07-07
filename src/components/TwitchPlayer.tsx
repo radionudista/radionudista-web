@@ -21,7 +21,7 @@ const TwitchPlayer = () => {
             style={getAspectRatioPadding('VIDEO_16_9')}
           >
             <iframe
-              src="https://player.twitch.tv/?channel=radionudista&parent=localhost&parent=lovableproject.com&autoplay=true&muted=false"
+              src="https://player.twitch.tv/?channel=radionudista&parent=radionudista.com&parent=localhost&parent=radionudista-aurora-glass.pages.dev&autoplay=true&muted=false"
               className="absolute top-0 left-0 w-full h-full rounded-md"
               allowFullScreen
               title="RadioNudista Twitch Stream"
