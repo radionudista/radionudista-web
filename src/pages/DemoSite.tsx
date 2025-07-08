@@ -10,7 +10,7 @@ import { AudioProvider } from '../contexts/AudioContext';
 
 const DemoSite = () => {
   const [currentPage, setCurrentPage] = useState('home');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] =[true,true] //useState(false);
 
   const renderPage = () => {
     switch (currentPage) {
