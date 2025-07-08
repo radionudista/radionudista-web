@@ -107,13 +107,13 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
       )}
       
       {/* Video Credits */}
-      <div className={`fixed bottom-20 right-4 z-[${LAYOUT.Z_INDEX.CREDITS}] text-white/60 text-xs font-light backdrop-blur-sm bg-black/20 px-2 py-1 rounded-sm transition-all duration-300`}>
+      <div className={`fixed bottom-20 right-4 z-50 text-white/60 text-xs font-light backdrop-blur-sm bg-black/20 px-2 py-1 rounded-sm transition-all duration-300 pointer-events-auto`}>
         Visuals by{' '}
         <a 
           href="https://www.instagram.com/gachapon3000" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="text-blue-400 hover:text-blue-300 hover:underline transition-colors duration-200"
+          className="text-blue-400 hover:text-blue-300 hover:underline transition-colors duration-200 cursor-pointer relative z-10"
         >
           @Gachapon3000
         </a>
