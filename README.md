@@ -72,6 +72,10 @@ Detailed documentation for this project is available in the [`docs/`](docs/) fol
 - **[BackgroundVideo Component](docs/BACKGROUND_VIDEO_IMPROVEMENTS.md)** - Detailed implementation guide for the background video system
 - **[Crossfade Transition Effect](docs/CROSSFADE_TRANSITION.md)** - Technical documentation for the image-to-video transition effect
 - **[Background Video Fixes](docs/BACKGROUND_VIDEO_FIX.md)** - Bug fixes and behavioral improvements
+- **[Brave Browser Twitch Fix](docs/BRAVE_BROWSER_TWITCH_FIX.md)** - Solutions for Twitch player issues in Brave browser
+
+### Troubleshooting
+- **[White Screen Fix](docs/WHITE_SCREEN_FIX.md)** - Solutions for common component loading issues
 
 ### Project Organization
 - **[Documentation Organization](docs/DOCUMENTATION_ORGANIZATION.md)** - How documentation is structured in this project
