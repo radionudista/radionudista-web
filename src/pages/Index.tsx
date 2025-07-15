@@ -1,26 +1,39 @@
 
 import React, { useState } from 'react';
-import CountdownTeaser from '../components/CountdownTeaser';
-import TwitchPlayer from '../components/TwitchPlayer';
+import Layout from '../components/Layout';
+import HomePage from '../components/HomePage';
+import AboutPage from '../components/AboutPage';
+import ContactPage from '../components/ContactPage';
+import BackgroundVideo from '../components/BackgroundVideo';
+import { AudioProvider } from '../contexts/AudioContext';
 
 const Index = () => {
-  const [showTwitch, setShowTwitch] = useState(false);
-  
-  const launchDate = new Date('2025-08-09T12:00:00-03:00');
+  const [currentPage, setCurrentPage] = useState('home');
 
-  const handleCountdownEnd = () => {
-    setShowTwitch(true);
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'about':
+        return <AboutPage />;
+      case 'contact':
+        return <ContactPage />;
+      default:
+        return <HomePage />;
+    }
   };
 
-  if (showTwitch) {
-    return <TwitchPlayer />;
-  }
-
   return (
-    <CountdownTeaser 
-      targetDate={launchDate} 
-      onCountdownEnd={handleCountdownEnd} 
-    />
+    <AudioProvider>
+      <div className="min-h-screen w-full overflow-hidden relative">
+        <BackgroundVideo />
+        
+        {/* Main Content */}
+        <div className="relative z-10 min-h-screen flex flex-col">
+          <Layout currentPage={currentPage} setCurrentPage={setCurrentPage}>
+            {renderPage()}
+          </Layout>
+        </div>
+      </div>
+    </AudioProvider>
   );
 };
 

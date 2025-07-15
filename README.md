@@ -76,6 +76,10 @@ Detailed documentation for this project is available in the [`docs/`](docs/) fol
 
 ### Troubleshooting
 - **[White Screen Fix](docs/WHITE_SCREEN_FIX.md)** - Solutions for common component loading issues
+- **[Brave Browser Twitch Fix](docs/BRAVE_BROWSER_TWITCH_FIX.md)** - Solutions for Twitch player issues in Brave browser
+
+### Application Structure
+- **[Application Restructure](docs/APPLICATION_RESTRUCTURE.md)** - How the main index page was restructured for better user experience
 
 ### Project Organization
 - **[Documentation Organization](docs/DOCUMENTATION_ORGANIZATION.md)** - How documentation is structured in this project
