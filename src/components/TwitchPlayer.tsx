@@ -11,8 +11,15 @@ const TwitchPlayer = () => {
   useEffect(() => {
     // Detect Brave browser or check for blocked content
     const detectBraveOrBlocking = async () => {
+      // Extend Navigator type to include optional brave property
+      type BraveNavigator = Navigator & {
+        brave?: {
+          isBrave: () => Promise<boolean>;
+        };
+      };
+      const nav = navigator as BraveNavigator;
       // Check if navigator.brave exists (Brave browser)
-      if (navigator.brave && await navigator.brave.isBrave()) {
+      if (nav.brave && await nav.brave.isBrave()) {
         setIsBraveOrBlocked(true);
       }
     };
