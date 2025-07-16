@@ -143,7 +143,7 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
         />
       )}
 
-      {/* Debug Info - Remove in production */}
+      {/* Debug Info - Remove in production /}
       {process.env.NODE_ENV === 'development' && (
         <div className="fixed top-4 left-4 z-50 bg-black/80 text-white p-2 rounded text-xs space-y-1">
           <div>Image: {showImage ? 'Visible' : 'Hidden'} (opacity: {imageOpacity})</div>
@@ -152,6 +152,7 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
           <div>Current Video: {currentVideo.split('/').pop()}</div>
         </div>
       )}
+      */}
 
       {/* Video Credits */}
       <div className={`fixed bottom-20 right-4 z-50 text-white/60 text-xs font-light backdrop-blur-sm bg-black/20 px-2 py-1 rounded-sm transition-all duration-300 pointer-events-auto`}>
