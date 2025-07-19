@@ -40,7 +40,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                                  word.includes('Touch') || 
                                  word.includes('Nudista');
               
-              return shouldColor ? (
+              /*return shouldColor ? (
                 <React.Fragment key={index}>
                   {index > 0 && ' '}
                   <span className={titleColor}>{word}</span>
@@ -50,7 +50,14 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                   {index > 0 && ' '}
                   {word}
                 </React.Fragment>
+              );*/
+              
+              return (<React.Fragment key={index}>
+                  {index > 0 && ' '}
+                  {word}
+                </React.Fragment>
               );
+
             })}
           </h2>
           {subtitle && (

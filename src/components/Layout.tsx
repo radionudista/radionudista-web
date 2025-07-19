@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Instagram, X, MessageCircle, Menu } from 'lucide-react';
 import MiniPlayer from './MiniPlayer';
 import Logo from './Logo';
+import Switch from './Switch/Switch';
+import { useIdioma } from '@/contexts/IdiomaContext';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -12,11 +14,12 @@ interface LayoutProps {
 
 const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const {lang, setLang} = useIdioma()
 
   const navItems = [
-    { id: 'home', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'contact', label: 'Contact' }
+    { id: 'home', label: 'Radio', ptlabel: 'Rádio' },
+    { id: 'about', label: 'Nosotros', ptlabel: 'Sobre' },
+    { id: 'contact', label: 'Programación', ptlabel:'Programação'}
   ];
 
   const handleMobileNavClick = (page: string) => {
@@ -39,17 +42,21 @@ const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
             </div>
           )}
           
+          
           {/* Desktop Navigation Items */}
           <div className="hidden md:flex items-center space-x-6">
+            
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setCurrentPage(item.id)}
                 className={`nav-link ${currentPage === item.id ? 'active' : ''}`}
               >
-                {item.label}
+                {lang == 'es' ? item.label : item.ptlabel}
               </button>
             ))}
+            <Switch value={lang} setValue={setLang} />
+
           </div>
           
           {/* Mobile Navigation */}

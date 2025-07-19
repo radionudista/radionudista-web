@@ -11,8 +11,8 @@ const HomePage = () => {
   const { barHeights } = useAudioVisualization({ isPlaying, isLoading });
 
   return (
-    <div className="container mx-auto px-6 py-12">
-      <div className="max-w-4xl mx-auto">
+    <div className="container mx-auto px-6 py-12 reproductor">
+      <div className="max-w-3xl mx-auto">
         <div className="text-center mb-16">
           
         </div>
@@ -23,7 +23,7 @@ const HomePage = () => {
           onClick={!isLoading ? togglePlay : undefined}
         >
           <div className="text-center">
-            <h3 className="text-2xl font-bold text-white mb-8">{currentTrack}</h3>
+            <h3 className="text-2xl font-bold text-white mb-[4rem]">{currentTrack}</h3>
             
             {/* Play Button and Audio Visualization */}
             <div className="flex justify-center items-center mb-8 space-x-8">
