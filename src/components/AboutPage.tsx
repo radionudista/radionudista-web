@@ -8,12 +8,12 @@ const AboutPage = () => {
   const {lang, setLang} = useIdioma()
 
   return (
-    <PageLayout title="RadioNudista">
+    <PageLayout >
       <div className="space-y-8">
 
         {lang == 'es' && <section>
           <p className="text-gray-200">
-            <strong>Radio Nudista®</strong> es un club social experimental para personas honestas, curiosas, apasionadas e inclusivas.
+            radio<strong>nudista</strong> es un club social experimental para personas honestas, curiosas, apasionadas e inclusivas.
             <br/><br/>
             Fundado en 2020, nació con una premisa simple pero poderosa: crear un espacio donde las voces diversas puedan encontrarse sin filtros. Aquí, la diferencia no es una barrera, sino un puente. La honestidad, un valor. Y la curiosidad, una brújula.
             <br/><br/>
@@ -29,16 +29,16 @@ const AboutPage = () => {
             <strong>Diseño web:</strong> Felipe Laboren (@felipelabo) y Lemys Lopez (@lemysKaman)<br/>
             <strong>Diseño de audio:</strong> Manuel Aular (@hardlinemanu).<br/>
             <strong>Visuales:</strong> Andres Ramírez (@Gachapon3000).<br/>
-            <strong>Voiceovers:</strong> Diana Hung, Gustavo Perez, Lucho Milazzo, Samira Moura y Gabriel Rodrigues, Adrian Sanchez, Julio Quintana y Alberto Flores Solano. <br/>
+            <strong>Voiceovers:</strong> Diana Hung, Gustavo Perez, Lucho Milazzo, Samira Moura, Gabriel Rodrigues,  Laura Sepulveda, Adrian Sanchez, Melanie Chab, Eloisa Colina, Julio Quintana, Paola Agrafojo, Ismelda Armada,  Alberto Flores Solano y Karlis Chirino. <br/>
             <br/><br/>
-            Esta radio suena gracias a Wendys Rodriguez, Daniel Salas, Leonardo Dávila, Carlos Eduardo Parra, Nelson Parra, David Jimenez, Daniel Villamizar, Edgar Cabrera, Clared Navarro, Felipe Laboren, Lemys Kaman, Carlos Pinto, Isaac Varzim y Elio Araujo.
+            Esta radio suena gracias a Wendys Rodriguez, Daniel Salas, Leonardo Dávila, Carlos Eduardo Parra, Nelson Parra, David Jimenez, Daniel Villamizar, Edgar Cabrera, Clared Navarro, Felipe Laboren, LemysKaman, Carlos Pinto, Isaac Varzim, Elio Araujo, Carlos Ignacio Hernández y a toda nuestra red de colaboradores alrededor del mundo.
             <br/><br/>
           </p>
         </section>}
 
         {lang == 'pt' && <section>
           <p className="text-gray-200">
-            <strong>Radio Nudista®</strong> é um clube social experimental para pessoas honestas, curiosas, apaixonadas e inclusivas.
+            radio<strong>nudista</strong> é um clube social experimental para pessoas honestas, curiosas, apaixonadas e inclusivas.
             <br/><br/>
             Fundado em 2020, nasceu com uma premissa simples, porém poderosa: criar um espaço onde vozes diversas possam se encontrar sem filtros. Aqui, a diferença não é uma barreira, e sim uma ponte. A honestidade, um valor. E a curiosidade, uma bússola.
             <br/><br/>
@@ -54,9 +54,9 @@ const AboutPage = () => {
             <strong>Design web:</strong> Felipe Laboren (@felipelabo) y Lemys Lopez (@lemysKaman)<br/>
             <strong>Design de áudio:</strong> Manuel Aular (@hardlinemanu).<br/>
             <strong>Visuais:</strong> Andres Ramírez (@Gachapon3000).<br/>
-            <strong>Voiceovers:</strong> Diana Hung, Gustavo Perez, Lucho Milazzo, Samira Moura y Gabriel Rodrigues, Adrian Sanchez, Julio Quintana y Alberto Flores Solano. <br/>
+            <strong>Voiceovers:</strong> Diana Hung, Gustavo Perez, Lucho Milazzo, Samira Moura, Gabriel Rodrigues,  Laura Sepulveda, Adrian Sanchez, Melanie Chab, Eloisa Colina, Julio Quintana, Paola Agrafojo, Ismelda Armada,  Alberto Flores Solano y Karlis Chirino. <br/>
             <br/><br/>
-            Agradecimentos especiais a Wendys Rodriguez, Daniel Salas, Leonardo Dávila, Carlos Eduardo Parra, Nelson Parra, David Jimenez, Daniel Villamizar, Edgar Cabrera, Clared Navarro, Felipe Laboren, Lemys Kaman, Carlos Pinto, Isaac Varzim y Elio Araujo.
+            Agradecimentos especiais a Wendys Rodriguez, Daniel Salas, Leonardo Dávila, Carlos Eduardo Parra, Nelson Parra, David Jimenez, Daniel Villamizar, Edgar Cabrera, Clared Navarro, Felipe Laboren, LemysKaman, Carlos Pinto, Isaac Varzim, Elio Araujo, Carlos Ignacio Hernández e a toda a nossa rede de colaboradores ao redor do mundo.
             <br/><br/>
           </p>
         </section>}

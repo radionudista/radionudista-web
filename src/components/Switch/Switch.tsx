@@ -14,13 +14,13 @@ export default function Switch({ value , setValue}) {
         className={`option ${value === 'es' ? 'active' : ''}`}
         onClick={()=>changeLang(value)}
       >
-        ES
+        es
       </button>
       <button
         className={`option ${value === 'pt' ? 'active' : ''}`}
         onClick={()=>changeLang(value)}
       >
-        PT
+        pt
       </button>
     </div>
   );

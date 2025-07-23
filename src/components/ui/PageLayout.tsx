@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 
 interface PageLayoutProps {
   children: React.ReactNode;
-  title: string;
+  title?: string;
   subtitle?: string;
   titleColor?: string;
   className?: string;
@@ -34,7 +34,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       <div className={cn('glass-container max-w-4xl mx-auto', containerClassName)}>
         <div className={cn('text-center mb-16', headerClassName)}>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-            {title.split(' ').map((word, index) => {
+            {title?.split(' ').map((word, index) => {
               // Check if this word should be colored (assuming the last word or words in brackets)
               const shouldColor = word.includes('RadioNudista') || 
                                  word.includes('Touch') || 
@@ -51,7 +51,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                   {word}
                 </React.Fragment>
               );*/
-              
+
               return (<React.Fragment key={index}>
                   {index > 0 && ' '}
                   {word}

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Instagram, X, MessageCircle, Menu } from 'lucide-react';
+import { Instagram, X, MessageCircle, Menu, PenOff } from 'lucide-react';
 import MiniPlayer from './MiniPlayer';
 import Logo from './Logo';
 import Switch from './Switch/Switch';
@@ -17,9 +17,9 @@ const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
   const {lang, setLang} = useIdioma()
 
   const navItems = [
-    { id: 'home', label: 'Radio', ptlabel: 'Rádio' },
-    { id: 'about', label: 'Nosotros', ptlabel: 'Sobre' },
-    { id: 'contact', label: 'Programación', ptlabel:'Programação'}
+    { id: 'home', label: 'radio', ptlabel: 'rádio' },
+    { id: 'about', label: 'nosotrxs', ptlabel: 'sobre' },
+    { id: 'contact', label: 'programación', ptlabel:'programação'}
   ];
 
   const handleMobileNavClick = (page: string) => {
@@ -143,7 +143,7 @@ const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
             <Instagram className="w-6 h-6" />
           </a>
           <a target="_blank" href="https://twitter.com/radionudista"  className="social-icon">
-            <X className="w-6 h-6" />
+            <PenOff className="w-6 h-6" />
           </a>
           <a href="https://linktr.ee/radionudista" target="_blank" className="social-icon">
             <div className="w-6 h-6">
@@ -190,7 +190,7 @@ const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
                 />
               </svg>
             </div>
-            {lang == 'es' ? <p>Apoya a radio<b>nudista</b></p> : <p>Apoie a radio<b>nudista</b></p>}
+            {lang == 'es' ? <p>apóyanos</p> : <p>ajude a gente</p>}
           </a>
         </div>
       </footer>
