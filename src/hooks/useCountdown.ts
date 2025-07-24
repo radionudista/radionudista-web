@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { TIME_CONSTANTS } from '../constants/timeConstants';
+import { logger } from '../utils/logger';
 
 /**
  * Time remaining interface
@@ -31,6 +32,11 @@ export const useCountdown = (targetDate: Date, onComplete?: () => void) => {
   const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
+    logger.info('Countdown hook initialized', {
+      targetDate: targetDate.toISOString(),
+      timeToLaunch: targetDate.getTime() - new Date().getTime()
+    });
+
     const calculateTimeLeft = (): TimeRemaining => {
       const now = new Date().getTime();
       const difference = targetDate.getTime() - now;
@@ -45,6 +51,7 @@ export const useCountdown = (targetDate: Date, onComplete?: () => void) => {
       } else {
         // Countdown has ended
         if (!isComplete) {
+          logger.info('Countdown completed!');
           setIsComplete(true);
           onComplete?.();
         }
