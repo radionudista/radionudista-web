@@ -101,26 +101,6 @@ class Logger {
       debug: import.meta.env.VITE_APP_DEBUG,
       launchingDate: import.meta.env.VITE_LAUNCHING_DATE,
       twitchPlayerSize: import.meta.env.VITE_TWITCH_PLAYER_WINDOW_SIZE_PERCENT,
-      mode: import.meta.env.MODE,
-      dev: import.meta.env.DEV,
-      prod: import.meta.env.PROD,
-    });
-  }
-
-  /**
-   * Log build information
-   */
-  logBuildInfo(): void {
-    if (!isDebugMode()) {
-      return;
-    }
-
-    this.info('Build Information', {
-      baseUrl: import.meta.env.BASE_URL,
-      mode: import.meta.env.MODE,
-      isDev: import.meta.env.DEV,
-      isProd: import.meta.env.PROD,
-      isSSR: import.meta.env.SSR,
     });
   }
 }
@@ -130,4 +110,3 @@ export const logger = new Logger();
 
 // Auto-log environment configuration on module load
 logger.logEnvConfig();
-logger.logBuildInfo();
