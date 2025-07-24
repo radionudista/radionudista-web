@@ -5,6 +5,7 @@ import BackgroundVideo from './BackgroundVideo';
 import CountdownUnit from './ui/CountdownUnit';
 import { useCountdown } from '../hooks/useCountdown';
 import { TIME_CONSTANTS } from '../constants/timeConstants';
+import { logger } from '../utils/logger';
 
 interface CountdownTeaserProps {
   targetDate: Date;
@@ -29,6 +30,11 @@ const CountdownTeaser: React.FC<CountdownTeaserProps> = ({
   onCountdownEnd 
 }) => {
   const { timeLeft } = useCountdown(targetDate, onCountdownEnd);
+
+  logger.debug('CountdownTeaser rendered', {
+    targetDate: targetDate.toISOString(),
+    timeLeft
+  });
 
   return (
     <div className="min-h-screen w-full overflow-hidden relative">
