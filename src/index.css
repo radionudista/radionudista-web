@@ -95,20 +95,20 @@
 /* Glass morphism styles */
 @layer components {
   .glass-navbar {
-    background: rgba(255, 255, 255, 0.05);
+    background:#000000; /*rgba(255, 255, 255, 0.05);*/
     backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
   }
   
   .glass-footer {
-    background: rgba(255, 255, 255, 0.05);
+    background: #000000; /*rgba(255, 255, 255, 0.05);*/
     backdrop-filter: blur(20px);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
   
   .glass-container {
-    background: rgba(255, 255, 255, 0.02);
+    background: #000000; /*rgba(255, 255, 255, 0.02);*/
     backdrop-filter: blur(10px);
     border-radius: 6px;
     border: 1px solid rgba(255, 255, 255, 0.1);

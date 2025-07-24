@@ -5,6 +5,7 @@ import MiniPlayer from './MiniPlayer';
 import Logo from './Logo';
 import Switch from './Switch/Switch';
 import { useIdioma } from '@/contexts/IdiomaContext';
+import { useIsMobile } from "@/hooks/use-mobile"
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ interface LayoutProps {
 const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const {lang, setLang} = useIdioma()
+  const isMobile = useIsMobile()
 
   const navItems = [
     { id: 'home', label: 'radio', ptlabel: 'rádio' },
@@ -36,7 +38,7 @@ const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
           <Logo size="medium" />
           
           {/* Mini Player - Only show when not on home page */}
-          {currentPage !== 'home' && (
+          {(currentPage !== 'home') && (
             <div className="hidden md:block">
               <MiniPlayer />
             </div>
@@ -62,8 +64,8 @@ const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
           {/* Mobile Navigation */}
           <div className="md:hidden flex items-center space-x-3">
             {/* Mini Player Mobile - Only show when not on home page */}
-            {currentPage !== 'home' && (
-              <div className="scale-75 origin-center">
+            {currentPage !== 'home' && !isMobile && (
+              <div className="scale-75 origin-center" id='player-navbar-mobile'>
                 <MiniPlayer />
               </div>
             )}
@@ -90,9 +92,9 @@ const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
           />
           
           {/* Sliding Panel */}
-          <div className={`absolute top-0 right-0 h-full w-80 max-w-[80vw] bg-black/40 backdrop-blur-xl border-l border-white/10 transform transition-transform duration-300 ease-out ${
+          <div className={`absolute top-0 right-0 h-full w-full max-w-[100vw] bg-black backdrop-blur-xl border-l border-white/10 transform transition-transform duration-300 ease-out ${
             isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-          }`}>
+          } flex flex-col`}>
             {/* Close Button */}
             <div className="flex justify-end p-6">
               <button
@@ -110,23 +112,57 @@ const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
                 <button
                   key={item.id}
                   onClick={() => handleMobileNavClick(item.id)}
-                  className={`block w-full text-left py-4 px-6 rounded-md text-lg font-medium transition-all duration-200 ${
+                  className={`block w-full text-left py-4 px-6 text-center rounded-md text-lg font-medium transition-all duration-200 ${
                     currentPage === item.id 
-                      ? 'text-blue-400 bg-blue-400/10' 
+                      ? 'text-white bg-white/10' 
                       : 'text-white/80 hover:text-white hover:bg-white/10'
                   }`}
                 >
-                  {item.label}
+                  {lang == 'es' ? item.label : item.ptlabel}
                 </button>
               ))}
             </div>
-            
             {/* Mini Player in Mobile Menu - Only show when not on home page */}
-            {currentPage !== 'home' && (
-              <div className="px-8 py-4 mt-12">
+            {(currentPage !== 'home' && !isMobile) && (
+              <div className="px-8 py-4 mt-12" id='player-on-mobileMenu'>
                 <MiniPlayer />
               </div>
             )}
+
+            <div className='w-full flex justify-center mt-10'>
+              <Switch value={lang} setValue={setLang} />
+            </div>
+
+            <div className='flex justify-center flex-1 items-end mb-[8rem]'>
+              {isMobile && <a href="https://www.patreon.com/profile/creators?u=170209343" target="_blank"  className="social-icon glass-card flex justify-center items-center"
+                style={{
+                  width:'fit-content',
+                  height:'fit-content'
+                }}
+              >
+                <div className="w-6 h-6 mr-3">
+                  <svg
+                    version="1.1"
+                    id="Layer_1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 1080 1080"
+                    width="100%"
+                    height="100%"
+                    xmlSpace="preserve"
+                  >
+                    <path
+                      fill="rgba(255, 255, 255, 0.7)"
+                      d="M1033.05,324.45c-0.19-137.9-107.59-250.92-233.6-291.7
+                        c-156.48-50.64-362.86-43.3-512.28,27.2C106.07,145.41,49.18,332.61,47.06,519.31
+                        c-1.74,153.5,13.58,557.79,241.62,560.67c169.44,2.15,194.67-216.18,273.07-321.33
+                        c55.78-74.81,127.6-95.94,216.01-117.82C929.71,603.22,1033.27,483.3,1033.05,324.45z"
+                    />
+                  </svg>
+                </div>
+                {lang == 'es' ? <p>apóyanos</p> : <p>ajude a gente</p>}
+              </a>}
+            </div>
+            
           </div>
         </div>
       )}
@@ -143,7 +179,7 @@ const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
             <Instagram className="w-6 h-6" />
           </a>
           <a target="_blank" href="https://twitter.com/radionudista"  className="social-icon">
-            <PenOff className="w-6 h-6" />
+            <X className="w-6 h-6" />
           </a>
           <a href="https://linktr.ee/radionudista" target="_blank" className="social-icon">
             <div className="w-6 h-6">
@@ -164,7 +200,7 @@ const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
               </svg>
             </div>
           </a>
-          <a href="https://www.patreon.com/profile/creators?u=170209343" target="_blank" className="social-icon glass-card flex justify-center items-center"
+          {!isMobile && <a href="https://www.patreon.com/profile/creators?u=170209343" target="_blank" className="social-icon glass-card flex justify-center items-center"
             style={{
               position:'absolute',
               right:0,
@@ -191,7 +227,7 @@ const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
               </svg>
             </div>
             {lang == 'es' ? <p>apóyanos</p> : <p>ajude a gente</p>}
-          </a>
+          </a>}
         </div>
       </footer>
     </div>

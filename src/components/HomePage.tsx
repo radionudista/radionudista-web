@@ -21,6 +21,7 @@ const HomePage = () => {
         <div 
           className={`glass-card mb-12 transition-colors ${!isLoading ? 'cursor-pointer hover:bg-white/10' : 'cursor-wait'}`}
           onClick={!isLoading ? togglePlay : undefined}
+          style={{backgroundColor:'#000000'}}
         >
           <div className="text-center">
             <h3 className="text-2xl text-white mb-[4rem]">{currentTrack}</h3>
@@ -29,19 +30,26 @@ const HomePage = () => {
             <div className="flex justify-center items-center mb-8 space-x-8">
               {/* Container with fixed height to prevent layout shift */}
               <div className="h-20 flex items-center justify-center">
-                {!isPlaying ? (
+                {/*!isPlaying ? (
                   <MediaButton
                     isPlaying={isPlaying}
                     isLoading={isLoading}
                     onClick={togglePlay}
                     size="large"
                   />
-                ) : null}
+                ) : null*/}
+
+                <MediaButton
+                  isPlaying={isPlaying}
+                  isLoading={isLoading}
+                  onClick={togglePlay}
+                  size="large"
+                />
                 
                 {/* Dynamic FFT Audio Visualization - Clickable for pause */}
-                {isPlaying && !isLoading && (
+                {/*isPlaying && !isLoading && (
                   <AudioVisualization barHeights={barHeights} />
-                )}
+                )*/}
               </div>
             </div>
             

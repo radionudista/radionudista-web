@@ -32,7 +32,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   return (
     <div className={cn('container mx-auto px-6 py-12', className)}>
       <div className={cn('glass-container max-w-4xl mx-auto', containerClassName)}>
-        <div className={cn('text-center mb-16', headerClassName)}>
+        <div className={cn('text-center', headerClassName)}> {/*mb-16 con title*/}
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
             {title?.split(' ').map((word, index) => {
               // Check if this word should be colored (assuming the last word or words in brackets)
