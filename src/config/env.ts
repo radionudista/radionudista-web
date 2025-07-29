@@ -14,6 +14,7 @@ export interface EnvConfig {
   TWITCH_SRC_URL: string;
   STREAM_URL: string;
   TWITCH_PLAYER_WINDOW_SIZE_PERCENT: number;
+  DEV_LAUNCHING_SECOUNDS: number;
 }
 
 /**
@@ -57,6 +58,7 @@ export const env: EnvConfig = {
   TWITCH_SRC_URL: getEnvVar('TWITCH_SRC_URL', 'https://player.twitch.tv/?channel=radionudista&parent=localhost'),
   STREAM_URL: getEnvVar('STREAM_URL', 'https://twitch.tv/radionudista'),
   TWITCH_PLAYER_WINDOW_SIZE_PERCENT: getEnvNumber('TWITCH_PLAYER_WINDOW_SIZE_PERCENT', 70),
+  DEV_LAUNCHING_SECOUNDS: getEnvNumber('DEV_LAUNCHING_SECOUNDS', -1),
 };
 
 /**

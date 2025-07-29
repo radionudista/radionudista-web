@@ -5,3 +5,4 @@ VITE_LAUNCHING_DATE=2025-08-09T12:00:00-03:00
 VITE_TWITCH_SRC_URL=https://player.twitch.tv/?channel=radionudista&parent=radionudista.com&parent=localhost&parent=127.0.0.1&parent=radionudista-aurora-glass.pages.dev&parent=lovable.dev&autoplay=true&muted=false
 VITE_STREAM_URL=https://twitch.tv/radionudista
 VITE_TWITCH_PLAYER_WINDOW_SIZE_PERCENT=60
+VITE_DEV_LAUNCHING_SECOUNDS=-1
