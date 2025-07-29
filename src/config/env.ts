@@ -11,7 +11,8 @@ export interface EnvConfig {
   APP_ENVIRONMENT: AppEnvironment;
   APP_DEBUG: boolean;
   LAUNCHING_DATE: string;
-  TWITCH_SRC_URL: string;
+  TWITCH_CHANNEL: string;
+  TWITCH_STATIC_PARENTS: string;
   STREAM_URL: string;
   TWITCH_PLAYER_WINDOW_SIZE_PERCENT: number;
   DEV_LAUNCHING_SECOUNDS: number;
@@ -55,7 +56,8 @@ export const env: EnvConfig = {
   APP_ENVIRONMENT: getEnvVar('APP_ENVIRONMENT', 'local') as AppEnvironment,
   APP_DEBUG: getEnvBoolean('APP_DEBUG', false),
   LAUNCHING_DATE: getEnvVar('LAUNCHING_DATE', '2025-08-09T12:00:00-03:00'),
-  TWITCH_SRC_URL: getEnvVar('TWITCH_SRC_URL', 'https://player.twitch.tv/?channel=radionudista&parent=localhost'),
+  TWITCH_CHANNEL: getEnvVar('TWITCH_CHANNEL', 'radionudista'),
+  TWITCH_STATIC_PARENTS: getEnvVar('TWITCH_STATIC_PARENTS', 'localhost'),
   STREAM_URL: getEnvVar('STREAM_URL', 'https://twitch.tv/radionudista'),
   TWITCH_PLAYER_WINDOW_SIZE_PERCENT: getEnvNumber('TWITCH_PLAYER_WINDOW_SIZE_PERCENT', 70),
   DEV_LAUNCHING_SECOUNDS: getEnvNumber('DEV_LAUNCHING_SECOUNDS', -1),

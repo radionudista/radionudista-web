@@ -5,6 +5,7 @@ import Logo from './Logo';
 import { getDynamicPlayerSize } from '../constants/mediaConstants';
 import { env } from '../config/env';
 import { logger } from '../utils/logger';
+import { getTwitchPlayerUrl } from '../utils/twitchUtils';
 
 // Extend Navigator interface for Brave browser detection
 interface BraveNavigator extends Navigator {
@@ -16,10 +17,14 @@ interface BraveNavigator extends Navigator {
 const TwitchPlayer = () => {
   const [isBraveOrBlocked, setIsBraveOrBlocked] = useState(false);
   const [playerError, setPlayerError] = useState(false);
+  const [twitchUrl, setTwitchUrl] = useState('');
 
   useEffect(() => {
+    const url = getTwitchPlayerUrl();
+    setTwitchUrl(url);
+
     logger.info('TwitchPlayer component mounted', {
-      twitchSrcUrl: env.TWITCH_SRC_URL,
+      twitchSrcUrl: url,
       streamUrl: env.STREAM_URL,
       playerSizePercent: env.TWITCH_PLAYER_WINDOW_SIZE_PERCENT
     });
@@ -98,7 +103,7 @@ const TwitchPlayer = () => {
               style={getDynamicPlayerSize('VIDEO_16_9')}
             >
               <iframe
-                src={env.TWITCH_SRC_URL}
+                src={twitchUrl}
                 className="absolute top-0 left-0 w-full h-full rounded-md"
                 allowFullScreen
                 title="RadioNudista Twitch Stream"
