@@ -15,7 +15,7 @@ export interface EnvConfig {
   TWITCH_STATIC_PARENTS: string;
   STREAM_URL: string;
   TWITCH_PLAYER_WINDOW_SIZE_PERCENT: number;
-  DEV_LAUNCHING_SECOUNDS: number;
+  DEV_LAUNCHING_SECONDS: number;
 }
 
 /**
@@ -60,7 +60,7 @@ export const env: EnvConfig = {
   TWITCH_STATIC_PARENTS: getEnvVar('TWITCH_STATIC_PARENTS', 'localhost'),
   STREAM_URL: getEnvVar('STREAM_URL', 'https://twitch.tv/radionudista'),
   TWITCH_PLAYER_WINDOW_SIZE_PERCENT: getEnvNumber('TWITCH_PLAYER_WINDOW_SIZE_PERCENT', 70),
-  DEV_LAUNCHING_SECOUNDS: getEnvNumber('DEV_LAUNCHING_SECOUNDS', -1),
+  DEV_LAUNCHING_SECONDS: getEnvNumber('DEV_LAUNCHING_SECONDS', -1),
 };
 
 /**
