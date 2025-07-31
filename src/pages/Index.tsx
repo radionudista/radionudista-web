@@ -9,9 +9,9 @@ const Index = () => {
   const [showTwitch, setShowTwitch] = useState(false);
   
   const getLaunchDate = () => {
-    if (!isProduction() && env.DEV_LAUNCHING_SECOUNDS > -1) {
+    if (!isProduction() && env.DEV_LAUNCHING_SECONDS > -1) {
       const now = new Date();
-      now.setSeconds(now.getSeconds() + env.DEV_LAUNCHING_SECOUNDS);
+      now.setSeconds(now.getSeconds() + env.DEV_LAUNCHING_SECONDS);
       return now;
     }
     return new Date(env.LAUNCHING_DATE);
@@ -23,7 +23,7 @@ const Index = () => {
     launchDate: launchDate.toISOString(),
     showTwitch,
     environment: env.APP_ENVIRONMENT,
-    devSeconds: env.DEV_LAUNCHING_SECOUNDS,
+    devSeconds: env.DEV_LAUNCHING_SECONDS,
   });
 
   const handleCountdownEnd = () => {
