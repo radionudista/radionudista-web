@@ -69,4 +69,4 @@ export const env: EnvConfig = {
 export const isProduction = () => env.APP_ENVIRONMENT === 'production';
 export const isDevelopment = () => env.APP_ENVIRONMENT === 'local';
 export const isFeature = () => env.APP_ENVIRONMENT === 'feature';
-export const isDebugMode = () => env.APP_DEBUG;
+export const isDebugMode = () => env.APP_ENVIRONMENT !== 'production' && env.APP_DEBUG;
