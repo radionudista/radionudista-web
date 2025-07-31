@@ -1,9 +1,0 @@
-# Feature Environment Variables
-VITE_APP_ENVIRONMENT=feature
-VITE_APP_DEBUG=true
-VITE_LAUNCHING_DATE=2025-08-09T12:00:00-03:00
-VITE_TWITCH_CHANNEL=radionudista
-VITE_TWITCH_STATIC_PARENTS=radionudista.com,lovable.dev,radionudista-aurora-glass.pages.dev
-VITE_STREAM_URL=https://twitch.tv/radionudista
-VITE_TWITCH_PLAYER_WINDOW_SIZE_PERCENT=60
-VITE_DEV_LAUNCHING_SECONDS=5
