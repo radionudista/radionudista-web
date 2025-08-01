@@ -2,24 +2,39 @@
 import React, { useState, useEffect } from 'react';
 import BackgroundVideo from './BackgroundVideo';
 import Logo from './Logo';
-import { getAspectRatioPadding } from '../constants/mediaConstants';
+import { getDynamicPlayerSize } from '../constants/mediaConstants';
+import { env } from '../config/env';
+import { logger } from '../utils/logger';
+import { getTwitchPlayerUrl } from '../utils/twitchUtils';
+
+// Extend Navigator interface for Brave browser detection
+interface BraveNavigator extends Navigator {
+  brave?: {
+    isBrave(): Promise<boolean>;
+  };
+}
 
 const TwitchPlayer = () => {
   const [isBraveOrBlocked, setIsBraveOrBlocked] = useState(false);
   const [playerError, setPlayerError] = useState(false);
+  const [twitchUrl, setTwitchUrl] = useState('');
 
   useEffect(() => {
+    const url = getTwitchPlayerUrl();
+    setTwitchUrl(url);
+
+    logger.info('TwitchPlayer component mounted', {
+      twitchSrcUrl: url,
+      streamUrl: env.STREAM_URL,
+      playerSizePercent: env.TWITCH_PLAYER_WINDOW_SIZE_PERCENT
+    });
+
     // Detect Brave browser or check for blocked content
     const detectBraveOrBlocking = async () => {
-      // Extend Navigator type to include optional brave property
-      type BraveNavigator = Navigator & {
-        brave?: {
-          isBrave: () => Promise<boolean>;
-        };
-      };
-      const nav = navigator as BraveNavigator;
       // Check if navigator.brave exists (Brave browser)
-      if (nav.brave && await nav.brave.isBrave()) {
+      const braveNavigator = navigator as BraveNavigator;
+      if (braveNavigator.brave && await braveNavigator.brave.isBrave()) {
+        logger.warn('Brave browser detected, may block Twitch player');
         setIsBraveOrBlocked(true);
       }
     };
@@ -28,6 +43,7 @@ const TwitchPlayer = () => {
   }, []);
 
   const handleIframeError = () => {
+    logger.error('Twitch iframe failed to load');
     setPlayerError(true);
   };
   return (
@@ -55,7 +71,7 @@ const TwitchPlayer = () => {
                 <div className="bg-black/30 p-4 rounded-md">
                   <h4 className="text-white font-semibold mb-2">📺 How to Watch:</h4>
                   <ul className="text-white/90 space-y-2">
-                    <li>• <strong>Direct Link:</strong> <a href="https://twitch.tv/radionudista" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">twitch.tv/radionudista</a></li>
+                    <li>• <strong>Direct Link:</strong> <a href={env.STREAM_URL} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">{env.STREAM_URL}</a></li>
                     <li>• <strong>Disable Shields:</strong> Click the Brave shield icon and disable for this site</li>
                     <li>• <strong>Alternative:</strong> Try a different browser (Chrome, Firefox, Safari)</li>
                   </ul>
@@ -73,7 +89,7 @@ const TwitchPlayer = () => {
               
               <div className="mt-6">
                 <button 
-                  onClick={() => window.open('https://twitch.tv/radionudista', '_blank')}
+                  onClick={() => window.open(env.STREAM_URL, '_blank')}
                   className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-md font-semibold transition-colors"
                 >
                   🚀 Open in Twitch
@@ -84,10 +100,10 @@ const TwitchPlayer = () => {
             // Normal Twitch player
             <div 
               className="relative w-full" 
-              style={getAspectRatioPadding('VIDEO_16_9')}
+              style={getDynamicPlayerSize('VIDEO_16_9')}
             >
               <iframe
-                src="https://player.twitch.tv/?channel=radionudista&parent=radionudista.com&parent=localhost&parent=127.0.0.1&parent=radionudista-aurora-glass.pages.dev&parent=lovable.dev&autoplay=true&muted=false"
+                src={twitchUrl}
                 className="absolute top-0 left-0 w-full h-full rounded-md"
                 allowFullScreen
                 title="RadioNudista Twitch Stream"

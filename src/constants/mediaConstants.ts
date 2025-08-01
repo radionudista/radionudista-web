@@ -6,6 +6,9 @@
  * - Eliminates magic numbers for aspect ratios and media settings
  */
 
+import { env } from '../config/env';
+import { logger } from '../utils/logger';
+
 export const MEDIA_CONSTANTS = {
   /**
    * Common aspect ratios
@@ -88,4 +91,29 @@ export const generateRandomBarHeight = (): number => {
  */
 export const generateFFTBars = (count: number = MEDIA_CONSTANTS.VISUALIZATION.FFT_BARS): number[] => {
   return Array.from({ length: count }, generateRandomBarHeight);
+};
+
+/**
+ * Calculate dynamic player size based on environment configuration
+ * Maintains 16:9 aspect ratio while adjusting to the specified percentage of available space
+ */
+export const getDynamicPlayerSize = (baseAspectRatio: keyof typeof MEDIA_CONSTANTS.ASPECT_RATIOS = 'VIDEO_16_9') => {
+  const sizePercent = env.TWITCH_PLAYER_WINDOW_SIZE_PERCENT;
+  const basePaddingPercent = parseFloat(MEDIA_CONSTANTS.ASPECT_RATIOS[baseAspectRatio]);
+  
+  // Calculate new padding to maintain aspect ratio at the desired size
+  const adjustedPadding = (basePaddingPercent * sizePercent) / 100;
+  
+  logger.debug('Calculating dynamic player size', {
+    sizePercent,
+    baseAspectRatio,
+    basePaddingPercent,
+    adjustedPadding
+  });
+
+  return {
+    paddingBottom: `${adjustedPadding}%`,
+    width: `${sizePercent}%`,
+    maxWidth: '100%'
+  };
 };
