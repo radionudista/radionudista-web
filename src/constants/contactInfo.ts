@@ -1,3 +1,5 @@
+import { env } from '../config/env';
+
 /**
  * Contact Information Configuration
  * 
@@ -45,10 +47,10 @@ export const COMPANY_INFO = {
 } as const;
 
 /**
- * Stream configuration URLs
+ * Stream configuration URLs - Now using environment variables
  */
 export const STREAM_CONFIG = {
-  streamUrl: 'https://servidor30.brlogic.com:7024/live',
-  statusUrl: 'https://d36nr0u3xmc4mm.cloudfront.net/index.php/api/streaming/status/7024/2348c62ead2082a25b4573ed601473a3/SV1BR',
-  twitchChannel: 'radionudista'
+  streamUrl: env.RADIO_STREAM_URL || 'https://servidor30.brlogic.com:7024/live',
+  statusUrl: env.RADIO_STATUS_URL || 'https://d36nr0u3xmc4mm.cloudfront.net/index.php/api/streaming/status/7024/2348c62ead2082a25b4573ed601473a3/SV1BR',
+  twitchChannel: env.TWITCH_CHANNEL
 } as const;
