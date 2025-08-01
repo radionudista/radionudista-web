@@ -40,7 +40,7 @@ const MiniPlayer = () => {
       {/* Text container with news ticker scrolling - improved visibility */}
       <div
         ref={containerRef}
-        className="flex-1 min-w-0 relative bg-white/5 rounded border border-white/10"
+        className="flex-1 min-w-0 relative  rounded "
         style={{
           height: '1.5rem', // Increased from 1.25rem for better visibility
           overflow: 'hidden',

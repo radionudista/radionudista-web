@@ -177,7 +177,7 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
           {/* Current Track Info with News Ticker Effect */}
           <div
             ref={containerRef}
-            className="mb-4 relative bg-white/5 rounded border border-white/10"
+            className="mb-4 relative  "
             style={{
               width: '100%',
               height: '1.75rem',
