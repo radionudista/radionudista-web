@@ -1,0 +1,63 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "radio": "Radio"
+  },
+  "contact": {
+    "page-title": "Ponte en Contacto",
+    "page-subtitle": "Nos encantaría saber de ti",
+    "form-title": "Envíanos un Mensaje",
+    "form-name-label": "Nombre",
+    "form-name-placeholder": "Tu nombre",
+    "form-email-label": "Correo",
+    "form-email-placeholder": "tu.correo@ejemplo.com",
+    "form-subject-label": "Asunto",
+    "form-subject-placeholder": "¿De qué se trata?",
+    "form-message-label": "Mensaje",
+    "form-message-placeholder": "Cuéntanos qué tienes en mente...",
+    "form-submit": "Enviar Mensaje",
+    "form-submitting": "Enviando...",
+    "contact-info-title": "Información de Contacto",
+    "contact-info-address": "Dirección",
+    "contact-info-phone": "Teléfono",
+    "contact-info-email": "Correo",
+    "contact-info-hours": "Horario de Atención",
+    "follow-us-title": "Síguenos",
+    "follow-us-description": "Mantente conectado con nosotros en las redes sociales para las últimas actualizaciones, música y contenido exclusivo."
+  },
+  "home": {
+    "page-title": "Bienvenido a RadioNudista",
+    "page-subtitle": "Tu destino para la mejor experiencia musical",
+    "radio-section-title": "Transmisión en Vivo",
+    "radio-section-description": "Disfruta nuestra selección musical curada 24/7"
+  },
+  "radio": {
+    "current-track": "Reproduciendo Ahora",
+    "default-track": "RadioNudista - Transmisión en Vivo",
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "volume": "Volumen",
+    "mute": "Silenciar",
+    "unmute": "Activar Sonido"
+  },
+  "errors": {
+    "page-not-found": "Página No Encontrada",
+    "go-home": "Ir al Inicio",
+    "something-went-wrong": "Algo salió mal",
+    "try-again": "Intentar de Nuevo"
+  }
+}
+

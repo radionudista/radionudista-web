@@ -1,19 +1,21 @@
 import React from 'react';
-import RadioPlayer from '../components/RadioPlayer';
+import RadioPlayerSection from '../components/RadioPlayerSection';
 
 const HomePage = () => {
   return (
-    <div className="container mx-auto px-6 py-12">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
-          
-        </div>
-        
-        {/* Radio Player Section */}
-        <RadioPlayer className="mb-12" />
-
-        {/* Features */}
-
+    <div
+      className="flex items-center justify-center px-6"
+      style={{
+        minHeight: 'calc(100vh - 160px)', // Account for top nav + bottom space
+        paddingTop: '80px', // Top nav height
+        paddingBottom: '80px' // Equal bottom spacing
+      }}
+    >
+      <div className="w-full max-w-2xl">
+        {/* Radio Player Section - Equal spacing from top and bottom bars */}
+        <RadioPlayerSection
+          showTitle={false}
+        />
       </div>
     </div>
   );

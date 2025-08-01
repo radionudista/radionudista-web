@@ -1,0 +1,63 @@
+{
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "save": "Salvar",
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior"
+  },
+  "navigation": {
+    "home": "Início",
+    "about": "Sobre",
+    "contact": "Contato",
+    "radio": "Rádio"
+  },
+  "contact": {
+    "page-title": "Entre em Contato",
+    "page-subtitle": "Adoraríamos ouvir de você",
+    "form-title": "Envie-nos uma Mensagem",
+    "form-name-label": "Nome",
+    "form-name-placeholder": "Seu nome",
+    "form-email-label": "Email",
+    "form-email-placeholder": "seu.email@exemplo.com",
+    "form-subject-label": "Assunto",
+    "form-subject-placeholder": "Sobre o que é?",
+    "form-message-label": "Mensagem",
+    "form-message-placeholder": "Conte-nos o que está pensando...",
+    "form-submit": "Enviar Mensagem",
+    "form-submitting": "Enviando...",
+    "contact-info-title": "Informações de Contato",
+    "contact-info-address": "Endereço",
+    "contact-info-phone": "Telefone",
+    "contact-info-email": "Email",
+    "contact-info-hours": "Horário de Funcionamento",
+    "follow-us-title": "Siga-nos",
+    "follow-us-description": "Mantenha-se conectado conosco nas redes sociais para as últimas atualizações, música e conteúdo exclusivo."
+  },
+  "home": {
+    "page-title": "Bem-vindo à RadioNudista",
+    "page-subtitle": "Seu destino para a melhor experiência musical",
+    "radio-section-title": "Transmissão ao Vivo",
+    "radio-section-description": "Experimente nossa seleção musical curada 24/7"
+  },
+  "radio": {
+    "current-track": "Tocando Agora",
+    "default-track": "RadioNudista - Transmissão ao Vivo",
+    "play": "Reproduzir",
+    "pause": "Pausar",
+    "volume": "Volume",
+    "mute": "Silenciar",
+    "unmute": "Ativar Som"
+  },
+  "errors": {
+    "page-not-found": "Página Não Encontrada",
+    "go-home": "Ir para Início",
+    "something-went-wrong": "Algo deu errado",
+    "try-again": "Tentar Novamente"
+  }
+}
+

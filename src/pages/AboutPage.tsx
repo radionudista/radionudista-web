@@ -1,6 +1,16 @@
 import React from 'react';
 
-const AboutPage = () => {
+/**
+ * AboutPage Component
+ *
+ * Displays information about RadioNudista including:
+ * - Company story and mission
+ * - Services offered to listeners and artists
+ * - Team information
+ *
+ * Follows glass morphism design pattern with proper content structure
+ */
+const AboutPage: React.FC = () => {
   return (
     <div className="container mx-auto px-6 py-12">
       <div className="max-w-4xl mx-auto">
@@ -51,6 +61,15 @@ const AboutPage = () => {
                 </ul>
               </div>
             </div>
+          </div>
+
+          <div className="glass-card">
+            <h3 className="text-2xl font-bold text-white mb-6">Join Our Community</h3>
+            <p className="text-gray-200 leading-relaxed">
+              Whether you're a music lover looking for your next favorite song or an artist
+              ready to share your talent with the world, RadioNudista welcomes you to join
+              our growing community of music enthusiasts.
+            </p>
           </div>
         </div>
       </div>
