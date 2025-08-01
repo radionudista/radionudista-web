@@ -1,97 +1,54 @@
-# Welcome to your Lovable project
+# Nudista Radio Aura Glass
 
-## Project info
+![Nudista Radio](https://raw.githubusercontent.com/kamansoft/nudista-radio-aura-glass/main/public/images/radio_nudista_metatag.png)
 
-**URL**: https://lovable.dev/projects/057ad3c9-152e-4c05-904c-03cb064db68a
+This project is a web application for Nudista Radio, featuring a modern glassmorphism design, a countdown to a future event, and an embedded Twitch player for live streams. It is built with Vite, React, TypeScript, and Shadcn UI.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+-   **Modern Tech Stack**: Vite, React, TypeScript for a fast and robust development experience.
+-   **Sleek UI**: Glassmorphism design implemented with Shadcn UI and Tailwind CSS.
+-   **Live Content**: Features a countdown timer and an embedded Twitch player.
+-   **Configurable**: Easily configured for different environments using `.env` files.
+-   **Responsive**: Designed to work seamlessly across various devices and screen sizes.
 
-**Use Lovable**
+## Quick Start
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/057ad3c9-152e-4c05-904c-03cb064db68a) and start prompting.
+To get the project running locally:
 
-Changes made via Lovable will be committed automatically to this repo.
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/kamansoft/nudista-radio-aura-glass.git
+    cd nudista-radio-aura-glass
+    ```
 
-**Use your preferred IDE**
+2.  **Install dependencies:**
+    ```bash
+    bun install
+    ```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+3.  **Run the development server:**
+    ```bash
+    bun run dev
+    ```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+The application will be available at `http://localhost:5173`.
 
-Follow these steps:
+## Documentation
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+For detailed information about the project, please refer to our comprehensive documentation:
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+**[➡️ View Full Documentation in the `docs` folder](./docs/README.md)**
 
-# Step 3: Install the necessary dependencies.
-npm i
+The documentation includes guides on:
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+-   [Getting Started](./docs/getting-started.md)
+-   [Usage and Build Commands](./docs/usage.md)
+-   [Environment Variables](./docs/environment-variables.md)
+-   [Component Details](./docs/components-guide.md)
+-   [Deployment Instructions](./docs/deployment.md)
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+This project was bootstrapped with `vite-react-shadcn-ts-template`.
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## 📚 Documentation
-
-Detailed documentation for this project is available in the [`docs/`](docs/) folder:
-
-### Architecture & Code Quality
-- **[SOLID Principles Implementation](docs/SOLID_IMPROVEMENTS.md)** - Comprehensive guide on SOLID principles applied throughout the project
-- **[Code Quality Standards](docs/SOLID_IMPROVEMENTS.md#code-quality-standards)** - Best practices and coding standards
-
-### Component Documentation
-- **[BackgroundVideo Component](docs/BACKGROUND_VIDEO_IMPROVEMENTS.md)** - Detailed implementation guide for the background video system
-- **[Crossfade Transition Effect](docs/CROSSFADE_TRANSITION.md)** - Technical documentation for the image-to-video transition effect
-- **[Background Video Fixes](docs/BACKGROUND_VIDEO_FIX.md)** - Bug fixes and behavioral improvements
-- **[Brave Browser Twitch Fix](docs/BRAVE_BROWSER_TWITCH_FIX.md)** - Solutions for Twitch player issues in Brave browser
-
-### Troubleshooting
-- **[White Screen Fix](docs/WHITE_SCREEN_FIX.md)** - Solutions for common component loading issues
-- **[Brave Browser Twitch Fix](docs/BRAVE_BROWSER_TWITCH_FIX.md)** - Solutions for Twitch player issues in Brave browser
-
-### Application Structure
-- **[Application Restructure](docs/APPLICATION_RESTRUCTURE.md)** - How the main index page was restructured for better user experience
-
-### Project Organization
-- **[Documentation Organization](docs/DOCUMENTATION_ORGANIZATION.md)** - How documentation is structured in this project
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/057ad3c9-152e-4c05-904c-03cb064db68a) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)

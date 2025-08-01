@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { selectRandomVideo, VIDEO_CONFIG } from '../utils/videoConfig';
 import { LAYOUT, getGlassOverlay } from '../constants/layoutConstants';
 import { useBackgroundTransition } from '../hooks/useBackgroundTransition';
+import { useDebug } from '../contexts/DebugContext';
 
 interface BackgroundVideoProps {
   /**
@@ -54,6 +55,7 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
   const [currentVideo, setCurrentVideo] = useState<string>(VIDEO_CONFIG.defaultVideo);
   const [videoKey, setVideoKey] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { setDebugInfo } = useDebug();
 
   // Use the background transition hook
   const { 
@@ -72,6 +74,18 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
     minimumDisplayTime: 2000,     // 2 seconds minimum display time
     transitionCurve: 'ELEGANT'     // Use elegant transition curve
   });
+
+  useEffect(() => {
+    const debugData = {
+      showImage,
+      imageOpacity,
+      isVideoReady,
+      videoOpacity,
+      currentImage: currentImage?.id || 'None',
+      currentVideo: currentVideo.split('/').pop(),
+    };
+    setDebugInfo('BackgroundVideo', debugData);
+  }, [showImage, imageOpacity, isVideoReady, videoOpacity, currentImage, currentVideo, setDebugInfo]);
 
   useEffect(() => {
     // Select a random video each time the component mounts
@@ -141,16 +155,6 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
           className={`${overlayConfig.className} z-[${LAYOUT.Z_INDEX.OVERLAY}]`}
           style={overlayConfig.style}
         />
-      )}
-
-      {/* Debug Info - Remove in production */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="fixed top-4 left-4 z-50 bg-black/80 text-white p-2 rounded text-xs space-y-1">
-          <div>Image: {showImage ? 'Visible' : 'Hidden'} (opacity: {imageOpacity})</div>
-          <div>Video: Ready={isVideoReady ? 'Yes' : 'No'} (opacity: {videoOpacity})</div>
-          <div>Current Image: {currentImage?.id || 'None'}</div>
-          <div>Current Video: {currentVideo.split('/').pop()}</div>
-        </div>
       )}
 
       {/* Video Credits */}
