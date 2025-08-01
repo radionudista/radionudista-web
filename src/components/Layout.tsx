@@ -1,26 +1,24 @@
-
 import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Instagram, X, MessageCircle, Menu } from 'lucide-react';
 import MiniPlayer from './MiniPlayer';
 import Logo from './Logo';
 
 interface LayoutProps {
   children: React.ReactNode;
-  currentPage: string;
-  setCurrentPage: (page: string) => void;
 }
 
-const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
+const Layout = ({ children }: LayoutProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   const navItems = [
-    { id: 'home', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'contact', label: 'Contact' }
+    { id: 'home', label: 'Home', path: '/' },
+    { id: 'about', label: 'About', path: '/about' },
+    { id: 'contact', label: 'Contact', path: '/contact' }
   ];
 
-  const handleMobileNavClick = (page: string) => {
-    setCurrentPage(page);
+  const handleMobileNavClick = () => {
     setIsMobileMenuOpen(false);
   };
 
@@ -33,7 +31,7 @@ const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
           <Logo size="medium" />
           
           {/* Mini Player - Only show when not on home page */}
-          {currentPage !== 'home' && (
+          {location.pathname !== '/' && (
             <div className="hidden md:block">
               <MiniPlayer />
             </div>
@@ -42,20 +40,20 @@ const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
           {/* Desktop Navigation Items */}
           <div className="hidden md:flex items-center space-x-6">
             {navItems.map((item) => (
-              <button
+              <Link
                 key={item.id}
-                onClick={() => setCurrentPage(item.id)}
-                className={`nav-link ${currentPage === item.id ? 'active' : ''}`}
+                to={item.path}
+                className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
               >
                 {item.label}
-              </button>
+              </Link>
             ))}
           </div>
           
           {/* Mobile Navigation */}
           <div className="md:hidden flex items-center space-x-3">
             {/* Mini Player Mobile - Only show when not on home page */}
-            {currentPage !== 'home' && (
+            {location.pathname !== '/' && (
               <div className="scale-75 origin-center">
                 <MiniPlayer />
               </div>
@@ -100,22 +98,23 @@ const Layout = ({ children, currentPage, setCurrentPage }: LayoutProps) => {
             {/* Navigation Items */}
             <div className="px-8 py-4 space-y-8">
               {navItems.map((item) => (
-                <button
+                <Link
                   key={item.id}
-                  onClick={() => handleMobileNavClick(item.id)}
+                  to={item.path}
+                  onClick={handleMobileNavClick}
                   className={`block w-full text-left py-4 px-6 rounded-md text-lg font-medium transition-all duration-200 ${
-                    currentPage === item.id 
+                    location.pathname === item.path 
                       ? 'text-blue-400 bg-blue-400/10' 
                       : 'text-white/80 hover:text-white hover:bg-white/10'
                   }`}
                 >
                   {item.label}
-                </button>
+                </Link>
               ))}
             </div>
             
             {/* Mini Player in Mobile Menu - Only show when not on home page */}
-            {currentPage !== 'home' && (
+            {location.pathname !== '/' && (
               <div className="px-8 py-4 mt-12">
                 <MiniPlayer />
               </div>

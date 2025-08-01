@@ -45,7 +45,7 @@ export const MEDIA_CONSTANTS = {
   STREAM: {
     DEFAULT_TRACK: 'RadioNudista - Live Stream',
     PRELOAD: 'none' as const,
-    UPDATE_INTERVAL: 10000
+    UPDATE_INTERVAL: env.RADIO_STATUS_POLL_INTERVAL || 10000
   },
 
   /**

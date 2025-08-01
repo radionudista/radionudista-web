@@ -1,7 +1,6 @@
-
 import React, { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react';
 import { MEDIA_CONSTANTS } from '../constants/mediaConstants';
-import { STREAM_CONFIG } from '../constants/contactInfo';
+import { STREAM_CONFIG } from '../constants/streamConstants';
 
 interface StreamStatus {
   isMobile: boolean;

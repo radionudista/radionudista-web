@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 
 interface DebugInfo {
   [key: string]: any;
@@ -26,12 +26,12 @@ interface DebugProviderProps {
 export const DebugProvider: React.FC<DebugProviderProps> = ({ children }) => {
   const [debugInfo, setDebugInfoState] = useState<DebugInfo>({});
 
-  const setDebugInfo = (componentName: string, data: any) => {
+  const setDebugInfo = useCallback((componentName: string, data: any) => {
     setDebugInfoState(prev => ({
       ...prev,
       [componentName]: data,
     }));
-  };
+  }, []);
 
   return (
     <DebugContext.Provider value={{ debugInfo, setDebugInfo }}>
@@ -39,4 +39,3 @@ export const DebugProvider: React.FC<DebugProviderProps> = ({ children }) => {
     </DebugContext.Provider>
   );
 };
-
