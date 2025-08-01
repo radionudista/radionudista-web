@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAudio } from '../contexts/AudioContext';
 import MediaButton from './ui/MediaButton';
-import { Square, Volume2, VolumeX } from 'lucide-react';
+import { Volume2, VolumeX } from 'lucide-react';
 import { useNewsTicker } from '../hooks/useTextScrolling';
 
 interface RadioPlayerProps {
@@ -216,7 +216,7 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
                 />
               </div>
             ) : (
-              /* Stop button when playing - same dimensions as play button container */
+              /* Pause button when playing - same dimensions as play button container */
               <button
                 onClick={togglePlay}
                 className="flex items-center justify-center bg-white/20 hover:bg-white/30 transition-all duration-200 border border-white/30"
@@ -225,12 +225,12 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
                   height: buttonSize * 0.6,
                   borderRadius: '50%'
                 }}
-                aria-label="Stop"
+                aria-label="Pause"
               >
-                <Square
-                  size={buttonSize * 0.3}
-                  className="text-white fill-white"
-                />
+                <div className="flex space-x-1">
+                  <div className="w-1.5 bg-white" style={{ height: buttonSize * 0.25 }} />
+                  <div className="w-1.5 bg-white" style={{ height: buttonSize * 0.25 }} />
+                </div>
               </button>
             )}
           </div>
