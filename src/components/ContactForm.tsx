@@ -3,6 +3,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface ContactFormData {
   name: string;
@@ -30,6 +31,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
   onSubmit,
   className = ''
 }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
@@ -73,21 +75,21 @@ const ContactForm: React.FC<ContactFormProps> = ({
     <Card className={`glass-card !bg-transparent backdrop-blur-[15px] !border-white/15 ${className}`}>
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-white">
-          Send Us a Message
+          {t('contact.form-title')}
         </CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              Name *
+              {t('contact.form-name-label')} *
             </label>
             <Input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              placeholder="Your name"
+              placeholder={t('contact.form-name-placeholder')}
               required
               className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
@@ -95,14 +97,14 @@ const ContactForm: React.FC<ContactFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              Email *
+              {t('contact.form-email-label')} *
             </label>
             <Input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="your.email@example.com"
+              placeholder={t('contact.form-email-placeholder')}
               required
               className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
@@ -110,14 +112,14 @@ const ContactForm: React.FC<ContactFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              Subject *
+              {t('contact.form-subject-label')} *
             </label>
             <Input
               type="text"
               name="subject"
               value={formData.subject}
               onChange={handleChange}
-              placeholder="What's this about?"
+              placeholder={t('contact.form-subject-placeholder')}
               required
               className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
@@ -125,13 +127,13 @@ const ContactForm: React.FC<ContactFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              Message *
+              {t('contact.form-message-label')} *
             </label>
             <Textarea
               name="message"
               value={formData.message}
               onChange={handleChange}
-              placeholder="Tell us what's on your mind..."
+              placeholder={t('contact.form-message-placeholder')}
               required
               rows={6}
               className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
@@ -143,7 +145,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
             disabled={isSubmitting}
             className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? 'Sending...' : 'Send Message'}
+            {isSubmitting ? t('contact.form-submitting') : t('contact.form-submit')}
           </Button>
         </form>
       </CardContent>
