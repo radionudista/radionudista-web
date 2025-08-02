@@ -216,14 +216,13 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
                 />
               </div>
             ) : (
-              /* Pause button when playing - same dimensions as play button container */
+              /* Pause button when playing - no background, just pause bars */
               <button
                 onClick={togglePlay}
-                className="flex items-center justify-center bg-white/20 hover:bg-white/30 transition-all duration-200 border border-white/30"
+                className="flex items-center justify-center transition-all duration-200 hover:scale-105"
                 style={{
                   width: buttonSize * 0.6,
                   height: buttonSize * 0.6,
-                  borderRadius: '50%'
                 }}
                 aria-label="Pause"
               >
