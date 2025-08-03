@@ -11,6 +11,8 @@ import { useNewsTicker } from '../hooks/useTextScrolling';
  * - Simple news ticker effect when playing
  * - Text never escapes the glass container limits
  * - Seamless right-to-left scrolling animation
+ * - Pause button instead of stop button
+ * - Fully transparent text canvas
  */
 const MiniPlayer = () => {
   const { isPlaying, isLoading, currentTrack, togglePlay } = useAudio();
@@ -28,23 +30,42 @@ const MiniPlayer = () => {
   return (
     <div 
       className={`flex items-center space-x-3 glass-card px-3 py-2 max-w-xs transition-colors ${!isLoading ? 'cursor-pointer hover:bg-white/10' : 'cursor-wait'}`}
-      onClick={!isLoading ? togglePlay : undefined}
     >
-      <MediaButton
-        isPlaying={isPlaying}
-        isLoading={isLoading}
-        onClick={togglePlay}
-        size="small"
-      />
-      
-      {/* Text container with news ticker scrolling - improved visibility */}
+      {/* Play/Pause Button */}
+      {!isPlaying ? (
+        <MediaButton
+          isPlaying={false}
+          isLoading={isLoading}
+          onClick={togglePlay}
+          size="small"
+        />
+      ) : (
+        /* Pause button when playing - minimalistic double bars, 20% bigger */
+        <button
+          onClick={togglePlay}
+          className="flex items-center justify-center transition-all duration-200 hover:scale-105"
+          style={{
+            width: 32, // 20% bigger than standard small size
+            height: 32,
+          }}
+          aria-label="Pause"
+        >
+          <div className="flex space-x-0.5">
+            <div className="w-1.5 bg-white rounded-sm" style={{ height: 12 }} />
+            <div className="w-1.5 bg-white rounded-sm" style={{ height: 12 }} />
+          </div>
+        </button>
+      )}
+
+      {/* Text container with news ticker scrolling - fully transparent canvas */}
       <div
         ref={containerRef}
-        className="flex-1 min-w-0 relative  rounded "
+        className="flex-1 min-w-0 relative"
         style={{
-          height: '1.5rem', // Increased from 1.25rem for better visibility
+          height: '1.5rem',
           overflow: 'hidden',
-          minWidth: '100px' // Ensure minimum width for text display
+          minWidth: '100px',
+          backgroundColor: 'transparent' // Make canvas fully transparent
         }}
       >
         <div
