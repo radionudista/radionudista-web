@@ -1,0 +1,3 @@
+# Add this line to your .env.development file
+VITE_RADIO_INFO_URL="https://public-player-widget.webradiosite.com/app/player/info/251579?hash=f9eb0f4eb62691f958df840acfd1936b22ce8ffc&version=1.00"
+
