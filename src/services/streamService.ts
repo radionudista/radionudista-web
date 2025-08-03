@@ -1,4 +1,5 @@
 import { env } from '../config/env';
+import { CoverImageService, ICoverImageService } from './coverImageService';
 
 /**
  * Stream Service Interface
@@ -56,10 +57,12 @@ export interface IStreamService {
 /**
  * Radio Stream Service Implementation
  * Follows Single Responsibility Principle - handles only stream-related operations
+ * Follows Dependency Inversion Principle - depends on cover service abstraction
  */
 export class RadioStreamService implements IStreamService {
   private radioInfoCache: RadioInfo | null = null;
   private readonly radioInfoUrl: string;
+  private readonly coverImageService: ICoverImageService;
 
   constructor(
     private readonly statusUrl: string,
@@ -68,6 +71,8 @@ export class RadioStreamService implements IStreamService {
   ) {
     // Use the radio info API URL from environment configuration
     this.radioInfoUrl = env.RADIO_INFO_API_URL;
+    // Inject cover image service (Dependency Inversion Principle)
+    this.coverImageService = new CoverImageService();
   }
 
   async fetchCurrentTrack(): Promise<string> {
@@ -107,26 +112,8 @@ export class RadioStreamService implements IStreamService {
   }
 
   async fetchSongCover(songName: string): Promise<string | null> {
-    try {
-      const radioInfo = await this.fetchRadioInfo();
-      if (!radioInfo?.songCoverUrl || !songName) {
-        return null;
-      }
-
-      // Replace {songName} placeholder with actual song name
-      const coverUrl = radioInfo.songCoverUrl.replace('{songName}', encodeURIComponent(songName));
-
-      // Test if the cover image URL is accessible
-      const response = await fetch(coverUrl, { method: 'HEAD' });
-      if (response.ok) {
-        return coverUrl;
-      }
-
-      return null;
-    } catch (error) {
-      console.error('Error fetching song cover:', error);
-      return null;
-    }
+    // Delegate to specialized cover image service (Single Responsibility Principle)
+    return await this.coverImageService.fetchCoverImageUrl(songName);
   }
 
   getStreamUrl(): string {
