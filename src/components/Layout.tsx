@@ -13,9 +13,11 @@ const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
 
   const navItems = [
+         /*
     { id: 'home', label: 'Home', path: '/' },
+
     { id: 'about', label: 'About', path: '/about' },
-    { id: 'contact', label: 'Contact', path: '/contact' }
+    { id: 'contact', label: 'Contact', path: '/contact' }*/
   ];
 
   const handleMobileNavClick = () => {
@@ -29,14 +31,14 @@ const Layout = ({ children }: LayoutProps) => {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo */}
           <Logo size="medium" />
-          
+
           {/* Mini Player - Only show when not on home page */}
           {location.pathname !== '/' && (
             <div className="hidden md:block">
               <MiniPlayer />
             </div>
           )}
-          
+
           {/* Desktop Navigation Items */}
           <div className="hidden md:flex items-center space-x-6">
             {navItems.map((item) => (
@@ -49,7 +51,7 @@ const Layout = ({ children }: LayoutProps) => {
               </Link>
             ))}
           </div>
-          
+
           {/* Mobile Navigation */}
           <div className="md:hidden flex items-center space-x-3">
             {/* Mini Player Mobile - Only show when not on home page */}
@@ -75,11 +77,11 @@ const Layout = ({ children }: LayoutProps) => {
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
           {/* Backdrop */}
-          <div 
+          <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
           />
-          
+
           {/* Sliding Panel */}
           <div className={`absolute top-0 right-0 h-full w-80 max-w-[80vw] bg-black/40 backdrop-blur-xl border-l border-white/10 transform transition-transform duration-300 ease-out ${
             isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
@@ -94,7 +96,7 @@ const Layout = ({ children }: LayoutProps) => {
                 <X className="w-6 h-6" />
               </button>
             </div>
-            
+
             {/* Navigation Items */}
             <div className="px-8 py-4 space-y-8">
               {navItems.map((item) => (
@@ -112,7 +114,7 @@ const Layout = ({ children }: LayoutProps) => {
                 </Link>
               ))}
             </div>
-            
+
             {/* Mini Player in Mobile Menu - Only show when not on home page */}
             {location.pathname !== '/' && (
               <div className="px-8 py-4 mt-12">
