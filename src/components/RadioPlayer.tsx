@@ -42,10 +42,10 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
         <div
           ref={mobileTicker.containerRef}
           className="relative w-full"
-          style={{
-            height: isMobile ? '1.25rem' : '1.75rem',
-            overflow: 'hidden',
-            backgroundColor: 'transparent'
+          style={{ 
+            height: isMobile ? '1.25rem' : '1.75rem', 
+            overflow: 'hidden', 
+            backgroundColor: 'transparent' 
           }}
           role="marquee"
           aria-live="polite"
@@ -64,7 +64,7 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
 
       {/* Main Player Layout - Enhanced structure and spacing */}
       <div className={`flex items-center gap-4 ${isMobile ? 'p-4 pt-10' : 'p-6 pt-14 md:pt-6'}`}>
-
+        
         {/* Cover Image Section - Consistent sizing and alignment */}
         <section className="flex-shrink-0" aria-label="Album Cover">
           <div
@@ -121,8 +121,8 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
         </section>
 
         {/* Player Controls Section - Enhanced layout and spacing */}
-        <section
-          className="flex-1 flex flex-col justify-center min-w-0"
+        <section 
+          className="flex-1 flex flex-col justify-center min-w-0" 
           style={{ height: isMobile ? '80px' : '120px' }}
           aria-label="Playback Controls"
         >
@@ -131,10 +131,10 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
             <div
               ref={desktopTicker.containerRef}
               className="relative w-full"
-              style={{
-                height: '1.75rem',
-                overflow: 'hidden',
-                backgroundColor: 'transparent'
+              style={{ 
+                height: '1.75rem', 
+                overflow: 'hidden', 
+                backgroundColor: 'transparent' 
               }}
               role="marquee"
               aria-live="polite"

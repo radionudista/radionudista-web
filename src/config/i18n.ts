@@ -5,14 +5,14 @@ import { env } from '../config/env';
 
 /**
  * I18n Configuration with Dynamic Language Loading
- *
+ * 
  * Follows Single Responsibility Principle:
  * - Only responsible for i18n initialization and configuration
- *
+ * 
  * Follows Open/Closed Principle:
  * - Open for extension by adding new language files
  * - Closed for modification of core loading logic
- *
+ * 
  * Follows Dependency Inversion Principle:
  * - Depends on environment abstractions, not concrete values
  */
@@ -20,7 +20,7 @@ import { env } from '../config/env';
 // Dynamic import of translation files based on supported languages
 const loadTranslations = async () => {
   const resources: Record<string, { translation: any }> = {};
-
+  
   for (const language of env.SUPPORTED_LANGUAGES) {
     try {
       // Dynamic import based on language code
@@ -30,7 +30,7 @@ const loadTranslations = async () => {
       console.warn(`Failed to load translation for language: ${language}`, error);
     }
   }
-
+  
   return resources;
 };
 
@@ -47,7 +47,7 @@ const detection = {
 // Initialize i18n with dynamic translations
 const initializeI18n = async () => {
   const resources = await loadTranslations();
-
+  
   await i18n
     .use(LanguageDetector)
     .use(initReactI18next)
@@ -56,13 +56,13 @@ const initializeI18n = async () => {
       fallbackLng: env.DEFAULT_LANGUAGE,
       supportedLngs: env.SUPPORTED_LANGUAGES,
       debug: env.APP_DEBUG,
-
+      
       detection,
-
+      
       interpolation: {
         escapeValue: false // React already does escaping
       },
-
+      
       react: {
         useSuspense: false // Disable suspense for better compatibility
       }

@@ -11,14 +11,14 @@ interface RadioPlayerSectionProps {
 
 /**
  * RadioPlayerSection Component
- *
+ * 
  * Follows Single Responsibility Principle:
  * - Only responsible for rendering the radio player section with optional title and description
- *
+ * 
  * Follows Open/Closed Principle:
  * - Open for extension through props
  * - Closed for modification of core functionality
- *
+ * 
  * Follows DRY Principle:
  * - Reusable component that can be used anywhere in the application
  * - Encapsulates the radio player with consistent styling
@@ -44,11 +44,11 @@ const RadioPlayerSection: React.FC<RadioPlayerSectionProps> = ({
           )}
         </div>
       )}
-
-      <RadioPlayer
-        className="mb-8"
-        showTitle={false}
-        size={size}
+      
+      <RadioPlayer 
+        className="mb-8" 
+        showTitle={false} 
+        size={size} 
       />
     </section>
   );

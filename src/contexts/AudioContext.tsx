@@ -31,12 +31,12 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isLoading, setIsLoading] = useState(false);
   const [currentTrack, setCurrentTrack] = useState<string>(MEDIA_CONSTANTS.STREAM.DEFAULT_TRACK);
   const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
-
+  
   // Volume State
   const [volume, setVolumeState] = useState(80);
   const [isMuted, setIsMuted] = useState(false);
   const [previousVolume, setPreviousVolume] = useState(80);
-
+  
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const streamService = useRef(
     new RadioStreamService(
@@ -65,13 +65,13 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
    */
   const createConfiguredAudio = useCallback(() => {
     const audio = AudioService.createAudioInstance(STREAM_CONFIG.streamUrl, volume / 100);
-
+    
     // Apply event listeners
     audio.addEventListener('loadstart', audioEventHandlers.onLoadStart);
     audio.addEventListener('canplay', audioEventHandlers.onCanPlay);
     audio.addEventListener('waiting', audioEventHandlers.onWaiting);
     audio.addEventListener('error', audioEventHandlers.onError);
-
+    
     return audio;
   }, [volume]);
 
@@ -101,10 +101,9 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   /**
    * Playback Control - Following SRP
-   */
   const togglePlayWithPause = useCallback(() => {
     if (!audioRef.current) {
-      audioRef.current = createConfiguredAudio();
+      audioRef.current = createAudioWithVolume(STREAM_CONFIG.streamUrl);
     }
 
     if (isPlaying) {
@@ -114,45 +113,57 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       audioRef.current.play().catch(console.error);
       setIsPlaying(true);
     }
-  }, [isPlaying, createConfiguredAudio]);
+  }, [isPlaying, createAudioWithVolume]);
 
+  // New togglePlay that drops audio ref on pause and creates new one on play
   const togglePlay = useCallback(() => {
     if (isPlaying && audioRef.current) {
-      AudioService.cleanupAudio(audioRef.current);
+      // Pause and drop current audio ref
+      audioRef.current.pause();
+      audioRef.current.src = '';
       audioRef.current = null;
       setIsPlaying(false);
       setIsLoading(false);
     } else {
-      audioRef.current = createConfiguredAudio();
+      // Create new audio instance and play from current stream
+      audioRef.current = createAudioWithVolume(STREAM_CONFIG.streamUrl);
       audioRef.current.play().catch(console.error);
       setIsPlaying(true);
     }
-  }, [isPlaying, createConfiguredAudio]);
+  }, [isPlaying, createAudioWithVolume]);
 
-  /**
-   * Track Information - Following SRP
-   */
-  const fetchCurrentTrack = useCallback(async () => {
-    try {
-      const trackName = await streamService.current.fetchCurrentTrack();
-      if (trackName !== currentTrack) {
-        setCurrentTrack(trackName);
-        const coverUrl = await streamService.current.fetchSongCover(trackName);
-        setCoverImageUrl(coverUrl);
-      }
-    } catch (error) {
-      console.error('Error fetching track info:', error);
-    }
-  }, [currentTrack]);
-
-  // Effects
+  // Update track info periodically
   useEffect(() => {
     fetchCurrentTrack();
     const interval = setInterval(fetchCurrentTrack, MEDIA_CONSTANTS.STREAM.UPDATE_INTERVAL);
     return () => clearInterval(interval);
   }, [fetchCurrentTrack]);
 
-  const contextValue: AudioContextType = {
+  // Handle audio events
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleCanPlay = () => setIsLoading(false);
+    const handleWaiting = () => setIsLoading(true);
+    const handleError = () => {
+      setIsLoading(false);
+      setIsPlaying(false);
+      console.error('Audio playback error');
+    };
+
+    audio.addEventListener('canplay', handleCanPlay);
+    audio.addEventListener('waiting', handleWaiting);
+    audio.addEventListener('error', handleError);
+
+    return () => {
+      audio.removeEventListener('canplay', handleCanPlay);
+      audio.removeEventListener('waiting', handleWaiting);
+      audio.removeEventListener('error', handleError);
+    };
+  }, []);
+
+  const contextValue = {
     isPlaying,
     isLoading,
     currentTrack,
@@ -168,6 +179,11 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return (
     <AudioContext.Provider value={contextValue}>
       {children}
+      <audio
+        ref={audioRef}
+        src={STREAM_CONFIG.streamUrl}
+        preload={MEDIA_CONSTANTS.STREAM.PRELOAD}
+      />
     </AudioContext.Provider>
   );
 };
