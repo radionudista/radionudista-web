@@ -4,10 +4,12 @@ import { useNewsTicker } from '../hooks/useTextScrolling';
 import { useResponsive } from '../hooks/useResponsive';
 import { VolumeControl } from './ui/VolumeControl';
 import { PlayPauseButton } from './ui/PlayPauseButton';
+
 interface RadioPlayerProps {
   className?: string;
   size?: 'small' | 'medium' | 'large';
 }
+
 /**
  * RadioPlayer Component - Simplified following SOLID principles
  * Single Responsibility: Orchestrates audio player UI components
@@ -20,17 +22,20 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
 }) => {
   const audioContext = useAudio();
   const { isMobile } = useResponsive();
+
   // Separate ticker instances for mobile and desktop
   const mobileTicker = useNewsTicker({
     text: audioContext.currentTrack,
     isActive: audioContext.isPlaying,
     speed: 80
   });
+
   const desktopTicker = useNewsTicker({
     text: audioContext.currentTrack,
     isActive: audioContext.isPlaying,
     speed: 80
   });
+
   return (
     <div className={`glass-card ${className} relative`}>
       {/* Mobile Overlay Text - Reduced size */}
@@ -51,6 +56,7 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
           </div>
         </div>
       </div>
+
       {/* Main Player Layout - Responsive sizing */}
       <div className={`flex items-stretch gap-3 ${isMobile ? 'p-4 pt-8' : 'p-6 pt-12 md:pt-6'}`}>
         {/* Cover Image - Sets the height reference */}
@@ -68,34 +74,19 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
                 alt={`Cover for ${audioContext.currentTrack}`}
                 className="w-full h-full object-cover"
                 onError={(e) => {
-                  // On error, fallback to default radio image
-                  e.currentTarget.src = "/images/radio_nudista_metatag.png";
-                  e.currentTarget.onerror = null; // Prevent infinite loop
+                  e.currentTarget.style.display = 'none';
                 }}
               />
             ) : (
-              <img
-                src="/images/radio_nudista_metatag.png"
-                alt="Radio Nudista"
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  // If default image fails, show minimal placeholder
-                  e.currentTarget.style.display = "none";
-                  const parent = e.currentTarget.parentElement;
-                  if (parent) {
-                    parent.innerHTML = `
-                      <div class="w-full h-full bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center">
-                        <div class="text-white/40 text-xs text-center px-2">
-                          Radio<br />Nudista
-                        </div>
-                      </div>
-                    `;
-                  }
-                }}
-              />
+              <div className="w-full h-full bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center">
+                <div className={`text-white/40 text-center px-1 ${isMobile ? 'text-xs' : 'text-xs'}`}>
+                  Radio<br />Nudista
+                </div>
+              </div>
             )}
           </div>
         </div>
+
         {/* Volume Control - Responsive height */}
         <VolumeControl
           volume={audioContext.volume}
@@ -104,6 +95,7 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
           onToggleMute={audioContext.toggleMute}
           height={isMobile ? 80 : 120}
         />
+
         {/* Player Controls - Responsive height */}
         <div className="flex-1 flex flex-col justify-center" style={{ height: isMobile ? '80px' : '120px' }}>
           {/* Desktop Track Info */}
@@ -122,6 +114,7 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
               </div>
             </div>
           </div>
+
           {/* Play/Pause Button */}
           <div className="flex justify-center md:justify-start">
             <PlayPauseButton
@@ -137,4 +130,5 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
     </div>
   );
 };
+
 export default RadioPlayer;
