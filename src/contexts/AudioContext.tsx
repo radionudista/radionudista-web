@@ -101,9 +101,10 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   /**
    * Playback Control - Following SRP
+   */
   const togglePlayWithPause = useCallback(() => {
     if (!audioRef.current) {
-      audioRef.current = createAudioWithVolume(STREAM_CONFIG.streamUrl);
+      audioRef.current = createConfiguredAudio();
     }
 
     if (isPlaying) {
@@ -113,57 +114,45 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       audioRef.current.play().catch(console.error);
       setIsPlaying(true);
     }
-  }, [isPlaying, createAudioWithVolume]);
+  }, [isPlaying, createConfiguredAudio]);
 
-  // New togglePlay that drops audio ref on pause and creates new one on play
   const togglePlay = useCallback(() => {
     if (isPlaying && audioRef.current) {
-      // Pause and drop current audio ref
-      audioRef.current.pause();
-      audioRef.current.src = '';
+      AudioService.cleanupAudio(audioRef.current);
       audioRef.current = null;
       setIsPlaying(false);
       setIsLoading(false);
     } else {
-      // Create new audio instance and play from current stream
-      audioRef.current = createAudioWithVolume(STREAM_CONFIG.streamUrl);
+      audioRef.current = createConfiguredAudio();
       audioRef.current.play().catch(console.error);
       setIsPlaying(true);
     }
-  }, [isPlaying, createAudioWithVolume]);
+  }, [isPlaying, createConfiguredAudio]);
 
-  // Update track info periodically
+  /**
+   * Track Information - Following SRP
+   */
+  const fetchCurrentTrack = useCallback(async () => {
+    try {
+      const trackName = await streamService.current.fetchCurrentTrack();
+      if (trackName !== currentTrack) {
+        setCurrentTrack(trackName);
+        const coverUrl = await streamService.current.fetchSongCover(trackName);
+        setCoverImageUrl(coverUrl);
+      }
+    } catch (error) {
+      console.error('Error fetching track info:', error);
+    }
+  }, [currentTrack]);
+
+  // Effects
   useEffect(() => {
     fetchCurrentTrack();
     const interval = setInterval(fetchCurrentTrack, MEDIA_CONSTANTS.STREAM.UPDATE_INTERVAL);
     return () => clearInterval(interval);
   }, [fetchCurrentTrack]);
 
-  // Handle audio events
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const handleCanPlay = () => setIsLoading(false);
-    const handleWaiting = () => setIsLoading(true);
-    const handleError = () => {
-      setIsLoading(false);
-      setIsPlaying(false);
-      console.error('Audio playback error');
-    };
-
-    audio.addEventListener('canplay', handleCanPlay);
-    audio.addEventListener('waiting', handleWaiting);
-    audio.addEventListener('error', handleError);
-
-    return () => {
-      audio.removeEventListener('canplay', handleCanPlay);
-      audio.removeEventListener('waiting', handleWaiting);
-      audio.removeEventListener('error', handleError);
-    };
-  }, []);
-
-  const contextValue = {
+  const contextValue: AudioContextType = {
     isPlaying,
     isLoading,
     currentTrack,
@@ -179,11 +168,6 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return (
     <AudioContext.Provider value={contextValue}>
       {children}
-      <audio
-        ref={audioRef}
-        src={STREAM_CONFIG.streamUrl}
-        preload={MEDIA_CONSTANTS.STREAM.PRELOAD}
-      />
     </AudioContext.Provider>
   );
 };
