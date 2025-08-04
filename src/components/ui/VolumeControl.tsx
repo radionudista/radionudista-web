@@ -30,7 +30,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({
       <div className="relative flex flex-col items-center" style={{ height }}>
         {/* Volume Track */}
         <div
-          className={`w-1 h-full bg-white/30 rounded-full relative cursor-pointer touch-none select-none ${
+          className={`w-1 h-full bg-white/30 relative cursor-pointer touch-none select-none ${
             isDragging ? 'bg-white/40' : ''
           }`}
           onClick={handleTrackInteraction}
@@ -38,7 +38,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({
         >
           {/* Volume Fill */}
           <div
-            className={`absolute bottom-0 left-0 w-full bg-white rounded-full transition-all ${
+            className={`absolute bottom-0 left-0 w-full bg-white transition-all ${
               isDragging ? 'duration-0' : 'duration-150'
             }`}
             style={{ height: `${volume}%` }}
@@ -46,7 +46,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({
 
           {/* Draggable Handle - Responsive size */}
           <div
-            className={`absolute bg-white rounded-full border-2 border-white/50 cursor-grab active:cursor-grabbing transition-all touch-none select-none ${
+            className={`absolute bg-white border-2 border-white/50 cursor-grab active:cursor-grabbing transition-all touch-none select-none ${
               isDragging ? 'scale-125 shadow-lg duration-0' : 'duration-150 hover:scale-110'
             }`}
             style={{
@@ -65,7 +65,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({
         {/* Mute/Unmute Button - Responsive size */}
         <button
           onClick={onToggleMute}
-          className={`p-1.5 hover:bg-white/10 rounded-full transition-all duration-150 touch-manipulation ${
+          className={`p-1.5 hover:bg-white/10 transition-all duration-150 touch-manipulation ${
             isMobile ? 'mt-1' : 'mt-2'
           }`}
           aria-label={isMuted ? "Unmute" : "Mute"}

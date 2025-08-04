@@ -28,8 +28,8 @@ const MiniPlayer = () => {
 
   return (
     <div 
-      className={`flex items-center space-x-2 glass-card px-2 py-1.5 max-w-xs transition-colors ${
-        !audioContext.isLoading ? 'cursor-pointer hover:bg-white/10' : 'cursor-wait'
+      className={`flex items-center space-x-2 glass-card px-2 py-1.5 max-w-xs ${
+        !audioContext.isLoading ? 'cursor-pointer' : 'cursor-wait'
       }`}
       style={{ minHeight: '40px', maxHeight: '40px' }} // Fixed height constraints
     >
@@ -60,14 +60,14 @@ const MiniPlayer = () => {
           >
             <div className="flex space-x-0.5">
               <div
-                className="bg-white rounded-sm"
+                className="bg-white"
                 style={{
                   width: '2.4px', // Increased from 2px to 2.4px (20% increase)
                   height: '12px' // Increased from 10px to 12px (20% increase)
                 }}
               />
               <div
-                className="bg-white rounded-sm"
+                className="bg-white"
                 style={{
                   width: '2.4px', // Increased from 2px to 2.4px (20% increase)
                   height: '12px' // Increased from 10px to 12px (20% increase)

@@ -37,7 +37,7 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
   });
 
   return (
-    <div className={`glass-card transition-colors hover:bg-white/5 ${className} relative`}>
+    <div className={`glass-card ${className} relative`}>
       {/* Mobile Overlay Text - Reduced size */}
       <div className="block md:hidden absolute top-0 left-0 right-0 z-10 px-3 py-2 pb-1">
         <div
@@ -59,10 +59,10 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
 
       {/* Main Player Layout - Responsive sizing */}
       <div className={`flex items-stretch gap-3 ${isMobile ? 'p-4 pt-8' : 'p-6 pt-12 md:pt-6'}`}>
-        {/* Cover Image - Responsive size */}
+        {/* Cover Image - Sets the height reference */}
         <div className="flex-shrink-0">
           <div
-            className="bg-white rounded-lg border border-white/30 shadow-sm overflow-hidden flex items-center justify-center"
+            className="bg-white border border-white/30 shadow-sm overflow-hidden flex items-center justify-center"
             style={{
               width: isMobile ? '80px' : '120px',
               height: isMobile ? '80px' : '120px'
