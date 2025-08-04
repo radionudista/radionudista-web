@@ -1,0 +1,161 @@
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
+import Logo from './Logo';
+import MiniPlayer from './MiniPlayer';
+
+interface NavigationItem {
+  id: string;
+  label: string;
+  path: string;
+}
+
+interface NavigationProps {
+  navItems?: NavigationItem[];
+  className?: string;
+}
+
+/**
+ * Navigation Component - Following SOLID principles
+ * Single Responsibility: Handles navigation UI and mobile menu state
+ * Open/Closed: Extensible through navItems prop without modification
+ * Liskov Substitution: Can be replaced by any component implementing NavigationProps
+ * Interface Segregation: Clean interface with only necessary props
+ * Dependency Inversion: Depends on abstractions (useLocation, Link)
+ */
+const Navigation: React.FC<NavigationProps> = ({
+  navItems = [
+    { id: 'home', label: 'Home', path: '/' },
+    { id: 'about', label: 'About', path: '/about' },
+    { id: 'contact', label: 'Contact', path: '/contact' }
+  ],
+  className = ''
+}) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const handleMobileNavClick = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  const openMobileMenu = () => {
+    setIsMobileMenuOpen(true);
+  };
+
+  return (
+    <>
+      {/* Main Navigation Bar */}
+      <nav className={`glass-navbar fixed top-0 left-0 right-0 z-50 px-6 py-4 md:px-8 ${className}`}>
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          {/* Logo Section */}
+          <Logo size="medium" />
+
+          {/* Mini Player - Desktop only, hidden on home page */}
+          {location.pathname !== '/' && (
+            <div className="hidden md:block">
+              <MiniPlayer />
+            </div>
+          )}
+
+          {/* Desktop Navigation Links */}
+          <div className="hidden md:flex items-center space-x-6">
+            {navItems.map((item) => (
+              <Link
+                key={item.id}
+                to={item.path}
+                className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
+                aria-current={location.pathname === item.path ? 'page' : undefined}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Mobile Navigation Controls */}
+          <div className="md:hidden flex items-center space-x-3">
+            {/* Mini Player Mobile - Scaled down, hidden on home page */}
+            {location.pathname !== '/' && (
+              <div className="scale-75 origin-center">
+                <MiniPlayer />
+              </div>
+            )}
+
+            {/* Mobile Menu Toggle Button */}
+            <button
+              onClick={openMobileMenu}
+              className="nav-link p-2"
+              aria-label="Open navigation menu"
+              aria-expanded={isMobileMenuOpen}
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal="true">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={closeMobileMenu}
+            aria-label="Close navigation menu"
+          />
+
+          {/* Mobile Menu Panel - Solid black background */}
+          <div
+            className={`absolute top-0 right-0 h-full w-80 max-w-[80vw] bg-black border-l border-white/10 transform transition-transform duration-300 ease-out ${
+              isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+            }`}
+            role="navigation"
+            aria-label="Mobile navigation menu"
+          >
+            {/* Close Button */}
+            <header className="flex justify-end p-6">
+              <button
+                onClick={closeMobileMenu}
+                className="nav-link p-2"
+                aria-label="Close navigation menu"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </header>
+
+            {/* Mobile Navigation Links */}
+            <div className="px-8 py-4 space-y-8">
+              {navItems.map((item) => (
+                <Link
+                  key={item.id}
+                  to={item.path}
+                  onClick={handleMobileNavClick}
+                  className={`block w-full text-left py-4 px-6 text-lg font-medium transition-all duration-200 ${
+                    location.pathname === item.path 
+                      ? 'text-blue-400 bg-blue-400/10' 
+                      : 'text-white/80 hover:text-white hover:bg-white/10'
+                  }`}
+                  aria-current={location.pathname === item.path ? 'page' : undefined}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+
+            {/* Mini Player in Mobile Menu - Hidden on home page */}
+            {location.pathname !== '/' && (
+              <div className="px-8 py-4 mt-12">
+                <MiniPlayer />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default Navigation;
