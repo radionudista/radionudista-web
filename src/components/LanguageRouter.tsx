@@ -80,7 +80,7 @@ const LanguageDetector: React.FC<{ children: React.ReactNode }> = ({ children })
   // Show loading state while i18n initializes
   if (!isI18nReady) {
     return (
-      <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+      <div className="min-h-screen w-full flex items-center justify-center bg-black">
         <div className="text-white text-lg">Loading...</div>
       </div>
     );
