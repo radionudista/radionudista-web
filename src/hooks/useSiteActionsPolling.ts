@@ -2,7 +2,6 @@ import { useEffect, useCallback } from 'react';
 import { logger } from '../utils/logger';
 
 interface SiteActions {
-  'dont-relaod'?: boolean;
   'dont-reload'?: boolean; // Also check for correct spelling
 }
 
