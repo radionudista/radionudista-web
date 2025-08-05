@@ -53,10 +53,41 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     onLoadStart: () => setIsLoading(true),
     onCanPlay: () => setIsLoading(false),
     onWaiting: () => setIsLoading(true),
-    onError: () => {
+    onError: (event: Event) => {
       setIsLoading(false);
       setIsPlaying(false);
-      console.error('Audio playback error');
+      const audioElement = event.target as HTMLAudioElement;
+      const error = audioElement.error;
+
+      if (error) {
+        console.error('Audio playback error details:', {
+          code: error.code,
+          message: error.message,
+          networkState: audioElement.networkState,
+          readyState: audioElement.readyState,
+          src: audioElement.src
+        });
+
+        // Handle specific error types
+        switch (error.code) {
+          case MediaError.MEDIA_ERR_ABORTED:
+            console.error('Audio playback aborted by user');
+            break;
+          case MediaError.MEDIA_ERR_NETWORK:
+            console.error('Network error while loading audio');
+            break;
+          case MediaError.MEDIA_ERR_DECODE:
+            console.error('Audio decoding error');
+            break;
+          case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+            console.error('Audio format not supported');
+            break;
+          default:
+            console.error('Unknown audio error');
+        }
+      } else {
+        console.error('Audio playback error: No error details available');
+      }
     }
   };
 
