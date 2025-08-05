@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Force black background from the very start - prevents white flash */
+html {
+  background-color: #000000 !important;
+}
+
+body {
+  background-color: #000000 !important;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  background-color: #000000 !important;
+  min-height: 100vh;
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
 
 @layer base {
@@ -130,6 +146,19 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   }
   
+  .solid-black-card {
+    background: rgba(0, 0, 0, 1);
+    border: 1px solid rgba(0, 0, 0, 1);
+    border-radius: 8px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .solid-black-card:hover {
+    background: rgba(0, 0, 0, 1);
+    border: 1px solid rgba(0, 0, 0, 1);
+  }
+
   .glass-input {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);

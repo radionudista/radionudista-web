@@ -85,7 +85,8 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
       currentVideo: currentVideo.split('/').pop(),
     };
     setDebugInfo('BackgroundVideo', debugData);
-  }, [showImage, imageOpacity, isVideoReady, videoOpacity, currentImage, currentVideo, setDebugInfo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showImage, imageOpacity, isVideoReady, videoOpacity, currentImage?.id, currentVideo]); // setDebugInfo is stable from context
 
   useEffect(() => {
     // Select a random video each time the component mounts
@@ -111,25 +112,17 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
 
   return (
     <>
-      {/* Background Image (shown while video loads) */}
-      {showImage && currentImage && (
-        <div
-          className={`${LAYOUT.PATTERNS.FIXED_OVERLAY} bg-cover bg-center bg-no-repeat z-[${LAYOUT.Z_INDEX.BACKGROUND}]`}
-          style={{
-            backgroundImage: `url(${currentImage.path})`,
-            ...transitionStyles.image
-          }}
-          role="img"
-          aria-label={currentImage.alt}
-        />
-      )}
-
+      {/* Background Image removed - no longer shows while video loads to prevent white/colored content during loading */}
+      
       {/* Background Video - Always rendered for smooth crossfade */}
       <video 
         ref={videoRef}
         key={videoKey}
         className={`${LAYOUT.PATTERNS.FIXED_OVERLAY} object-cover z-[${LAYOUT.Z_INDEX.BACKGROUND}] ${className}`}
-        style={transitionStyles.video}
+        style={{
+          ...transitionStyles.video,
+          filter: 'brightness(0.4) contrast(1.2)'
+        }}
         autoPlay
         muted
         loop
