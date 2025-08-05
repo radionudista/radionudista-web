@@ -11,6 +11,11 @@ interface BackgroundVideoProps {
   className?: string;
   
   /**
+   * Whether to show the fallback gradient background
+   */
+  showFallbackGradient?: boolean;
+  
+  /**
    * Whether to show the overlay for better contrast
    */
   showOverlay?: boolean;
@@ -25,7 +30,7 @@ interface BackgroundVideoProps {
  * BackgroundVideo Component
  * 
  * Follows Single Responsibility Principle:
- * - Only responsible for rendering background video with black background while loading
+ * - Only responsible for rendering background video with smooth image-to-video transition
  * 
  * Follows Open/Closed Principle:
  * - Open for extension through props
@@ -33,15 +38,17 @@ interface BackgroundVideoProps {
  *
  * Follows DRY Principle:
  * - Uses centralized layout constants and background transition logic
- * - Reuses background transition hook
+ * - Reuses background image utilities and transition hook
  *
  * Features:
- * - Shows black background while video loads
- * - Smooth fade-in transition when video is ready
+ * - Shows random background image while video loads
+ * - Smooth transition from image to video
+ * - Fallback gradient background
  * - Configurable overlay for better contrast
  */
 const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
   className = '',
+  showFallbackGradient = true,
   showOverlay = true,
   overlayOpacity = 0.4
 }) => {
@@ -52,24 +59,33 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
 
   // Use the background transition hook
   const { 
+    currentImage, 
     isVideoReady, 
+    showImage, 
+    showVideo, 
+    imageOpacity, 
     videoOpacity,
     handleVideoCanPlay,
     handleVideoLoadedData,
     transitionStyles
   } = useBackgroundTransition({ 
     videoRef,
-    transitionDuration: 1000      // 1 second fade-in transition
+    transitionDuration: 1000,      // 1 second transition
+    minimumDisplayTime: 2000,     // 2 seconds minimum display time
+    transitionCurve: 'ELEGANT'     // Use elegant transition curve
   });
 
   useEffect(() => {
     const debugData = {
+      showImage,
+      imageOpacity,
       isVideoReady,
       videoOpacity,
+      currentImage: currentImage?.id || 'None',
       currentVideo: currentVideo.split('/').pop(),
     };
     setDebugInfo('BackgroundVideo', debugData);
-  }, [isVideoReady, videoOpacity, currentVideo, setDebugInfo]);
+  }, [showImage, imageOpacity, isVideoReady, videoOpacity, currentImage, currentVideo, setDebugInfo]);
 
   useEffect(() => {
     // Select a random video each time the component mounts
@@ -95,10 +111,20 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
 
   return (
     <>
-      {/* Black Background (shown while video loads) */}
-      <div className={`${LAYOUT.PATTERNS.FIXED_OVERLAY} bg-black z-[${LAYOUT.Z_INDEX.BACKGROUND}]`} />
+      {/* Background Image (shown while video loads) */}
+      {showImage && currentImage && (
+        <div
+          className={`${LAYOUT.PATTERNS.FIXED_OVERLAY} bg-cover bg-center bg-no-repeat z-[${LAYOUT.Z_INDEX.BACKGROUND}]`}
+          style={{
+            backgroundImage: `url(${currentImage.path})`,
+            ...transitionStyles.image
+          }}
+          role="img"
+          aria-label={currentImage.alt}
+        />
+      )}
 
-      {/* Background Video - Fades in when ready */}
+      {/* Background Video - Always rendered for smooth crossfade */}
       <video 
         ref={videoRef}
         key={videoKey}
@@ -117,6 +143,11 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
       >
         <source src={`${currentVideo}?t=${videoKey}`} type="video/mp4" />
       </video>
+      
+      {/* Fallback gradient background */}
+      {showFallbackGradient && (
+        <div className={`${LAYOUT.PATTERNS.FIXED_OVERLAY} bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 z-[-1]`} />
+      )}
       
       {/* Overlay for better contrast */}
       {showOverlay && (
