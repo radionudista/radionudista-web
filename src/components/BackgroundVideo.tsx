@@ -112,20 +112,8 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
 
   return (
     <>
-      {/* Background Image (shown while video loads) */}
-      {showImage && currentImage && (
-        <div
-          className={`${LAYOUT.PATTERNS.FIXED_OVERLAY} bg-cover bg-center bg-no-repeat z-[${LAYOUT.Z_INDEX.BACKGROUND}]`}
-          style={{
-            backgroundImage: `url(${currentImage.path})`,
-            ...transitionStyles.image,
-            filter: 'brightness(0.4) contrast(1.2)'
-          }}
-          role="img"
-          aria-label={currentImage.alt}
-        />
-      )}
-
+      {/* Background Image removed - no longer shows while video loads to prevent white/colored content during loading */}
+      
       {/* Background Video - Always rendered for smooth crossfade */}
       <video 
         ref={videoRef}
