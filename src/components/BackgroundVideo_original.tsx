@@ -39,7 +39,6 @@ interface BackgroundVideoProps {
  * - Shows black background while video loads
  * - Smooth fade-in transition when video is ready
  * - Configurable overlay for better contrast
- * - Video darkening overlay for improved UI visibility
  */
 const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
   className = '',
@@ -118,9 +117,6 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
       >
         <source src={`${currentVideo}?t=${videoKey}`} type="video/mp4" />
       </video>
-      
-      {/* Video Darkening Overlay - Improves content visibility */}
-      <div className={`${LAYOUT.PATTERNS.FIXED_OVERLAY} bg-black/30 z-[${LAYOUT.Z_INDEX.BACKGROUND + 1}]`} />
       
       {/* Overlay for better contrast */}
       {showOverlay && (

@@ -30,9 +30,10 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({
       <div className="relative flex flex-col items-center" style={{ height }}>
         {/* Volume Track */}
         <div
-          className={`w-1 h-full bg-white/30 relative cursor-pointer touch-none select-none ${
+          className={`w-1 h-full bg-white/30 relative cursor-pointer touch-manipulation select-none ${
             isDragging ? 'bg-white/40' : ''
           }`}
+          data-volume-track
           onClick={handleTrackInteraction}
           onTouchStart={handleTrackInteraction}
         >
@@ -46,7 +47,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({
 
           {/* Draggable Handle - Responsive size */}
           <div
-            className={`absolute bg-white border-2 border-white/50 cursor-grab active:cursor-grabbing transition-all touch-none select-none ${
+            className={`absolute bg-white border-2 border-white/50 cursor-grab active:cursor-grabbing transition-all touch-manipulation select-none ${
               isDragging ? 'scale-125 shadow-lg duration-0' : 'duration-150 hover:scale-110'
             }`}
             style={{
