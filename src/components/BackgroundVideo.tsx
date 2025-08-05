@@ -85,7 +85,8 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
       currentVideo: currentVideo.split('/').pop(),
     };
     setDebugInfo('BackgroundVideo', debugData);
-  }, [showImage, imageOpacity, isVideoReady, videoOpacity, currentImage, currentVideo, setDebugInfo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showImage, imageOpacity, isVideoReady, videoOpacity, currentImage?.id, currentVideo]); // setDebugInfo is stable from context
 
   useEffect(() => {
     // Select a random video each time the component mounts
@@ -117,7 +118,8 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
           className={`${LAYOUT.PATTERNS.FIXED_OVERLAY} bg-cover bg-center bg-no-repeat z-[${LAYOUT.Z_INDEX.BACKGROUND}]`}
           style={{
             backgroundImage: `url(${currentImage.path})`,
-            ...transitionStyles.image
+            ...transitionStyles.image,
+            filter: 'brightness(0.4) contrast(1.2)'
           }}
           role="img"
           aria-label={currentImage.alt}
@@ -129,7 +131,10 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
         ref={videoRef}
         key={videoKey}
         className={`${LAYOUT.PATTERNS.FIXED_OVERLAY} object-cover z-[${LAYOUT.Z_INDEX.BACKGROUND}] ${className}`}
-        style={transitionStyles.video}
+        style={{
+          ...transitionStyles.video,
+          filter: 'brightness(0.4) contrast(1.2)'
+        }}
         autoPlay
         muted
         loop
