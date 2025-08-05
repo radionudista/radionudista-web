@@ -33,9 +33,8 @@ export const useVolumeControl = (onVolumeChange: (volume: number) => void): UseV
       ((effectiveHeight - (adjustedY - paddingTop)) / effectiveHeight) * 100
     ));
 
-    // Smooth out small movements to prevent jitter
-    const roundedPercentage = Math.round(percentage * 2) / 2; // Round to 0.5 increments
-    return roundedPercentage;
+    // Smooth out small movements to prevent jitter - return directly
+    return Math.round(percentage * 2) / 2; // Round to 0.5 increments
   }, []);
 
   // Enhanced volume update with iPhone-specific handling
@@ -64,6 +63,11 @@ export const useVolumeControl = (onVolumeChange: (volume: number) => void): UseV
       });
     }
   }, [onVolumeChange]);
+
+  // Prevent context menu during drag
+  const preventContextMenu = useCallback((e: Event) => {
+    e.preventDefault();
+  }, []);
 
   // Handle track click/tap with haptic-like feedback timing
   const handleTrackInteraction = useCallback((e: React.MouseEvent | React.TouchEvent) => {
@@ -103,12 +107,7 @@ export const useVolumeControl = (onVolumeChange: (volume: number) => void): UseV
     if ('ontouchstart' in window) {
       document.addEventListener('contextmenu', preventContextMenu, { once: true });
     }
-  }, [calculateVolumeFromEvent, updateVolumeSmooth]);
-
-  // Prevent context menu during drag
-  const preventContextMenu = useCallback((e: Event) => {
-    e.preventDefault();
-  }, []);
+  }, [calculateVolumeFromEvent, updateVolumeSmooth, preventContextMenu]);
 
   // Optimized mouse move handler
   const handleMouseMove = useCallback((e: MouseEvent) => {
