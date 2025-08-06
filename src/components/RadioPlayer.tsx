@@ -109,16 +109,18 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
           </div>
         </section>
 
-        {/* Volume Control Section - Proper spacing */}
-        <section className="flex-shrink-0" aria-label="Volume Control">
-          <VolumeControl
-            volume={audioContext.volume}
-            isMuted={audioContext.isMuted}
-            onVolumeChange={audioContext.setVolume}
-            onToggleMute={audioContext.toggleMute}
-            height={isMobile ? 80 : 120}
-          />
-        </section>
+        {/* Volume Control Section - Hidden on mobile devices */}
+        {!isMobile && (
+          <section className="flex-shrink-0" aria-label="Volume Control">
+            <VolumeControl
+              volume={audioContext.volume}
+              isMuted={audioContext.isMuted}
+              onVolumeChange={audioContext.setVolume}
+              onToggleMute={audioContext.toggleMute}
+              height={120}
+            />
+          </section>
+        )}
 
         {/* Player Controls Section - Enhanced layout and spacing */}
         <section 
