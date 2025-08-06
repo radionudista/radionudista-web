@@ -47,8 +47,10 @@ const LanguageDetector: React.FC<{ children: React.ReactNode }> = ({ children })
     checkI18nReady();
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!isI18nReady) return;
+
+    console.log('Pasa por aqui')
 
     const currentPath = location.pathname;
     const pathSegments = currentPath.split('/').filter(Boolean);
@@ -75,7 +77,7 @@ const LanguageDetector: React.FC<{ children: React.ReactNode }> = ({ children })
         i18n.changeLanguage(env.DEFAULT_LANGUAGE);
       }
     }
-  }, [location.pathname, navigate, isI18nReady]);
+  }, [location.pathname, navigate, isI18nReady]);*/
 
   // Show loading state while i18n initializes
   if (!isI18nReady) {

@@ -112,7 +112,7 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
   return (
     <>
       {/* Background Image (shown while video loads) */}
-      {showImage && currentImage && (
+      {/*showImage && currentImage && (
         <div
           className={`${LAYOUT.PATTERNS.FIXED_OVERLAY} bg-cover bg-center bg-no-repeat z-[${LAYOUT.Z_INDEX.BACKGROUND}]`}
           style={{
@@ -122,7 +122,7 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
           role="img"
           aria-label={currentImage.alt}
         />
-      )}
+      )*/}
 
       {/* Background Video - Always rendered for smooth crossfade */}
       <video 
@@ -158,7 +158,7 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
       )}
 
       {/* Video Credits */}
-      <div className={`fixed bottom-20 right-4 z-50 text-white/60 text-xs font-light backdrop-blur-sm bg-black/20 px-2 py-1 rounded-sm transition-all duration-300 pointer-events-auto`}>
+      {/*<div className={`fixed bottom-20 right-4 z-50 text-white/60 text-xs font-light backdrop-blur-sm bg-black/20 px-2 py-1 rounded-sm transition-all duration-300 pointer-events-auto`}>
         Visuals by{' '}
         <a 
           href="https://www.instagram.com/gachapon3000" 
@@ -168,7 +168,7 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
         >
           @Gachapon3000
         </a>
-      </div>
+      </div>*/}
     </>
   );
 };

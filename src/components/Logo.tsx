@@ -43,7 +43,6 @@ const Logo = ({ size = 'medium', className = '' }: LogoProps) => {
       <h1 
         className={`${sizeClasses.text} text-white`} 
         style={{ 
-          fontFamily: 'AkzidenzGrotesk, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
           display: 'flex',
           alignItems: 'baseline',
           lineHeight: '1',

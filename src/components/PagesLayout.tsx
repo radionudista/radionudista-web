@@ -7,7 +7,7 @@ import { AudioProvider } from '../contexts/AudioContext';
 const PagesLayout = () => {
   return (
     <AudioProvider>
-      <div className="min-h-screen w-full overflow-hidden relative">
+      <div className="min-h-screen w-full overflow-hidden relative bg-[#000000]">
         <BackgroundVideo />
         
         {/* Main Content */}
