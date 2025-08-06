@@ -84,24 +84,24 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
             </div>
           </section>
 
-          {/* Controls Section - Right of cover, precisely top-aligned */}
-          <section className="flex-1 flex flex-col min-w-0" aria-label="Playback Controls" style={{ marginTop: '0px' }}>
-            {/* Scrolling Text - Aligned with play button left edge */}
-            <div className="mb-5" style={{ marginLeft: '15px' }}>
+          {/* Controls Section - Right of cover, top-aligned with cover */}
+          <section className="flex-1 flex flex-col justify-start min-w-0" aria-label="Playback Controls">
+            {/* Scrolling Text - Top aligned with cover top edge */}
+            <div className="mb-4">
               <div
                 ref={mobileTicker.containerRef}
                 className="relative w-full"
-                style={{ 
-                  height: '1.25rem', 
-                  overflow: 'hidden', 
-                  backgroundColor: 'transparent' 
+                style={{
+                  height: '1.25rem',
+                  overflow: 'hidden',
+                  backgroundColor: 'transparent'
                 }}
                 role="marquee"
                 aria-live="polite"
               >
                 <div
                   ref={mobileTicker.textRef}
-                  className="absolute inset-y-0 left-0 flex items-center text-white font-medium whitespace-nowrap text-sm leading-none"
+                  className="absolute inset-y-0 left-0 flex items-center text-white font-medium whitespace-nowrap text-sm"
                   style={{ paddingLeft: '0rem', paddingRight: '0.5rem' }}
                 >
                   {audioContext.currentTrack}
@@ -178,8 +178,8 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
           </section>
 
           {/* Player Controls Section - Desktop */}
-          <section 
-            className="flex-1 flex flex-col justify-center min-w-0" 
+          <section
+            className="flex-1 flex flex-col justify-center min-w-0"
             style={{ height: '120px' }}
             aria-label="Playback Controls"
           >
@@ -188,10 +188,10 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
               <div
                 ref={desktopTicker.containerRef}
                 className="relative w-full"
-                style={{ 
-                  height: '1.75rem', 
-                  overflow: 'hidden', 
-                  backgroundColor: 'transparent' 
+                style={{
+                  height: '1.75rem',
+                  overflow: 'hidden',
+                  backgroundColor: 'transparent'
                 }}
                 role="marquee"
                 aria-live="polite"
