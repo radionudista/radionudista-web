@@ -86,8 +86,8 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
 
           {/* Controls Section - Right of cover, precisely top-aligned */}
           <section className="flex-1 flex flex-col min-w-0" aria-label="Playback Controls" style={{ marginTop: '0px' }}>
-            {/* Scrolling Text - Aligned with play button left edge */}
-            <div className="mb-5" style={{ marginLeft: '15px' }}>
+            {/* Scrolling Text - Perfectly aligned with cover top edge */}
+            <div className="mb-5">
               <div
                 ref={mobileTicker.containerRef}
                 className="relative w-full"
