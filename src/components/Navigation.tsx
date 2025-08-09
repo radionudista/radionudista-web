@@ -26,8 +26,8 @@ interface NavigationProps {
  */
 const Navigation: React.FC<NavigationProps> = ({
   navItems = [
-    { id: 'home', label: 'Home', path: '/' },
-    { id: 'about', label: 'About', path: '/about' },
+    { id: 'home', label: 'radio', path: '/' },
+    { id: 'about', label: 'nosotrxs', path: '/about' },
     { id: 'contact', label: 'Contact', path: '/contact' }
   ],
   className = ''
