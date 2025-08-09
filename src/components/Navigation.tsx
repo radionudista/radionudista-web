@@ -69,6 +69,7 @@ const Navigation: React.FC<NavigationProps> = ({
                 key={item.id}
                 to={item.path}
                 className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
+                style={{ fontFamily: "'AkzidenzGrotesk', sans-serif" }}
                 aria-current={location.pathname === item.path ? 'page' : undefined}
               >
                 {item.label}
@@ -100,23 +101,16 @@ const Navigation: React.FC<NavigationProps> = ({
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal="true">
-          {/* Backdrop */}
+        <div className="fixed inset-0 z-[9999] md:hidden" role="dialog" aria-modal="true">
+          {/* Full Screen Mobile Menu Panel - Solid black background covering entire screen */}
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={closeMobileMenu}
-            aria-label="Close navigation menu"
-          />
-
-          {/* Mobile Menu Panel - Solid black background */}
-          <div
-            className={`absolute top-0 right-0 h-full w-80 max-w-[80vw] bg-black border-l border-white/10 transform transition-transform duration-300 ease-out ${
+            className={`absolute inset-0 bg-black transform transition-transform duration-300 ease-out ${
               isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
             role="navigation"
             aria-label="Mobile navigation menu"
           >
-            {/* Close Button */}
+            {/* Close Button - Positioned at top right */}
             <header className="flex justify-end p-6">
               <button
                 onClick={closeMobileMenu}
@@ -127,34 +121,35 @@ const Navigation: React.FC<NavigationProps> = ({
               </button>
             </header>
 
-            {/* Mobile Navigation Links */}
-            <div className="px-8 py-4 space-y-8">
+            {/* Mobile Navigation Links - Centered in screen */}
+            <div className="flex flex-col items-center justify-center h-full px-8 py-4 space-y-8 -mt-20">
               {navItems.map((item) => (
                 <Link
                   key={item.id}
                   to={item.path}
                   onClick={handleMobileNavClick}
-                  className={`block w-full text-left py-4 px-6 text-lg font-medium transition-all duration-200 ${
+                  className={`block w-full text-center py-4 px-6 text-xl font-medium transition-all duration-200 ${
                     location.pathname === item.path 
                       ? 'text-blue-400 bg-blue-400/10'
                       : 'text-white/80 hover:text-white hover:bg-white/10'
                   }`}
+                  style={{ fontFamily: "'AkzidenzGrotesk', sans-serif" }}
                   aria-current={location.pathname === item.path ? 'page' : undefined}
                 >
                   {item.label}
                 </Link>
               ))}
+
+              {/* Mini Player in Mobile Menu - Hidden on home page, centered */}
+              {location.pathname !== '/' && (
+                <div className="mt-12">
+                  <MiniPlayer />
+                </div>
+              )}
             </div>
 
-            {/* Mini Player in Mobile Menu - Hidden on home page */}
-            {location.pathname !== '/' && (
-              <div className="px-8 py-4 mt-12">
-                <MiniPlayer />
-              </div>
-            )}
-
-            {/* PatreonButton fixed at bottom of mobile menu */}
-            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
+            {/* PatreonButton fixed at bottom center of mobile menu */}
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
               <PatreonButton absolute={false} className="relative" />
             </div>
           </div>
