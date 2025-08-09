@@ -176,8 +176,9 @@
   }
   
   .nav-link.active {
-    color: #60a5fa;
-    background: rgba(96, 165, 250, 0.1);
+    color: white;
+    font-weight: bold;
+    background: transparent;
   }
   
   .nav-link-mobile {
@@ -189,7 +190,7 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    font-size: 0.875rem;
+    font-size: 1.25rem;
   }
   
   .nav-link-mobile:hover {
@@ -198,8 +199,9 @@
   }
   
   .nav-link-mobile.active {
-    color: #60a5fa;
-    background: rgba(96, 165, 250, 0.1);
+    color: white;
+    font-weight: bold;
+    background: transparent;
   }
   
   .social-icon {
