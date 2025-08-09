@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAudio } from '../contexts/AudioContext';
 import Logo from './Logo';
 import { getDynamicPlayerSize } from '../constants/mediaConstants';
 import { env } from '../config/env';
@@ -17,6 +18,8 @@ const TwitchPlayer = () => {
   const [playerError, setPlayerError] = useState(false);
   const [twitchUrl, setTwitchUrl] = useState('');
   const [isAnimating, setIsAnimating] = useState(true);
+  const [showTrack, setShowTrack] = useState(false);
+  const { currentTrack } = useAudio();
 
   useEffect(() => {
     const url = getTwitchPlayerUrl();
@@ -48,6 +51,16 @@ const TwitchPlayer = () => {
     return () => clearTimeout(animationTimer);
   }, []);
 
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (!isAnimating) {
+      timer = setTimeout(() => setShowTrack(true), 2000);
+    } else {
+      setShowTrack(false);
+    }
+    return () => clearTimeout(timer);
+  }, [isAnimating]);
+
   const handleIframeError = () => {
     logger.error('Twitch iframe failed to load');
     setPlayerError(true);
@@ -60,8 +73,17 @@ const TwitchPlayer = () => {
         {/* Logo */}
         <Logo size="medium" className="mb-8" />
 
+        {/* Current Track Display */}
+        { showTrack && (
+          <div className="w-full max-w-5xl flex justify-start overflow-hidden">
+            <div className="bg-black py-1 w-full text-left overflow-hidden">
+              <span className="text-white text-sm font-medium tracking-wide pl-4" data-testid="current-track">{currentTrack}</span>
+            </div>
+          </div>
+        ) }
+
         {/* Twitch Player Container */}
-        <div className={`solid-black-card p-4 w-full max-w-5xl transition-all duration-1000 ease-out ${
+        <div className={`solid-black-card p-4 w-full max-w-5xl transition-all duration-1000 ease-out rounded-none ${
           isAnimating 
             ? 'scale-50 transform-gpu' 
             : 'scale-100 transform-gpu'
@@ -75,7 +97,6 @@ const TwitchPlayer = () => {
               <p className="text-white/80 mb-6">
                 Your browser (likely Brave) is blocking the Twitch player due to privacy/ad blocking settings.
               </p>
-              
               <div className="space-y-4 text-left">
                 <div className="bg-black p-4">
                   <h4 className="text-white font-semibold mb-2">📺 How to Watch:</h4>
@@ -85,7 +106,6 @@ const TwitchPlayer = () => {
                     <li>• <strong>Alternative:</strong> Try a different browser (Chrome, Firefox, Safari)</li>
                   </ul>
                 </div>
-                
                 <div className="bg-black p-4">
                   <h4 className="text-white font-semibold mb-2">🔧 Brave Browser Fix:</h4>
                   <ol className="text-white/90 space-y-1 list-decimal list-inside">
@@ -95,7 +115,6 @@ const TwitchPlayer = () => {
                   </ol>
                 </div>
               </div>
-              
               <div className="mt-6">
                 <button 
                   onClick={() => window.open(env.STREAM_URL, '_blank')}
