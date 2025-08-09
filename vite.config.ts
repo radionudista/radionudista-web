@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
+import { multiLanguageBuild } from "./src/plugins/multiLanguageBuild";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -18,6 +19,10 @@ export default defineConfig(({ mode }) => {
       react(),
       mode === 'development' &&
       componentTagger(),
+      multiLanguageBuild({
+        langDir: path.resolve(__dirname, 'src/lang'),
+        defaultLang: 'en',
+      })
     ].filter(Boolean),
     resolve: {
       alias: {

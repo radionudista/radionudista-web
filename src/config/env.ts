@@ -14,8 +14,15 @@ export interface EnvConfig {
   TWITCH_CHANNEL: string;
   TWITCH_STATIC_PARENTS: string;
   STREAM_URL: string;
+  RADIO_STREAM_URL: string;
+  RADIO_STATUS_URL: string;
+  RADIO_INFO_URL: string;
+  RADIO_INFO_API_URL: string;
+  RADIO_STATUS_POLL_INTERVAL: number;
   TWITCH_PLAYER_WINDOW_SIZE_PERCENT: number;
   DEV_LAUNCHING_SECONDS: number;
+  SUPPORTED_LANGUAGES: string[];
+  DEFAULT_LANGUAGE: string;
 }
 
 /**
@@ -58,9 +65,16 @@ export const env: EnvConfig = {
   LAUNCHING_DATE: getEnvVar('LAUNCHING_DATE', '2025-08-09T12:00:00-03:00'),
   TWITCH_CHANNEL: getEnvVar('TWITCH_CHANNEL', 'radionudista'),
   TWITCH_STATIC_PARENTS: getEnvVar('TWITCH_STATIC_PARENTS', 'localhost'),
-  STREAM_URL: getEnvVar('STREAM_URL', 'https://twitch.tv/radionudista'),
+  STREAM_URL: getEnvVar('STREAM_URL', `https://twitch.tv/${getEnvVar('TWITCH_CHANNEL', 'radionudista')}`),
+  RADIO_STREAM_URL: getEnvVar('RADIO_STREAM_URL', 'https://servidor30.brlogic.com:7024/live'),
+  RADIO_STATUS_URL: getEnvVar('RADIO_STATUS_URL', 'https://d36nr0u3xmc4mm.cloudfront.net/index.php/api/streaming/status/7024/2348c62ead2082a25b4573ed601473a3/SV1BR'),
+  RADIO_INFO_URL: getEnvVar('RADIO_INFO_URL', 'https://public-player-widget.webradiosite.com/app/player/info/251579?hash=f9eb0f4eb62691f958df840acfd1936b22ce8ffc&version=1.00'),
+  RADIO_INFO_API_URL: getEnvVar('RADIO_INFO_API_URL', 'https://public-player-widget.webradiosite.com/app/player/info/251579?hash=f9eb0f4eb62691f958df840acfd1936b22ce8ffc&version=1.00'),
+  RADIO_STATUS_POLL_INTERVAL: getEnvNumber('RADIO_STATUS_POLL_INTERVAL', 10000),
   TWITCH_PLAYER_WINDOW_SIZE_PERCENT: getEnvNumber('TWITCH_PLAYER_WINDOW_SIZE_PERCENT', 70),
   DEV_LAUNCHING_SECONDS: getEnvNumber('DEV_LAUNCHING_SECONDS', -1),
+  SUPPORTED_LANGUAGES: getEnvVar('SUPPORTED_LANGUAGES', 'en,es,pt').split(','),
+  DEFAULT_LANGUAGE: getEnvVar('DEFAULT_LANGUAGE', 'en'),
 };
 
 /**
