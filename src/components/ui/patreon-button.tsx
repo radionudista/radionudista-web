@@ -68,6 +68,7 @@ const PatreonButton = React.forwardRef<
       rel="noopener noreferrer"
       className={cn(
         "social-icon glass-card flex justify-center items-center",
+        !absolute && "relative", // Add relative positioning when not absolute
         className
       )}
       style={{ ...defaultStyle, ...style }}

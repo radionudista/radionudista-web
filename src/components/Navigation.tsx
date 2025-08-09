@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import Logo from './Logo';
 import MiniPlayer from './MiniPlayer';
+import { PatreonButton } from './ui/patreon-button';
 
 interface NavigationItem {
   id: string;
@@ -151,6 +152,11 @@ const Navigation: React.FC<NavigationProps> = ({
                 <MiniPlayer />
               </div>
             )}
+
+            {/* PatreonButton fixed at bottom of mobile menu */}
+            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
+              <PatreonButton absolute={false} className="relative" />
+            </div>
           </div>
         </div>
       )}
