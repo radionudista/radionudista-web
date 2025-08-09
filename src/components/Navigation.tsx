@@ -128,10 +128,8 @@ const Navigation: React.FC<NavigationProps> = ({
                   key={item.id}
                   to={item.path}
                   onClick={handleMobileNavClick}
-                  className={`block w-full text-center py-4 px-6 text-xl font-medium transition-all duration-200 ${
-                    location.pathname === item.path 
-                      ? 'text-blue-400 bg-blue-400/10'
-                      : 'text-white/80 hover:text-white hover:bg-white/10'
+                  className={`nav-link-mobile text-center py-4 px-6 text-xl block w-full transition-all duration-200 ${
+                    location.pathname === item.path ? 'active' : ''
                   }`}
                   style={{ fontFamily: "'AkzidenzGrotesk', sans-serif" }}
                   aria-current={location.pathname === item.path ? 'page' : undefined}
