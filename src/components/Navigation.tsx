@@ -121,8 +121,8 @@ const Navigation: React.FC<NavigationProps> = ({
               </button>
             </header>
 
-            {/* Mobile Navigation Links - Centered in screen */}
-            <div className="flex flex-col items-center justify-center h-full px-8 py-4 space-y-8 -mt-20">
+            {/* Mobile Navigation Links - Positioned at top */}
+            <div className="px-8 py-8 space-y-6">
               {navItems.map((item) => (
                 <Link
                   key={item.id}
@@ -140,9 +140,9 @@ const Navigation: React.FC<NavigationProps> = ({
                 </Link>
               ))}
 
-              {/* Mini Player in Mobile Menu - Hidden on home page, centered */}
+              {/* Mini Player in Mobile Menu - Hidden on home page */}
               {location.pathname !== '/' && (
-                <div className="mt-12">
+                <div className="mt-8 flex justify-center">
                   <MiniPlayer />
                 </div>
               )}
