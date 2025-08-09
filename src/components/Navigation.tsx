@@ -135,7 +135,7 @@ const Navigation: React.FC<NavigationProps> = ({
                   onClick={handleMobileNavClick}
                   className={`block w-full text-left py-4 px-6 text-lg font-medium transition-all duration-200 ${
                     location.pathname === item.path 
-                      ? 'text-blue-400 bg-blue-400/10' 
+                      ? 'text-blue-400 bg-blue-400/10'
                       : 'text-white/80 hover:text-white hover:bg-white/10'
                   }`}
                   aria-current={location.pathname === item.path ? 'page' : undefined}
