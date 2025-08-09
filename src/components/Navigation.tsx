@@ -102,9 +102,9 @@ const Navigation: React.FC<NavigationProps> = ({
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[9999] md:hidden" role="dialog" aria-modal="true">
-          {/* Full Screen Mobile Menu Panel - Solid black background covering entire screen */}
+          {/* Mobile Menu Panel - Solid black background covering screen except footer area */}
           <div
-            className={`absolute inset-0 bg-black transform transition-transform duration-300 ease-out ${
+            className={`absolute top-0 left-0 right-0 bottom-16 bg-black transform transition-transform duration-300 ease-out ${
               isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
             role="navigation"
@@ -148,7 +148,7 @@ const Navigation: React.FC<NavigationProps> = ({
               )}
             </div>
 
-            {/* PatreonButton fixed at bottom center of mobile menu */}
+            {/* PatreonButton positioned at bottom of mobile menu panel */}
             <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
               <PatreonButton absolute={false} className="relative" />
             </div>
