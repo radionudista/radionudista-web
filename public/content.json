@@ -1,0 +1,38 @@
+{
+  "contenido-prueba-1": {
+    "es": {
+      "title": "Contenido Prueba 1",
+      "slug": "contenido-prueba-1",
+      "id": "contenido-prueba-1",
+      "component": "TestPage",
+      "public": true,
+      "date": "2024-01-01T00:00:00.000Z"
+    },
+    "pt": {
+      "title": "Conteúdo Teste 1",
+      "slug": "conteudo-teste-1",
+      "id": "contenido-prueba-1",
+      "component": "TestPage",
+      "public": true,
+      "date": "2024-01-01T00:00:00.000Z"
+    }
+  },
+  "guia-desarrollo-web-moderno": {
+    "es": {
+      "title": "Guía de Desarrollo Web Moderno",
+      "slug": "guia-desarrollo-web-moderno",
+      "id": "guia-desarrollo-web-moderno",
+      "component": "TestPage",
+      "public": true,
+      "date": "2024-08-11T00:00:00.000Z"
+    },
+    "pt": {
+      "title": "Guia de Desenvolvimento Web Moderno",
+      "slug": "guia-desenvolvimento-web-moderno",
+      "id": "guia-desarrollo-web-moderno",
+      "component": "TestPage",
+      "public": true,
+      "date": "2024-08-11T00:00:00.000Z"
+    }
+  }
+}
