@@ -36,20 +36,31 @@ interface NavigationProps {
 const Navigation: React.FC<NavigationProps> = ({
   navItems = [
     { id: 'home', label: 'radio', path: '/' },
-    { id: 'about', label: 'nosotrxs', path: '/about' },
-    { id: 'contact', label: 'Contact', path: '/contact' }
+    { id: 'about', label: 'nosotrxs', path: 'about' },
+    { id: 'contact', label: 'Contact', path: 'contact' }
   ],
   className = ''
 }) => {
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-
 
   // --- Dynamic nav items from indexed content (content.json) ---
   const [indexedContent, setIndexedContent] = useState<any>(null);
   // Use env for supported languages
   const supportedLangs = env.SUPPORTED_LANGUAGES;
   const currentLang = getCurrentLang(location.pathname, supportedLangs);
+
+  // Helper to prefix nav paths with current language
+  const getNavPath = (item: NavigationItem) => {
+    if (item.id === 'home') {
+      return currentLang ? `/${currentLang}` : '/';
+    }
+    if (currentLang) {
+      return `/${currentLang}/${item.path}`;
+    }
+    return `/${item.path}`;
+  };
 
   // Helper: is current path a home route for any supported language?
   const isHomeRoute = React.useMemo(() => {
@@ -113,7 +124,6 @@ const Navigation: React.FC<NavigationProps> = ({
           {/* Logo Section */}
           <Logo size="medium" />
 
-
           {/* Mini Player - Desktop only, hidden on any home route (/{lang}) */}
           {!isHomeRoute && (
             <div className="hidden md:block">
@@ -122,44 +132,37 @@ const Navigation: React.FC<NavigationProps> = ({
           )}
 
           {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center space-x-6">
-            {mergedNavItems.map((item) => (
-              <Link
-                key={item.id}
-                to={item.path}
-                className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
-                style={{ fontFamily: "'AkzidenzGrotesk', sans-serif" }}
-                aria-current={location.pathname === item.path ? 'page' : undefined}
-              >
-                {item.label}
-              </Link>
-            ))}
+          <div className="hidden md:flex space-x-8 items-center">
+            {mergedNavItems.map((item) => {
+              const navPath = getNavPath(item);
+              const isActive = location.pathname === navPath;
+              return (
+                <Link
+                  key={item.id}
+                  to={navPath}
+                  className={`nav-link px-4 py-2 ${isActive ? 'active' : ''}`}
+                  aria-current={isActive ? 'page' : undefined}
+                  style={{ fontFamily: "'AkzidenzGrotesk', sans-serif" }}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+            {/* PatreonButton removed from desktop nav */}
           </div>
 
-          {/* Mobile Navigation Controls */}
-          <div className="md:hidden flex items-center space-x-3">
-
-            {/* Mini Player Mobile - Scaled down, hidden on any home route (/{lang}) */}
-            {!isHomeRoute && (
-              <div className="scale-75 origin-center">
-                <MiniPlayer />
-              </div>
-            )}
-
-            {/* Mobile Menu Toggle Button */}
-            <button
-              onClick={openMobileMenu}
-              className="nav-link p-2"
-              aria-label="Open navigation menu"
-              aria-expanded={isMobileMenuOpen}
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-          </div>
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden nav-link p-2"
+            onClick={openMobileMenu}
+            aria-label="Open navigation menu"
+          >
+            <Menu className="w-7 h-7" />
+          </button>
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Navigation Menu */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[9999] md:hidden" role="dialog" aria-modal="true">
           {/* Mobile Menu Panel - Solid black background covering screen except footer area */}
@@ -183,21 +186,24 @@ const Navigation: React.FC<NavigationProps> = ({
 
             {/* Mobile Navigation Links - Positioned at top */}
             <div className="px-8 py-8 space-y-6">
-              {mergedNavItems.map((item) => (
-                <Link
-                  key={item.id}
-                  to={item.path}
-                  onClick={handleMobileNavClick}
-                  className={`nav-link-mobile text-center py-4 px-6 text-xl block w-full transition-all duration-200 ${
-                    location.pathname === item.path ? 'active' : ''
-                  }`}
-                  style={{ fontFamily: "'AkzidenzGrotesk', sans-serif" }}
-                  aria-current={location.pathname === item.path ? 'page' : undefined}
-                >
-                  {item.label}
-                </Link>
-              ))}
-
+              {mergedNavItems.map((item) => {
+                const navPath = getNavPath(item);
+                const isActive = location.pathname === navPath;
+                return (
+                  <Link
+                    key={item.id}
+                    to={navPath}
+                    onClick={handleMobileNavClick}
+                    className={`nav-link-mobile text-center py-4 px-6 text-xl block w-full transition-all duration-200 ${
+                      isActive ? 'active' : ''
+                    }`}
+                    style={{ fontFamily: "'AkzidenzGrotesk', sans-serif" }}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
 
               {/* Mini Player in Mobile Menu - Hidden on any home route (/{lang}) */}
               {!isHomeRoute && (
