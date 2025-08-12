@@ -1,17 +1,21 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useMemo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import Logo from './Logo';
 import MiniPlayer from './MiniPlayer';
 import { PatreonButton } from './ui/patreon-button';
-import { useLocation } from 'react-router-dom';
-import contentIndex from '../../public/content.json';
-import { useTranslation } from '../hooks/useTranslation';
 
 interface NavigationItem {
   id: string;
   label: string;
   path: string;
+}
+
+// Helper to get current language from path (e.g. /es/slug)
+function getCurrentLang(pathname: string, supportedLangs: string[]): string {
+  const parts = pathname.split('/').filter(Boolean);
+  if (parts.length > 0 && supportedLangs.includes(parts[0])) return parts[0];
+  return supportedLangs[0]; // fallback
 }
 
 interface NavigationProps {
@@ -37,33 +41,45 @@ const Navigation: React.FC<NavigationProps> = ({
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const { i18n } = useTranslation ? useTranslation() : { i18n: { language: 'es' } };
 
-  // Memoize dynamic nav items for current language
-  const dynamicNavItems = useMemo(() => {
-    const lang = i18n.language || 'es';
-    if (!contentIndex || typeof contentIndex !== 'object') return [];
-    // Collect all indexed content for this language with menu and public
-    const items = Object.entries(contentIndex)
-      .map(([id, langs]) => {
-        const entry = langs[lang];
-        if (!entry || !entry.menu || !entry.public) return null;
-        return {
-          id: `${id}-${lang}`,
+  // --- Dynamic nav items from indexed content (content.json) ---
+  const [indexedContent, setIndexedContent] = useState<any>(null);
+  const supportedLangs = useMemo(() => ['es', 'pt'], []); // Could be loaded from env/config
+  const currentLang = getCurrentLang(location.pathname, supportedLangs);
+
+  React.useEffect(() => {
+    fetch('/content.json')
+      .then(res => res.json())
+      .then(setIndexedContent)
+      .catch(() => setIndexedContent(null));
+  }, []);
+
+  const dynamicNavItems: NavigationItem[] = useMemo(() => {
+    if (!indexedContent) return [];
+    // Collect all public, menu'd items for current language
+    const items: NavigationItem[] = [];
+    Object.entries(indexedContent).forEach(([id, langs]: [string, any]) => {
+      const entry = langs[currentLang];
+      if (entry && entry.menu && (entry.public === true || entry.public === 'true')) {
+        items.push({
+          id: `${id}-${currentLang}`,
           label: entry.menu,
-          path: `/${lang}/${entry.slug}`,
-          menu_position: typeof entry.menu_position === 'number' ? entry.menu_position : (entry.menu_position ? Number(entry.menu_position) : 0),
-        };
-      })
-      .filter(Boolean)
-      .sort((a, b) => (a.menu_position ?? 0) - (b.menu_position ?? 0));
-    return items;
-  }, [i18n.language]);
+          path: `/${currentLang}/${entry.slug}`
+        });
+      }
+    });
+    // Sort by menu_position if present
+    return items.sort((a, b) => {
+      const idA = a.id?.split('-')[0];
+      const idB = b.id?.split('-')[0];
+      const posA = indexedContent?.[idA]?.[currentLang]?.menu_position ?? 9999;
+      const posB = indexedContent?.[idB]?.[currentLang]?.menu_position ?? 9999;
+      return posA - posB;
+    });
+  }, [indexedContent, currentLang]);
 
   // Merge static and dynamic nav items (dynamic after static)
-  const mergedNavItems = useMemo(() => {
-    return [...navItems, ...dynamicNavItems];
-  }, [navItems, dynamicNavItems]);
+  const mergedNavItems = [...navItems, ...dynamicNavItems];
 
   const handleMobileNavClick = () => {
     setIsMobileMenuOpen(false);
