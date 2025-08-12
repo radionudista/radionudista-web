@@ -3,6 +3,7 @@ import { selectRandomVideo, VIDEO_CONFIG } from '../utils/videoConfig';
 import { LAYOUT, getGlassOverlay } from '../constants/layoutConstants';
 import { useBackgroundTransition } from '../hooks/useBackgroundTransition';
 import { useDebug } from '../contexts/DebugContext';
+import { isDebugMode } from '../config/env';
 
 interface BackgroundVideoProps {
   /**
@@ -70,6 +71,14 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
       currentVideo: currentVideo.split('/').pop(),
     };
     setDebugInfo('BackgroundVideo', debugData);
+    try {
+      const forced = typeof window !== 'undefined' && (localStorage.getItem('debug') === '1' || new URL(window.location.href).searchParams.get('debug') === '1' || new URL(window.location.href).searchParams.get('debug') === 'true');
+      if (isDebugMode() || forced) {
+        document.body.setAttribute('data-rn-bg-video', debugData.currentVideo || '');
+      }
+    } catch {
+      // noop
+    }
   }, [isVideoReady, videoOpacity, currentVideo, setDebugInfo]);
 
   useEffect(() => {

@@ -6,6 +6,7 @@ import { getDynamicPlayerSize } from '../constants/mediaConstants';
 import { env } from '../config/env';
 import { logger } from '../utils/logger';
 import { getTwitchPlayerUrl } from '../utils/twitchUtils';
+import { useDebug } from '../contexts/DebugContext';
 
 // Extend Navigator interface for Brave browser detection
 interface BraveNavigator extends Navigator {
@@ -18,6 +19,7 @@ const TwitchPlayer = () => {
   const [isBraveOrBlocked, setIsBraveOrBlocked] = useState(false);
   const [playerError, setPlayerError] = useState(false);
   const [twitchUrl, setTwitchUrl] = useState('');
+  const { setDebugInfo } = useDebug();
 
   useEffect(() => {
     const url = getTwitchPlayerUrl();
@@ -41,6 +43,22 @@ const TwitchPlayer = () => {
 
     detectBraveOrBlocking();
   }, []);
+
+  // Publicar estado para vibecoding/Debug Bar
+  useEffect(() => {
+    try {
+      setDebugInfo('Twitch', {
+        isBraveOrBlocked,
+        playerError,
+        twitchUrl,
+      });
+      // Atributos simples en body
+      document.body.setAttribute('data-rn-twitch-error', String(playerError));
+      document.body.setAttribute('data-rn-twitch-brave', String(isBraveOrBlocked));
+    } catch {
+      // noop
+    }
+  }, [isBraveOrBlocked, playerError, twitchUrl, setDebugInfo]);
 
   const handleIframeError = () => {
     logger.error('Twitch iframe failed to load');

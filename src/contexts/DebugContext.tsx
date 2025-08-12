@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, ReactNode, useMemo } from 'react';
 
 interface DebugInfo {
   [key: string]: any;
@@ -7,6 +7,7 @@ interface DebugInfo {
 interface DebugContextType {
   debugInfo: DebugInfo;
   setDebugInfo: (componentName: string, data: any) => void;
+  clearDebugInfo: (componentName?: string) => void;
 }
 
 const DebugContext = createContext<DebugContextType | undefined>(undefined);
@@ -33,9 +34,24 @@ export const DebugProvider: React.FC<DebugProviderProps> = ({ children }) => {
     }));
   }, []);
 
+  const clearDebugInfo = useCallback((componentName?: string) => {
+    if (!componentName) {
+      setDebugInfoState({});
+      return;
+    }
+    setDebugInfoState(prev => {
+      const next = { ...prev };
+      delete next[componentName];
+      return next;
+    });
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({ debugInfo, setDebugInfo, clearDebugInfo }),
+    [debugInfo, setDebugInfo, clearDebugInfo]
+  );
+
   return (
-    <DebugContext.Provider value={{ debugInfo, setDebugInfo }}>
-      {children}
-    </DebugContext.Provider>
+    <DebugContext.Provider value={contextValue}>{children}</DebugContext.Provider>
   );
 };

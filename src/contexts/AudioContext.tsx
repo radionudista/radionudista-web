@@ -1,8 +1,10 @@
-import React, { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { MEDIA_CONSTANTS } from '../constants/mediaConstants';
 import { STREAM_CONFIG } from '../constants/streamConstants';
 import { RadioStreamService } from '../services/streamService';
 import { AudioService } from '../services/audioService';
+import { useDebug } from './DebugContext';
+import { isDebugMode } from '@/config/env';
 
 interface AudioContextType {
   isPlaying: boolean;
@@ -36,6 +38,13 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [volume, setVolumeState] = useState(80);
   const [isMuted, setIsMuted] = useState(false);
   const [previousVolume, setPreviousVolume] = useState(80);
+  // Health metrics
+  const [lastTrackFetchAt, setLastTrackFetchAt] = useState<number | null>(null);
+  const [lastTrackChangeAt, setLastTrackChangeAt] = useState<number | null>(null);
+  const [audioReadyState, setAudioReadyState] = useState<number>(0);
+  const [audioNetworkState, setAudioNetworkState] = useState<number>(0);
+  const [audioErrorCount, setAudioErrorCount] = useState<number>(0);
+  const [lastAudioErrorAt, setLastAudioErrorAt] = useState<number | null>(null);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const streamService = useRef(
@@ -46,16 +55,73 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     )
   );
 
+  // Debug: publicar estado de audio para vibecoding
+  const { setDebugInfo } = useDebug();
+  useEffect(() => {
+    try {
+      const forced = typeof window !== 'undefined' && (localStorage.getItem('debug') === '1' || new URL(window.location.href).searchParams.get('debug') === '1' || new URL(window.location.href).searchParams.get('debug') === 'true');
+      if (!isDebugMode() && !forced) return;
+      setDebugInfo('Audio', {
+        isPlaying,
+        isLoading,
+        currentTrack,
+        volume,
+        isMuted,
+        hasAudioElement: !!audioRef.current,
+        health: {
+          readyState: audioRef.current?.readyState ?? audioReadyState,
+          networkState: audioRef.current?.networkState ?? audioNetworkState,
+          errorCount: audioErrorCount,
+          lastAudioErrorAt,
+          lastTrackFetchAt,
+          lastTrackChangeAt,
+          currentSrc: audioRef.current?.currentSrc ?? null,
+        },
+      });
+      // Actualizar dataset en <body> para scrapers simples
+      if (typeof document !== 'undefined') {
+        document.body.setAttribute('data-rn-playing', String(isPlaying));
+        document.body.setAttribute('data-rn-track', currentTrack || '');
+        document.body.setAttribute('data-rn-volume', String(volume));
+      }
+    } catch {
+      // noop
+    }
+  }, [isPlaying, isLoading, currentTrack, volume, isMuted, audioReadyState, audioNetworkState, audioErrorCount, lastAudioErrorAt, lastTrackFetchAt, lastTrackChangeAt, setDebugInfo]);
+
   /**
    * Audio Event Handlers - DRY principle
    */
   const audioEventHandlers = {
-    onLoadStart: () => setIsLoading(true),
-    onCanPlay: () => setIsLoading(false),
-    onWaiting: () => setIsLoading(true),
+    onLoadStart: () => {
+      setIsLoading(true);
+      const el = audioRef.current;
+      if (el) {
+        setAudioReadyState(el.readyState);
+        setAudioNetworkState(el.networkState);
+      }
+    },
+    onCanPlay: () => {
+      setIsLoading(false);
+      const el = audioRef.current;
+      if (el) {
+        setAudioReadyState(el.readyState);
+        setAudioNetworkState(el.networkState);
+      }
+    },
+    onWaiting: () => {
+      setIsLoading(true);
+      const el = audioRef.current;
+      if (el) {
+        setAudioReadyState(el.readyState);
+        setAudioNetworkState(el.networkState);
+      }
+    },
     onError: (event: Event) => {
       setIsLoading(false);
       setIsPlaying(false);
+      setAudioErrorCount(prev => prev + 1);
+      setLastAudioErrorAt(Date.now());
       const audioElement = event.target as HTMLAudioElement;
       const error = audioElement.error;
 
@@ -165,9 +231,11 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
    */
   const fetchCurrentTrack = useCallback(async () => {
     try {
+      setLastTrackFetchAt(Date.now());
       const trackName = await streamService.current.fetchCurrentTrack();
       if (trackName !== currentTrack) {
         setCurrentTrack(trackName);
+        setLastTrackChangeAt(Date.now());
         const coverUrl = await streamService.current.fetchSongCover(trackName);
         setCoverImageUrl(coverUrl);
       }
@@ -183,7 +251,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return () => clearInterval(interval);
   }, [fetchCurrentTrack]);
 
-  const contextValue: AudioContextType = {
+  const contextValue: AudioContextType = useMemo(() => ({
     isPlaying,
     isLoading,
     currentTrack,
@@ -194,7 +262,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     togglePlay,
     setVolume,
     toggleMute,
-  };
+  }), [isPlaying, isLoading, currentTrack, coverImageUrl, volume, isMuted, togglePlayWithPause, togglePlay, setVolume, toggleMute]);
 
   return (
     <AudioContext.Provider value={contextValue}>
