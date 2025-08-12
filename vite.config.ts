@@ -3,13 +3,20 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { multiLanguageBuild } from "./src/plugins/multiLanguageBuild";
+import { contentJsonGeneratorPlugin } from './src/plugins/contentJsonGenerator';
+// Removed unused import of env
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
   // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
-  const env = loadEnv(mode, process.cwd(), '');
-  
+  const envVars = loadEnv(mode, process.cwd(), '');
+  // Ensure supportedLanguages is always an array
+  const supportedLanguages = (envVars.VITE_SUPPORTED_LANGUAGES || 'es,pt')
+    .split(',')
+    .map(l => l.trim())
+    .filter(Boolean);
+
   return {
     server: {
       host: "::",
@@ -22,6 +29,11 @@ export default defineConfig(({ mode }) => {
       multiLanguageBuild({
         langDir: path.resolve(__dirname, 'src/lang'),
         defaultLang: 'en',
+      }),
+      contentJsonGeneratorPlugin({
+        contentDir: path.resolve(__dirname, 'src/content'),
+        outputFile: path.resolve(__dirname, 'public/content.json'),
+        supportedLanguages: Array.isArray(supportedLanguages) ? supportedLanguages : [supportedLanguages],
       })
     ].filter(Boolean),
     resolve: {
