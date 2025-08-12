@@ -4,10 +4,12 @@ slug: contenido-prueba-1
 id: contenido-prueba-1
 component: TestPage
 public: true
+menu: prueba
+menu_position: 1
 date: 2024-01-01
 ---
 
-# Bienvenido a Nuestro Sitio Multilingüe
+# Bienvenido a Nuestro Sitio Mltilingüe
 
 Esta es la página de inicio en español de nuestro sitio estático construido con Vite, React y Markdown.
 

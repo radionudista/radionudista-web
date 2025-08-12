@@ -4,6 +4,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { env } from '../config/env';
 
+
 interface ContentEntry {
   [lang: string]: {
     title: string;
@@ -12,6 +13,8 @@ interface ContentEntry {
     component: string;
     public: string;
     date: string;
+    menu?: string;
+    menu_position?: number;
   };
 }
 
@@ -66,6 +69,8 @@ export function contentJsonGeneratorPlugin({
               component: data.component || '',
               public: data.public,
               date: data.date || '',
+              menu: data.menu || '',
+              menu_position: typeof data.menu_position === 'number' ? data.menu_position : (data.menu_position ? Number(data.menu_position) : undefined),
             };
           }
         } catch (err) {
