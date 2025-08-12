@@ -1,68 +1,68 @@
-# Usage
 
-This document explains how to run, build, and lint the application.
+# Usage & Build
+
+This document explains how to run, build, and lint the application, including multilingual and dynamic content features.
 
 ## Development Server
 
-To start the development server, run the following command:
-
+Start the development server:
 ```bash
 bun run dev
+# or npm run dev
 ```
-
-This will start the Vite development server, and you can view the application at `http://localhost:5173` by default. The server features Hot Module Replacement (HMR), so it will automatically reload when you make changes to the source code.
+The app will be available at `http://localhost:5173` (or as configured). Hot Module Replacement (HMR) is enabled.
 
 ## Building the Application
 
-The project is configured with multiple build modes to cater to different environments. The build output is placed in the `dist/` directory.
+The project supports multiple build modes. All builds output to the `dist/` directory.
 
-### Development Build
+- **Development Build:**
+	```bash
+	bun run build:dev
+	# or npm run build:dev
+	```
+	Uses `.env.development` and is suitable for local/staging testing.
 
-```bash
-bun run build:dev
-```
+- **Feature Build:**
+	```bash
+	bun run build:feature
+	# or npm run build:feature
+	```
+	Uses `.env.feature` for feature branch builds.
 
-This command uses the `vite build --mode development` command, which typically uses the environment variables defined in `.env.development`. This build is not minified and may contain debugging information, making it suitable for testing on a staging server.
+- **Production Build:**
+	```bash
+	bun run build
+	# or npm run build
+	# or bun run build:production
+	```
+	Uses `.env.production` for optimized, minified output.
 
-### Feature Build
+### Multilingual & Content Indexing
 
-```bash
-bun run build:feature
-```
-
-This command runs `vite build --mode feature`. It's intended for building a specific feature branch for isolated testing. It will use variables from `.env.feature`.
-
-### Production Build
-
-```bash
-bun run build
-```
-
-or
-
-```bash
-bun run build:production
-```
-
-This command executes `vite build --mode production`. It creates a production-ready, optimized, and minified build of the application. It uses environment variables from `.env.production`. This is the command you should use when you are ready to deploy the application.
+- At build time, all Markdown content in `src/content/{lang}/` is auto-indexed into `public/content.json`.
+- The build produces language-specific routes and navigation based on available content and translations.
+- Adding new languages or content is automatic—just add files and rebuild.
 
 ## Previewing the Production Build
 
-After running the production build, you can preview it locally using the following command:
-
+After building, preview the production output locally:
 ```bash
 bun run preview
+# or npm run preview
 ```
-
-This will serve the `dist` folder, allowing you to check the production build before deploying it.
+This serves the `dist` folder for final checks before deployment.
 
 ## Linting
 
-To check the code for linting errors and style issues, run:
-
+Check code for linting errors and style issues:
 ```bash
 bun run lint
+# or npm run lint
 ```
+This uses ESLint with the rules in `eslint.config.js`. Run before committing code.
 
-This command uses ESLint to analyze the codebase based on the rules defined in `eslint.config.js`. It's good practice to run this command before committing your code.
+---
+For more, see [Getting Started](./getting-started.md) and [Deployment](./deployment.md).
+
 
