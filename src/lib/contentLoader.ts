@@ -16,8 +16,14 @@ const contentMap: Record<string, Record<string, any>> = {};
 for (const [id, langs] of Object.entries(contentIndex)) {
   for (const [lang, meta] of Object.entries(langs as Record<string, any>)) {
     if (!contentMap[lang]) contentMap[lang] = {};
-    // Find the markdown file for this entry
-    const mdPath = `../content/${lang}/${meta.slug}.md`;
+    // Use the markdownfile path from contentIndex.json
+    let mdPath = meta.markdownfile;
+    // Ensure the path is relative to src/lib/contentLoader.ts for import.meta.glob
+    if (mdPath.startsWith('/content/')) {
+      mdPath = '..' + mdPath;
+    } else if (!mdPath.startsWith('../content/')) {
+      mdPath = '../content/' + lang + '/' + id + '.md';
+    }
     const markdown = markdownFiles[mdPath] || '';
     contentMap[lang][meta.slug] = { ...meta, markdown };
   }
