@@ -2,7 +2,7 @@
 title: Guia de Desenvolvimento Web Moderno
 slug: guia-desenvolvimento-web-moderno
 id: guia-desarrollo-web-moderno
-component: TestPage
+component: SimplePage
 public: true
 menu: desenvolvimento
 menu_position: 2
