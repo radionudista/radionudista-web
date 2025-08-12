@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import Logo from './Logo';
 import MiniPlayer from './MiniPlayer';
 import { PatreonButton } from './ui/patreon-button';
+import { useLocation } from 'react-router-dom';
+import contentIndex from '../../public/content.json';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface NavigationItem {
   id: string;
@@ -34,6 +37,33 @@ const Navigation: React.FC<NavigationProps> = ({
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { i18n } = useTranslation ? useTranslation() : { i18n: { language: 'es' } };
+
+  // Memoize dynamic nav items for current language
+  const dynamicNavItems = useMemo(() => {
+    const lang = i18n.language || 'es';
+    if (!contentIndex || typeof contentIndex !== 'object') return [];
+    // Collect all indexed content for this language with menu and public
+    const items = Object.entries(contentIndex)
+      .map(([id, langs]) => {
+        const entry = langs[lang];
+        if (!entry || !entry.menu || !entry.public) return null;
+        return {
+          id: `${id}-${lang}`,
+          label: entry.menu,
+          path: `/${lang}/${entry.slug}`,
+          menu_position: typeof entry.menu_position === 'number' ? entry.menu_position : (entry.menu_position ? Number(entry.menu_position) : 0),
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => (a.menu_position ?? 0) - (b.menu_position ?? 0));
+    return items;
+  }, [i18n.language]);
+
+  // Merge static and dynamic nav items (dynamic after static)
+  const mergedNavItems = useMemo(() => {
+    return [...navItems, ...dynamicNavItems];
+  }, [navItems, dynamicNavItems]);
 
   const handleMobileNavClick = () => {
     setIsMobileMenuOpen(false);
@@ -64,7 +94,7 @@ const Navigation: React.FC<NavigationProps> = ({
 
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center space-x-6">
-            {navItems.map((item) => (
+            {mergedNavItems.map((item) => (
               <Link
                 key={item.id}
                 to={item.path}
@@ -123,7 +153,7 @@ const Navigation: React.FC<NavigationProps> = ({
 
             {/* Mobile Navigation Links - Positioned at top */}
             <div className="px-8 py-8 space-y-6">
-              {navItems.map((item) => (
+              {mergedNavItems.map((item) => (
                 <Link
                   key={item.id}
                   to={item.path}

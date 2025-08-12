@@ -2,7 +2,7 @@
 title: Contenido Prueba 1
 slug: contenido-prueba-1
 id: contenido-prueba-1
-component: TestPage
+component: SimplePage
 public: true
 menu: prueba
 menu_position: 1
