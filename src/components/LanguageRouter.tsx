@@ -89,31 +89,39 @@ const LanguageDetector: React.FC<{ children: React.ReactNode }> = ({ children })
   return <>{children}</>;
 };
 
+
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      {/* Routes for default language (no prefix) */}
-      <Route path="/" element={<PagesLayout />}>
-        <Route index element={<HomePage />} />
-        <Route path="about" element={<AboutPage />} />
-        <Route path="contact" element={<ContactPage />} />
-      </Route>
+      {/* Redirect root / to detected language path */}
+      <Route path="/" element={<RedirectToLang />} />
 
-      {/* Routes for non-default languages with language prefix */}
-      {env.SUPPORTED_LANGUAGES
-        .filter(lang => lang !== env.DEFAULT_LANGUAGE)
-        .map(lang => (
-          <Route key={lang} path={`/${lang}`} element={<PagesLayout />}>
-            <Route index element={<HomePage />} />
-            <Route path="about" element={<AboutPage />} />
-            <Route path="contact" element={<ContactPage />} />
-          </Route>
-        ))}
+      {/* Routes for all supported languages at /{lang} */}
+      {env.SUPPORTED_LANGUAGES.map(lang => (
+        <Route key={lang} path={`/${lang}`} element={<PagesLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="about" element={<AboutPage />} />
+          <Route path="contact" element={<ContactPage />} />
+        </Route>
+      ))}
 
       {/* Catch-all route for 404 */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
+};
+
+// Redirects / to /{lang} based on browser or default
+const RedirectToLang: React.FC = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const browserLang = LanguageUtils.getBrowserPreferredLanguage();
+    const targetLang = env.SUPPORTED_LANGUAGES.includes(browserLang)
+      ? browserLang
+      : env.DEFAULT_LANGUAGE;
+    navigate(`/${targetLang}`, { replace: true });
+  }, [navigate]);
+  return null;
 };
 
 const LanguageRouter: React.FC = () => {
