@@ -3,13 +3,14 @@ import ContactForm from '../components/ContactForm';
 import ContactInformation from '../components/ContactInformation';
 import FollowUs from '../components/FollowUs';
 import { useTranslation } from '../hooks/useTranslation';
+import { logger } from '../utils/logger';
 
 const ContactPage = () => {
   const { t } = useTranslation();
 
   const handleFormSubmit = async (formData: any) => {
     // Handle form submission logic here
-    console.log('Form submitted:', formData);
+    logger.debug('Form submitted:', formData);
     // You can add API call or other submission logic here
   };
 

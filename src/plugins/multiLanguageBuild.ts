@@ -2,7 +2,7 @@ import { Plugin } from 'vite';
 import { readdir, readFile, writeFile, mkdir } from 'fs/promises';
 import { join, resolve } from 'path';
 import { existsSync } from 'fs';
-
+import { logger } from '../utils/logger';
 /**
  * Multi-Language Build Plugin for Vite
  *
@@ -35,7 +35,7 @@ export function multiLanguageBuild(config: MultiLangConfig): Plugin {
       const langPath = resolve(config.langDir);
 
       if (!existsSync(langPath)) {
-        console.warn(`Language directory not found: ${langPath}`);
+        logger.warn(`Language directory not found: ${langPath}`);
         return;
       }
 
@@ -44,7 +44,7 @@ export function multiLanguageBuild(config: MultiLangConfig): Plugin {
         .filter(file => file.endsWith('.json'))
         .map(file => file.replace('.json', ''));
 
-      console.log(`🌐 Discovered languages: ${languages.join(', ')}`);
+      logger.debug(`Discovered languages: ${languages.join(', ')}`);
 
       // Store languages for use in other hooks
       (this as any).discoveredLanguages = languages;

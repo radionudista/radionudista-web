@@ -3,6 +3,7 @@ import { selectRandomVideo, VIDEO_CONFIG } from '../utils/videoConfig';
 import { LAYOUT, getGlassOverlay } from '../constants/layoutConstants';
 import { useBackgroundTransition } from '../hooks/useBackgroundTransition';
 import { useDebug } from '../contexts/DebugContext';
+import { logger } from '../utils/logger';
 
 interface BackgroundVideoProps {
   /**
@@ -80,15 +81,15 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
     setVideoKey(prev => prev + 1);
     
     // Debug: Log the selected video for development
-    console.log('BackgroundVideo - Random video selected:', randomVideo);
-    console.log('BackgroundVideo - Component initialized');
+    logger.debug('BackgroundVideo - Random video selected:', randomVideo);
+    logger.debug('BackgroundVideo - Component initialized');
   }, []); // Empty dependency array ensures this runs once when component mounts
 
   useEffect(() => {
     // Force video to load when currentVideo changes
     if (videoRef.current) {
       videoRef.current.load();
-      console.log('BackgroundVideo - Video load() called for:', currentVideo);
+      logger.debug('BackgroundVideo - Video load() called for:', currentVideo);
     }
   }, [currentVideo]);
 
@@ -112,9 +113,9 @@ const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
         preload="auto"
         onLoadedData={handleVideoLoadedData}
         onCanPlay={handleVideoCanPlay}
-        onLoadStart={() => console.log('BackgroundVideo - Video started loading')}
-        onProgress={() => console.log('BackgroundVideo - Video loading progress')}
-        onCanPlayThrough={() => console.log('BackgroundVideo - Video can play through')}
+        onLoadStart={() => logger.debug('BackgroundVideo - Video started loading')}
+        onProgress={() => logger.debug('BackgroundVideo - Video loading progress')}
+        onCanPlayThrough={() => logger.debug('BackgroundVideo - Video can play through')}
       >
         <source src={`${currentVideo}?t=${videoKey}`} type="video/mp4" />
       </video>

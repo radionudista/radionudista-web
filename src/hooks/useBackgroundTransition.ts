@@ -14,6 +14,7 @@ import {
   BACKGROUND_TRANSITIONS,
   TransitionCurve
 } from '../utils/backgroundImages';
+import { logger } from '../utils/logger';
 
 export interface BackgroundTransitionState {
   currentImage: BackgroundImage | null;
@@ -56,12 +57,12 @@ export const useBackgroundTransition = ({
       currentImage: randomImage
     }));
 
-    console.log('BackgroundTransition - Random image selected:', randomImage);
-    console.log('BackgroundTransition - Starting 10 second timer');
+    logger.debug('BackgroundTransition - Random image selected:', randomImage);
+    logger.debug('BackgroundTransition - Starting 10 second timer');
 
     // Set timer for minimum display time (10 seconds)
     const timer = setTimeout(() => {
-      console.log('BackgroundTransition - 10 second timer completed');
+      logger.debug('BackgroundTransition - 10 second timer completed');
       setState(prev => ({
         ...prev,
         isTimerReady: true
@@ -73,7 +74,7 @@ export const useBackgroundTransition = ({
 
   // Start the transition from image to video
   const startTransition = useCallback(() => {
-    console.log('BackgroundTransition - Starting crossfade transition');
+    logger.debug('BackgroundTransition - Starting crossfade transition');
     
     // Start showing video and begin simultaneous opacity transition
     setState(prev => ({
@@ -90,26 +91,26 @@ export const useBackgroundTransition = ({
         ...prev,
         showImage: false
       }));
-      console.log('BackgroundTransition - Crossfade transition completed');
+      logger.debug('BackgroundTransition - Crossfade transition completed');
     }, transitionDuration);
   }, [transitionDuration]);
 
   // Check if we can start transition (both timer and video ready)
   useEffect(() => {
-    console.log('BackgroundTransition - State check:', { 
+    logger.debug('BackgroundTransition - State check:', { 
       isTimerReady: state.isTimerReady, 
       isVideoReady: state.isVideoReady 
     });
     
     if (state.isTimerReady && state.isVideoReady) {
-      console.log('BackgroundTransition - Both conditions met, starting transition');
+      logger.debug('BackgroundTransition - Both conditions met, starting transition');
       startTransition();
     }
   }, [state.isTimerReady, state.isVideoReady, startTransition]);
 
   // Handle video ready state
   const handleVideoReady = useCallback(() => {
-    console.log('BackgroundTransition - Video is ready');
+    logger.debug('BackgroundTransition - Video is ready');
     setState(prev => ({ ...prev, isVideoReady: true }));
   }, []);
 
@@ -135,7 +136,7 @@ export const useBackgroundTransition = ({
   const handleVideoCanPlay = useCallback(() => {
     if (videoRef.current && state.isVideoReady) {
       videoRef.current.play().catch(error => {
-        console.log('Video autoplay prevented:', error);
+        logger.debug('Video autoplay prevented:', error);
       });
     }
   }, [videoRef, state.isVideoReady]);
