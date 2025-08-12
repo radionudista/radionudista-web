@@ -1,67 +1,56 @@
+
 # Components Guide
 
-This guide provides an overview of the key components in the application, with a focus on those that are configurable or have significant business logic.
+This guide provides an overview of the key components and their roles in the multilingual, dynamic content, and live radio system.
 
-## Countdown Timer (`CountdownTeaser.tsx`)
+## Core Components
 
-The countdown timer is implemented in `src/components/CountdownTeaser.tsx`. It displays a countdown to a specific date and time.
+### `LanguageRouter`
+- Handles language detection, subdirectory-based routing (`/es`, `/pt`, ...), and fallback to default language.
+- Integrates with React Router and i18n.
 
-### Configuration
+### `Navigation`
+- Combines static and dynamic menu items.
+- Dynamic items are generated from `public/content.json` (auto-indexed from Markdown in `src/content/{lang}/`).
+- Language-aware: navigation adapts to current language and available content.
 
-The countdown is configured via environment variables:
+### `RadioPlayerSection` & `RadioPlayer`
+- `RadioPlayerSection`: Section wrapper for the radio player, with optional title/description.
+- `RadioPlayer`: Custom audio player with cover art, ticker, play/pause, and volume control. Uses context for audio state.
 
--   `VITE_TARGET_DATE`: The target date and time for the countdown, in ISO 8601 format (e.g., `2025-12-31T23:59:59`).
--   `VITE_SHOW_COUNTDOWN`: A boolean (`'true'` or `'false'`) that controls the visibility of the entire countdown component.
+### `TwitchPlayer`
+- Embeds the Twitch live stream.
+- Detects ad-blockers/Brave and provides a user-friendly fallback if blocked.
+- Configured via environment variables for channel, parent domains, and size.
 
-### Logic
+### `CountdownTeaser`
+- Displays a countdown to a launch/event date (from env vars).
+- Uses the `useCountdown` hook for logic and `CountdownUnit` for display.
 
--   The component uses the `useCountdown` custom hook (`src/hooks/useCountdown.ts`) to calculate the time remaining.
--   The hook takes the target date as an argument and returns the remaining days, hours, minutes, and seconds.
--   The `CountdownTeaser` component then renders these values using the `CountdownUnit` presentational component.
--   If the target date is reached, the countdown will display all zeros.
+### `PagesLayout` & `Layout`
+- `PagesLayout`: Wraps all pages with background video and audio context.
+- `Layout`: Handles navigation, main content, and footer (with social links and Patreon button).
 
-### Usage
+### `DebugBar`
+- Shows live debug info (language, context, etc) in non-production environments.
+- Uses `DebugContext` and `useLanguageDebugInfo` for state.
 
-The component is rendered conditionally in `src/pages/Index.tsx` based on the `VITE_SHOW_COUNTDOWN` variable:
+## Dynamic Content System
 
-```tsx
-// src/pages/Index.tsx
-import CountdownTeaser from '@/components/CountdownTeaser';
+- Markdown files in `src/content/{lang}/` are auto-indexed at build time into `public/content.json`.
+- Each content entry can define menu labels, slugs, and visibility per language.
+- Navigation and routes are generated based on this content.
 
-// ...
-{import.meta.env.VITE_SHOW_COUNTDOWN === 'true' && <CountdownTeaser />}
-// ...
-```
+## Extending the System
 
-## Twitch Player (`TwitchPlayer.tsx`)
+- **Add a new language:**
+	- Add to `VITE_SUPPORTED_LANGUAGES` in env.
+	- Create a translation file in `src/lang/` and content folder in `src/content/{lang}/`.
+- **Add new content/page:**
+	- Add a Markdown file in the appropriate language folder.
+	- It will appear in navigation and routes after rebuild.
 
-The Twitch player, located at `src/components/TwitchPlayer.tsx`, embeds a Twitch stream and its corresponding chat into the application.
+---
+For more, see [Project Structure](./project-structure.md) and [Environment Variables](./environment-variables.md).
 
-### Configuration
-
-The player is configured using the following environment variables:
-
--   `VITE_TWITCH_CHANNEL`: The name of the Twitch channel to display (e.g., `nudistaradio`).
--   `VITE_TWITCH_PARENT`: The domain where the application is hosted. This is a security requirement from Twitch to allow embedding. For local development, this should be `localhost`. For production, it must be the public domain of your site (e.g., `nudistaradio.com`).
--   `VITE_SHOW_TWITCH_PLAYER`: A boolean (`'true'` or `'false'`) to control the visibility of the player.
-
-### Implementation
-
--   The component uses the official `twitch-embed` library, which is loaded via a script in the component.
--   It creates two `div` elements, one for the video player and one for the chat.
--   A `useEffect` hook initializes the `Twitch.Embed` object with the channel and parent domain from the environment variables.
--   The player and chat are rendered inside a responsive container.
-
-### Usage
-
-The component is conditionally rendered in `src/pages/Index.tsx` based on the `VITE_SHOW_TWITCH_PLAYER` variable:
-
-```tsx
-// src/pages/Index.tsx
-import TwitchPlayer from '@/components/TwitchPlayer';
-
-// ...
-{import.meta.env.VITE_SHOW_TWITCH_PLAYER === 'true' && <TwitchPlayer />}
-// ...
-```
 

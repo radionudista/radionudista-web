@@ -1,50 +1,41 @@
 # Environment Variables
 
-The application uses environment variables to manage configuration for different environments. Vite exposes environment variables on the special `import.meta.env` object.
+The application uses environment variables (all prefixed with `VITE_`) for configuration. These are loaded from `.env`, `.env.[mode]`, and `.env.[mode].local` files in the project root. Vite exposes them via `import.meta.env`.
 
-These variables are loaded from the following files in your project root:
+## Key Variables
 
--   `.env`: Loaded in all cases.
--   `.env.local`: Loaded in all cases, ignored by git.
--   `.env.[mode]`: Only loaded in the specified mode.
--   `.env.[mode].local`: Only loaded in the specified mode, ignored by git.
+| Variable | Description | Example/Default |
+| --- | --- | --- |
+| `VITE_APP_ENVIRONMENT` | App environment: `production`, `local`, or `feature` | `local` |
+| `VITE_APP_DEBUG` | Enable debug bar and extra logging | `true` |
+| `VITE_LAUNCHING_DATE` | ISO date for countdown teaser | `2025-08-09T12:00:00-03:00` |
+| `VITE_DEV_LAUNCHING_SECONDS` | For dev: seconds until launch (overrides date) | `2` |
+| `VITE_TWITCH_CHANNEL` | Twitch channel name | `radionudista` |
+| `VITE_TWITCH_STATIC_PARENTS` | Comma-separated parent domains for Twitch embed | `radionudista.com,localhost` |
+| `VITE_STREAM_URL` | Direct Twitch stream URL | `https://twitch.tv/radionudista` |
+| `VITE_TWITCH_PLAYER_WINDOW_SIZE_PERCENT` | Twitch player size (percent of canvas) | `100` |
+| `VITE_RADIO_STREAM_URL` | Radio stream URL (audio) | `https://servidor30.brlogic.com:7024/live` |
+| `VITE_RADIO_STATUS_URL` | Radio status API URL | *(see .env)* |
+| `VITE_RADIO_INFO_URL` | Radio info API URL | *(see .env)* |
+| `VITE_RADIO_INFO_API_URL` | Radio info API URL (alt) | *(see .env)* |
+| `VITE_RADIO_STATUS_POLL_INTERVAL` | Poll interval for radio status (ms) | `500` or `10000` |
+| `VITE_SUPPORTED_LANGUAGES` | Comma-separated list of supported languages | `es,pt` |
+| `VITE_DEFAULT_LANGUAGE` | Default language code | `es` |
 
-The build scripts in `package.json` use the `--mode` flag to specify the context (e.g., `development`, `production`).
+## How to Add or Change Variables
 
-## Available Variables
+1. Add the variable to the relevant `.env` file(s). Prefix with `VITE_` to expose to client code.
+2. (Optional) Add to `src/vite-env.d.ts` for TypeScript autocompletion.
+3. Use in code as `import.meta.env.VITE_YOUR_VARIABLE` or via the `env` object in `src/config/env.ts`.
 
-Here are the key environment variables used in the application:
+## Notes
 
-| Variable | Description | Default Value | Example |
-| --- | --- | --- | --- |
-| `VITE_APP_TITLE` | The title of the application, used in the browser tab. | `Nudista Radio` | `Nudista Radio Live` |
-| `VITE_TARGET_DATE` | The target date and time for the countdown timer, in ISO 8601 format. | `2025-12-31T23:59:59` | `2025-08-15T20:00:00` |
-| `VITE_TWITCH_CHANNEL` | The name of the Twitch channel to be embedded. | `nudistaradio` | `monstercat` |
-| `VITE_TWITCH_PARENT` | The parent domain for the embedded Twitch player. This is a required security feature by Twitch. | `localhost` | `nudistaradio.com` |
-| `VITE_PASSWORD_PROTECT` | Set to `'true'` to enable password protection for the site. | `'false'` | `'true'` |
-| `VITE_SITE_PASSWORD` | The password to access the site if password protection is enabled. | `""` | `your-secret-password` |
-| `VITE_MAINTENANCE_MODE` | Set to `'true'` to enable maintenance mode, which can show a specific page or message. | `'false'` | `'true'` |
-| `VITE_SHOW_COUNTDOWN` | Set to `'true'` to display the countdown timer component. | `'true'` | `'false'` |
-| `VITE_SHOW_TWITCH_PLAYER` | Set to `'true'` to display the Twitch player component. | `'true'` | `'false'` |
-| `VITE_DEBUG_MODE` | Set to `'true'` to enable the debug bar and other debugging features. | `'false'` | `'true'` |
+- All URLs, language lists, and feature toggles are controlled via env vars.
+- Adding a new language? Add it to `VITE_SUPPORTED_LANGUAGES` and provide a translation file in `src/lang/` and content in `src/content/{lang}/`.
+- For local dev, use `.env.development`. For production, use `.env.production`.
 
-## How to Add a New Environment Variable
-
-1.  **Add the variable** to the relevant `.env` files (e.g., `.env.development`, `.env.production`). Remember to prefix it with `VITE_` to expose it to the client-side code.
-2.  **Add TypeScript definition**: For TypeScript autocompletion, add the variable to `src/vite-env.d.ts`:
-    ```typescript
-    // /src/vite-env.d.ts
-    /// <reference types="vite/client" />
-
+---
+See also: [Getting Started](./getting-started.md) and [Component Guide](./components-guide.md).
     interface ImportMetaEnv {
+
       readonly VITE_APP_TITLE: string;
-      readonly VITE_NEW_VARIABLE: string; // Add your new variable here
-      // other env variables...
-    }
-
-    interface ImportMeta {
-      readonly env: ImportMetaEnv;
-    }
-    ```
-3.  **Use it in your code**: You can now access the variable in your application code using `import.meta.env.VITE_NEW_VARIABLE`.
-
