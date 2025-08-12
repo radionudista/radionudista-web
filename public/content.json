@@ -8,7 +8,8 @@
       "public": true,
       "date": "2024-01-01T00:00:00.000Z",
       "menu": "prueba",
-      "menu_position": 1
+      "menu_position": 1,
+      "markdownfile": "/content/es/contenido-prueba-1.md"
     },
     "pt": {
       "title": "Conteúdo Teste 1",
@@ -18,7 +19,8 @@
       "public": true,
       "date": "2024-01-01T00:00:00.000Z",
       "menu": "teste",
-      "menu_position": 1
+      "menu_position": 1,
+      "markdownfile": "/content/pt/contenido-prueba-1.md"
     }
   },
   "guia-desarrollo-web-moderno": {
@@ -30,7 +32,8 @@
       "public": true,
       "date": "2024-08-11T00:00:00.000Z",
       "menu": "desarrollo",
-      "menu_position": 2
+      "menu_position": 2,
+      "markdownfile": "/content/es/guia-desarrollo-web-moderno.md"
     },
     "pt": {
       "title": "Guia de Desenvolvimento Web Moderno",
@@ -40,7 +43,8 @@
       "public": true,
       "date": "2024-08-11T00:00:00.000Z",
       "menu": "desenvolvimento",
-      "menu_position": 2
+      "menu_position": 2,
+      "markdownfile": "/content/pt/guia-desarrollo-web-moderno.md"
     }
   }
 }

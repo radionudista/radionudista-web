@@ -15,6 +15,7 @@ interface ContentEntry {
     date: string;
     menu?: string;
     menu_position?: number;
+    markdownfile: string;
   };
 }
 
@@ -62,6 +63,8 @@ export function contentJsonGeneratorPlugin({
             const id = data.id || getIdFromFilename(file);
             if (!content[id]) content[id] = {};
 
+            // Compute the markdown file path relative to the project root (starting from /content/...)
+            const relPath = path.relative(process.cwd(), file).replace(/^src\//, '/').replace(/^src\//, '/');
             content[id][lang] = {
               title: data.title || '',
               slug: data.slug || getIdFromFilename(file),
@@ -71,6 +74,7 @@ export function contentJsonGeneratorPlugin({
               date: data.date || '',
               menu: data.menu || '',
               menu_position: typeof data.menu_position === 'number' ? data.menu_position : (data.menu_position ? Number(data.menu_position) : undefined),
+              markdownfile: relPath.replace(/^\/src\//, '/content/'),
             };
           }
         } catch (err) {
