@@ -1,5 +1,11 @@
 
 import contentIndex from '../contentIndex.json';
+// Helper to fetch contentIndex.json via HTTP if needed in the future
+export async function fetchContentIndex(): Promise<any> {
+  const res = await fetch('/contentIndex.json');
+  if (!res.ok) throw new Error('Failed to fetch contentIndex.json');
+  return res.json();
+}
 
 // Vite import all markdown files in src/content/*/*.md
 const markdownFiles = import.meta.glob('../content/*/*.md', { query: '?raw', import: 'default', eager: true });

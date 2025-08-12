@@ -83,7 +83,7 @@ export function contentJsonGeneratorPlugin({
       }
 
       await fs.writeFile(outputFile, JSON.stringify(content, null, 2), 'utf-8');
-      this.info(`Generated content.json with ${Object.keys(content).length} entries.`);
+  this.info(`Generated contentIndex.json with ${Object.keys(content).length} entries.`);
     },
   };
 }

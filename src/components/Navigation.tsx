@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import contentIndex from '../contentIndex.json';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import Logo from './Logo';
@@ -44,10 +45,7 @@ const Navigation: React.FC<NavigationProps> = ({
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-
-  // --- Dynamic nav items from indexed content (content.json) ---
-  const [indexedContent, setIndexedContent] = useState<any>(null);
-  // Use env for supported languages
+  // --- Dynamic nav items from indexed content (contentIndex.json) ---
   const supportedLangs = env.SUPPORTED_LANGUAGES;
   const currentLang = getCurrentLang(location.pathname, supportedLangs);
 
@@ -70,18 +68,12 @@ const Navigation: React.FC<NavigationProps> = ({
     return supportedLangs.some(lang => path === `/${lang}`);
   }, [location.pathname, supportedLangs]);
 
-  React.useEffect(() => {
-    fetch('/content.json')
-      .then(res => res.json())
-      .then(setIndexedContent)
-      .catch(() => setIndexedContent(null));
-  }, []);
+  // No fetch needed; contentIndex.json is imported as a module
 
   const dynamicNavItems: NavigationItem[] = useMemo(() => {
-    if (!indexedContent) return [];
     // Collect all public, menu'd items for current language
     const items: NavigationItem[] = [];
-    Object.entries(indexedContent).forEach(([id, langs]: [string, any]) => {
+    Object.entries(contentIndex).forEach(([id, langs]: [string, any]) => {
       const entry = langs[currentLang];
       if (entry && entry.menu && (entry.public === true || entry.public === 'true')) {
         items.push({
@@ -95,11 +87,11 @@ const Navigation: React.FC<NavigationProps> = ({
     return items.sort((a, b) => {
       const idA = a.id?.split('-')[0];
       const idB = b.id?.split('-')[0];
-      const posA = indexedContent?.[idA]?.[currentLang]?.menu_position ?? 9999;
-      const posB = indexedContent?.[idB]?.[currentLang]?.menu_position ?? 9999;
+      const posA = contentIndex?.[idA]?.[currentLang]?.menu_position ?? 9999;
+      const posB = contentIndex?.[idB]?.[currentLang]?.menu_position ?? 9999;
       return posA - posB;
     });
-  }, [indexedContent, currentLang]);
+  }, [currentLang]);
 
   // Merge static and dynamic nav items (dynamic after static)
   const mergedNavItems = [...navItems, ...dynamicNavItems];

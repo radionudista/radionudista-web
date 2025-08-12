@@ -34,7 +34,24 @@ export default defineConfig(({ mode }) => {
         contentDir: path.resolve(__dirname, 'src/content'),
         outputFile: path.resolve(__dirname, 'src/contentIndex.json'),
         supportedLanguages: Array.isArray(supportedLanguages) ? supportedLanguages : [supportedLanguages],
-      })
+      }),
+      // Plugin to copy contentIndex.json to public/ after build
+      {
+        name: 'copy-contentIndex-to-public',
+        closeBundle: async () => {
+          const fs = await import('fs/promises');
+          const src = path.resolve(__dirname, 'src/contentIndex.json');
+          const dest = path.resolve(__dirname, 'public/contentIndex.json');
+          try {
+            await fs.copyFile(src, dest);
+            // eslint-disable-next-line no-console
+            console.log('Copied contentIndex.json to public/');
+          } catch (err) {
+            // eslint-disable-next-line no-console
+            console.error('Failed to copy contentIndex.json to public/', err);
+          }
+        }
+      }
     ].filter(Boolean),
     resolve: {
       alias: {
