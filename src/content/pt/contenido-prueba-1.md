@@ -1,4 +1,5 @@
 ---
+language: pt
 title: Conteúdo Teste 1
 slug: conteudo-teste-1
 id: contenido-prueba-1

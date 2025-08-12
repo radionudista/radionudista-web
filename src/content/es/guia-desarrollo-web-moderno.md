@@ -1,4 +1,5 @@
 ---
+language: es
 title: Guía de Desarrollo Web Moderno
 slug: guia-desarrollo-web-moderno
 id: guia-desarrollo-web-moderno
