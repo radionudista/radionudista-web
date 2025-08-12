@@ -1,27 +1,29 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import { Helmet } from 'react-helmet-async';
 
-/**
- * SimplePage Component
- *
- * Displays information about RadioNudista including:
- * - Company story and mission
- * - Services offered to listeners and artists
- * - Team information
- *
- * Follows glass morphism design pattern with proper content structure
- */
-const SimplePage: React.FC = () => {
+interface SimplePageProps {
+  title: string;
+  markdown: string;
+  meta?: Record<string, any>;
+}
+
+const SimplePage: React.FC<SimplePageProps> = ({ title, markdown, meta }) => {
   return (
     <div className="container mx-auto px-6 py-12">
+      <Helmet>
+        <title>{title}</title>
+        {meta?.description && <meta name="description" content={meta.description} />}
+        {/* Add more SEO tags as needed */}
+      </Helmet>
       <div className="max-w-4xl mx-auto">
-
-
         <div className="space-y-8">
           <div className="glass-card">
-              some body content
+            <h3 className="text-2xl font-bold text-white mb-6">{title}</h3>
+            <div className="prose prose-invert max-w-none text-gray-200 text-justify">
+              <ReactMarkdown >{markdown}</ReactMarkdown>
+            </div>
           </div>
-
-
         </div>
       </div>
     </div>

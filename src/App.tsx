@@ -6,6 +6,7 @@ import LanguageRouter from "./components/LanguageRouter";
 import { DebugProvider } from "./contexts/DebugContext";
 import DebugBar from "./components/ui/DebugBar";
 import { useLanguageDebugInfo } from "@/hooks/useLanguageDebugInfo";
+import { HelmetProvider } from 'react-helmet-async';
 
 /**
  * Calls useLanguageDebugInfo to register language info in DebugContext.
@@ -20,17 +21,19 @@ const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <DebugProvider>
-          <LanguageDebugInfoProvider /> {/* Now inside DebugProvider */}
-          <Toaster />
-          <Sonner />
-          <LanguageRouter />
-          <DebugBar />
-        </DebugProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <DebugProvider>
+            <LanguageDebugInfoProvider /> {/* Now inside DebugProvider */}
+            <Toaster />
+            <Sonner />
+            <LanguageRouter />
+            <DebugBar />
+          </DebugProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation, useParams } from 'react-router-dom';
 import { useTranslation, LanguageUtils } from '../hooks/useTranslation';
 import { env } from '../config/env';
 import i18n from '../config/i18n';
@@ -10,6 +10,8 @@ import HomePage from '../pages/HomePage';
 import AboutPage from '../pages/AboutPage';
 import ContactPage from '../pages/ContactPage';
 import NotFound from '../pages/NotFound';
+import SimplePage from '../pages/SimplePage';
+import { getContent } from '../lib/contentLoader';
 
 /**
  * Language Router Component
@@ -96,20 +98,39 @@ const AppRoutes: React.FC = () => {
       {/* Redirect root / to detected language path */}
       <Route path="/" element={<RedirectToLang />} />
 
+
       {/* Routes for all supported languages at /{lang} */}
       {env.SUPPORTED_LANGUAGES.map(lang => (
         <Route key={lang} path={`/${lang}`} element={<PagesLayout />}>
           <Route index element={<HomePage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="contact" element={<ContactPage />} />
+          {/* Dynamic content pages: /{lang}/{slug} */}
+          <Route path=":slug" element={<DynamicSimplePageWrapper lang={lang} />} />
         </Route>
       ))}
-
       {/* Catch-all route for 404 */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
-};
+}
+
+// Wrapper to load content and render SimplePage for dynamic routes
+function DynamicSimplePageWrapper({ lang }: { lang: string }) {
+  const { slug } = useParams();
+  if (!slug) return <NotFound />;
+  const content = getContent(lang, slug);
+  if (!content) return <NotFound />;
+  return (
+    <SimplePage
+      title={content.title}
+      markdown={content.markdown}
+      meta={content}
+    />
+  );
+}
+
+
 
 // Redirects / to /{lang} based on browser or default
 const RedirectToLang: React.FC = () => {

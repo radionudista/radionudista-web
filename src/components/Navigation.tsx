@@ -87,7 +87,7 @@ const Navigation: React.FC<NavigationProps> = ({
         items.push({
           id: `${id}-${currentLang}`,
           label: entry.menu,
-          path: `/${currentLang}/${entry.slug}`
+          path: entry.slug // Only the slug, not a full path
         });
       }
     });

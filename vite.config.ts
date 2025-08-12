@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => {
       }),
       contentJsonGeneratorPlugin({
         contentDir: path.resolve(__dirname, 'src/content'),
-        outputFile: path.resolve(__dirname, 'public/content.json'),
+        outputFile: path.resolve(__dirname, 'src/contentIndex.json'),
         supportedLanguages: Array.isArray(supportedLanguages) ? supportedLanguages : [supportedLanguages],
       })
     ].filter(Boolean),
