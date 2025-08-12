@@ -2,7 +2,9 @@ import { Plugin } from 'vite';
 import { promises as fs } from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { env } from '../config/env';
+
+// For component existence validation
+import { readdirSync } from 'fs';
 
 
 interface ContentEntry {
@@ -16,6 +18,7 @@ interface ContentEntry {
     menu?: string;
     menu_position?: number;
     markdownfile: string;
+    language: string;
   };
 }
 
@@ -49,6 +52,19 @@ export function contentJsonGeneratorPlugin({
     name: 'content-json-generator',
     async buildStart() {
       const content: ContentJson = {};
+      const errors: string[] = [];
+      const menuMap: Record<string, Record<string, { menu: string, menu_position: number, file: string }>> = {};
+      const langContentCount: Record<string, number> = {};
+
+      // Get all available page components (without extension)
+      let pageComponents: string[] = [];
+      try {
+        pageComponents = readdirSync(path.resolve(process.cwd(), 'src/pages'))
+          .filter(f => f.endsWith('.tsx'))
+          .map(f => f.replace(/\.[^.]+$/, ''));
+      } catch (e) {
+        errors.push('Could not read src/pages for component validation.');
+      }
 
       for (const lang of supportedLanguages) {
         const langDir = path.join(contentDir, lang);
@@ -56,7 +72,34 @@ export function contentJsonGeneratorPlugin({
           const files = await getMarkdownFiles(langDir);
           for (const file of files) {
             const fileContent = await fs.readFile(file, 'utf-8');
-            const { data } = matter(fileContent);
+            const { data, content: mdBody } = matter(fileContent);
+
+            // 1. All current header vars for markdown are mandatory (except markdownfile, which is computed)
+            const requiredFields = ['title', 'slug', 'id', 'component', 'public', 'date', 'menu', 'menu_position', 'language'];
+            for (const field of requiredFields) {
+              if (typeof data[field] === 'undefined' || data[field] === '') {
+                errors.push(`[${lang}] ${file}: Missing required frontmatter field: ${field}`);
+              }
+            }
+
+            // 2. The component must exist in src/pages
+            if (data.component && !pageComponents.includes(data.component)) {
+              errors.push(`[${lang}] ${file}: Component '${data.component}' does not exist in src/pages.`);
+            }
+
+            // 3. No duplicate menu/menu_position in same language
+            if (!menuMap[lang]) menuMap[lang] = {};
+            const menuKey = `${data.menu}|${data.menu_position}`;
+            if (menuMap[lang][menuKey]) {
+              errors.push(`[${lang}] ${file}: Duplicate menu/menu_position ('${data.menu}', ${data.menu_position}) also in ${menuMap[lang][menuKey].file}`);
+            } else {
+              menuMap[lang][menuKey] = { menu: data.menu, menu_position: data.menu_position, file };
+            }
+
+            // 4. Markdown body must be valid (non-empty)
+            if (!mdBody || !mdBody.trim()) {
+              errors.push(`[${lang}] ${file}: Markdown body is empty or invalid.`);
+            }
 
             if (!(data.public === true || data.public === 'true')) continue;
 
@@ -75,15 +118,49 @@ export function contentJsonGeneratorPlugin({
               menu: data.menu || '',
               menu_position: typeof data.menu_position === 'number' ? data.menu_position : (data.menu_position ? Number(data.menu_position) : undefined),
               markdownfile: relPath.replace(/^\/src\//, '/content/'),
+              language: data.language || lang
             };
+            langContentCount[lang] = (langContentCount[lang] || 0) + 1;
           }
         } catch (err) {
           // Ignore missing language folders
         }
       }
 
+      // 5. Check for missing content by language
+      const allIds = Object.keys(content);
+      const missingByLang: Record<string, string[]> = {};
+      for (const id of allIds) {
+        for (const lang of supportedLanguages) {
+          if (!content[id][lang]) {
+            if (!missingByLang[lang]) missingByLang[lang] = [];
+            missingByLang[lang].push(id);
+          }
+        }
+      }
+
+      if (errors.length > 0) {
+        // Print all errors and stop build
+        console.error('\n\x1b[31mContent validation failed:\x1b[0m');
+        for (const err of errors) {
+          console.error('  -', err);
+        }
+        throw new Error('Content validation failed. See errors above.');
+      }
+
       await fs.writeFile(outputFile, JSON.stringify(content, null, 2), 'utf-8');
-  this.info(`Generated contentIndex.json with ${Object.keys(content).length} entries.`);
+      // Print summary
+      console.log('\n\x1b[36mContent summary by language:\x1b[0m');
+      for (const lang of supportedLanguages) {
+        const count = langContentCount[lang] || 0;
+        console.log(`  - ${lang}: ${count} content item(s)`);
+      }
+      for (const lang of supportedLanguages) {
+        if (missingByLang[lang] && missingByLang[lang].length > 0) {
+          console.warn(`\x1b[33m[WARN]\x1b[0m Missing content for language '${lang}':`, missingByLang[lang].join(', '));
+        }
+      }
+      this.info(`Generated contentIndex.json with ${Object.keys(content).length} entries.`);
     },
   };
 }

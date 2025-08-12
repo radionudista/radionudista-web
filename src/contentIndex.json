@@ -9,7 +9,8 @@
       "date": "2024-01-01T00:00:00.000Z",
       "menu": "prueba",
       "menu_position": 1,
-      "markdownfile": "/content/es/contenido-prueba-1.md"
+      "markdownfile": "/content/es/contenido-prueba-1.md",
+      "language": "es"
     },
     "pt": {
       "title": "Conteúdo Teste 1",
@@ -20,7 +21,8 @@
       "date": "2024-01-01T00:00:00.000Z",
       "menu": "teste",
       "menu_position": 1,
-      "markdownfile": "/content/pt/contenido-prueba-1.md"
+      "markdownfile": "/content/pt/contenido-prueba-1.md",
+      "language": "pt"
     }
   },
   "guia-desarrollo-web-moderno": {
@@ -33,7 +35,8 @@
       "date": "2024-08-11T00:00:00.000Z",
       "menu": "desarrollo",
       "menu_position": 2,
-      "markdownfile": "/content/es/guia-desarrollo-web-moderno.md"
+      "markdownfile": "/content/es/guia-desarrollo-web-moderno.md",
+      "language": "es"
     },
     "pt": {
       "title": "Guia de Desenvolvimento Web Moderno",
@@ -44,7 +47,8 @@
       "date": "2024-08-11T00:00:00.000Z",
       "menu": "desenvolvimento",
       "menu_position": 2,
-      "markdownfile": "/content/pt/guia-desarrollo-web-moderno.md"
+      "markdownfile": "/content/pt/guia-desarrollo-web-moderno.md",
+      "language": "pt"
     }
   }
 }
