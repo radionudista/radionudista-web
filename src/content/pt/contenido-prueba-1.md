@@ -4,6 +4,8 @@ slug: conteudo-teste-1
 id: contenido-prueba-1
 component: TestPage
 public: true
+menu: teste
+menu_position: 1
 date: 2024-01-01
 ---
 

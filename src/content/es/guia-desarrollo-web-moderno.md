@@ -4,6 +4,8 @@ slug: guia-desarrollo-web-moderno
 id: guia-desarrollo-web-moderno
 component: TestPage
 public: true
+menu: desarrollo
+menu_position: 2
 date: 2024-08-11
 ---
 

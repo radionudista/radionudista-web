@@ -6,7 +6,9 @@
       "id": "contenido-prueba-1",
       "component": "TestPage",
       "public": true,
-      "date": "2024-01-01T00:00:00.000Z"
+      "date": "2024-01-01T00:00:00.000Z",
+      "menu": "prueba",
+      "menu_position": 1
     },
     "pt": {
       "title": "Conteúdo Teste 1",
@@ -14,7 +16,9 @@
       "id": "contenido-prueba-1",
       "component": "TestPage",
       "public": true,
-      "date": "2024-01-01T00:00:00.000Z"
+      "date": "2024-01-01T00:00:00.000Z",
+      "menu": "teste",
+      "menu_position": 1
     }
   },
   "guia-desarrollo-web-moderno": {
@@ -24,7 +28,9 @@
       "id": "guia-desarrollo-web-moderno",
       "component": "TestPage",
       "public": true,
-      "date": "2024-08-11T00:00:00.000Z"
+      "date": "2024-08-11T00:00:00.000Z",
+      "menu": "desarrollo",
+      "menu_position": 2
     },
     "pt": {
       "title": "Guia de Desenvolvimento Web Moderno",
@@ -32,7 +38,9 @@
       "id": "guia-desarrollo-web-moderno",
       "component": "TestPage",
       "public": true,
-      "date": "2024-08-11T00:00:00.000Z"
+      "date": "2024-08-11T00:00:00.000Z",
+      "menu": "desenvolvimento",
+      "menu_position": 2
     }
   }
 }
