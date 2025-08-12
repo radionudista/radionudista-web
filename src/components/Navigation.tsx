@@ -2,8 +2,10 @@ import React, { useState, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import Logo from './Logo';
+
 import MiniPlayer from './MiniPlayer';
 import { PatreonButton } from './ui/patreon-button';
+import { env } from '../config/env';
 
 interface NavigationItem {
   id: string;
@@ -42,10 +44,20 @@ const Navigation: React.FC<NavigationProps> = ({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
+
   // --- Dynamic nav items from indexed content (content.json) ---
   const [indexedContent, setIndexedContent] = useState<any>(null);
-  const supportedLangs = useMemo(() => ['es', 'pt'], []); // Could be loaded from env/config
+  // Use env for supported languages
+  const supportedLangs = env.SUPPORTED_LANGUAGES;
   const currentLang = getCurrentLang(location.pathname, supportedLangs);
+
+  // Helper: is current path a home route for any supported language?
+  const isHomeRoute = React.useMemo(() => {
+    // Accepts /, /es, /pt, etc. (with or without trailing slash)
+    const path = location.pathname.replace(/\/+$/, ''); // remove trailing slash
+    if (path === '') return true; // root
+    return supportedLangs.some(lang => path === `/${lang}`);
+  }, [location.pathname, supportedLangs]);
 
   React.useEffect(() => {
     fetch('/content.json')
@@ -101,8 +113,9 @@ const Navigation: React.FC<NavigationProps> = ({
           {/* Logo Section */}
           <Logo size="medium" />
 
-          {/* Mini Player - Desktop only, hidden on home page */}
-          {location.pathname !== '/' && (
+
+          {/* Mini Player - Desktop only, hidden on any home route (/{lang}) */}
+          {!isHomeRoute && (
             <div className="hidden md:block">
               <MiniPlayer />
             </div>
@@ -125,8 +138,9 @@ const Navigation: React.FC<NavigationProps> = ({
 
           {/* Mobile Navigation Controls */}
           <div className="md:hidden flex items-center space-x-3">
-            {/* Mini Player Mobile - Scaled down, hidden on home page */}
-            {location.pathname !== '/' && (
+
+            {/* Mini Player Mobile - Scaled down, hidden on any home route (/{lang}) */}
+            {!isHomeRoute && (
               <div className="scale-75 origin-center">
                 <MiniPlayer />
               </div>
@@ -184,8 +198,9 @@ const Navigation: React.FC<NavigationProps> = ({
                 </Link>
               ))}
 
-              {/* Mini Player in Mobile Menu - Hidden on home page */}
-              {location.pathname !== '/' && (
+
+              {/* Mini Player in Mobile Menu - Hidden on any home route (/{lang}) */}
+              {!isHomeRoute && (
                 <div className="mt-8 flex justify-center">
                   <MiniPlayer />
                 </div>
