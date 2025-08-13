@@ -74,11 +74,18 @@ export function contentJsonGeneratorPlugin({
             const fileContent = await fs.readFile(file, 'utf-8');
             const { data, content: mdBody } = matter(fileContent);
 
-            // 1. All current header vars for markdown are mandatory (except markdownfile, which is computed)
-            const requiredFields = ['title', 'slug', 'id', 'component', 'public', 'date', 'menu', 'menu_position', 'language'];
-            for (const field of requiredFields) {
+            // 1. Required fields (except markdownfile, which is computed)
+            const alwaysRequired = ['title', 'slug', 'id', 'component', 'public', 'date', 'language'];
+            for (const field of alwaysRequired) {
               if (typeof data[field] === 'undefined' || data[field] === '') {
                 errors.push(`[${lang}] ${file}: Missing required frontmatter field: ${field}`);
+              }
+            }
+
+            // 1b. If menu is present, menu_position is mandatory
+            if (typeof data.menu !== 'undefined' && data.menu !== '') {
+              if (typeof data.menu_position === 'undefined' || data.menu_position === '' || isNaN(Number(data.menu_position))) {
+                errors.push(`[${lang}] ${file}: menu_position is mandatory and must be a number if menu is set.`);
               }
             }
 
@@ -87,13 +94,16 @@ export function contentJsonGeneratorPlugin({
               errors.push(`[${lang}] ${file}: Component '${data.component}' does not exist in src/pages.`);
             }
 
-            // 3. No duplicate menu/menu_position in same language
+            // 3. No duplicate menu/menu_position in same language (only if both are present and public is true)
             if (!menuMap[lang]) menuMap[lang] = {};
-            const menuKey = `${data.menu}|${data.menu_position}`;
-            if (menuMap[lang][menuKey]) {
-              errors.push(`[${lang}] ${file}: Duplicate menu/menu_position ('${data.menu}', ${data.menu_position}) also in ${menuMap[lang][menuKey].file}`);
-            } else {
-              menuMap[lang][menuKey] = { menu: data.menu, menu_position: data.menu_position, file };
+            const isPublic = data.public === true || data.public === 'true';
+            if (isPublic && typeof data.menu !== 'undefined' && data.menu !== '' && typeof data.menu_position !== 'undefined' && data.menu_position !== '' && !isNaN(Number(data.menu_position))) {
+              const menuKey = `${data.menu}|${data.menu_position}`;
+              if (menuMap[lang][menuKey]) {
+                errors.push(`[${lang}] ${file}: Duplicate menu/menu_position ('${data.menu}', ${data.menu_position}) also in ${menuMap[lang][menuKey].file}`);
+              } else {
+                menuMap[lang][menuKey] = { menu: data.menu, menu_position: data.menu_position, file };
+              }
             }
 
             // 4. Markdown body must be valid (non-empty)
@@ -109,6 +119,8 @@ export function contentJsonGeneratorPlugin({
             // Compute the markdown file path relative to the project root (starting from /content/...)
             const relPath = path.relative(process.cwd(), file).replace(/^src\//, '/').replace(/^src\//, '/');
             content[id][lang] = {
+              ...data, // include all frontmatter variables (required and extra)
+              // Overwrite/ensure required fields are present and normalized
               title: data.title || '',
               slug: data.slug || getIdFromFilename(file),
               id,

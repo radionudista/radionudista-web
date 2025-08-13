@@ -25,6 +25,7 @@ function getCurrentLang(pathname: string, supportedLangs: string[]): string {
 interface NavigationProps {
   navItems?: NavigationItem[];
   className?: string;
+  postNavItems?: NavigationItem[];
 }
 
 /**
@@ -39,7 +40,8 @@ const Navigation: React.FC<NavigationProps> = ({
   navItems = [
     { id: 'home', label: 'radio' , path: '/' }
   ],
-  className = ''
+  className = '',
+  postNavItems = [{ id: 'program', label: 'programacion' , path: 'programacion' }],
 }) => {
     const { t } = useTranslation();
 
@@ -98,8 +100,12 @@ const Navigation: React.FC<NavigationProps> = ({
     ...item,
     label: t(`navigation.${item.label}`)
   }));
+  const translatedPostNavItems = postNavItems.map(item => ({
+    ...item,
+    label: t(`navigation.${item.label}`)
+  }));
   // Merge static and dynamic nav items (dynamic after static)
-  const mergedNavItems = [...translatedNavItems, ...dynamicNavItems];
+  const mergedNavItems = [...translatedNavItems, ...dynamicNavItems, ...translatedPostNavItems];
 
   const handleMobileNavClick = () => {
     setIsMobileMenuOpen(false);

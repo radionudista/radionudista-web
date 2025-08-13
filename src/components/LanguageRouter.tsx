@@ -12,6 +12,7 @@ import ContactPage from '../pages/ContactPage';
 import NotFound from '../pages/NotFound';
 import SimplePage from '../pages/SimplePage';
 import { getContent } from '../lib/contentLoader';
+import ProgramPage from '@/pages/ProgramPage';
 
 /**
  * Language Router Component
@@ -104,7 +105,7 @@ const AppRoutes: React.FC = () => {
         <Route key={lang} path={`/${lang}`} element={<PagesLayout />}>
           <Route index element={<HomePage />} />
           <Route path="about" element={<AboutPage />} />
-          <Route path="contact" element={<ContactPage />} />
+          <Route path="programacion" element={<ProgramPage />} />
           {/* Dynamic content pages: /{lang}/{slug} */}
           <Route path=":slug" element={<DynamicSimplePageWrapper lang={lang} />} />
         </Route>
