@@ -13,7 +13,5 @@ social: ['@luchomy']
 logo: 7.png
 ---
 
-# Sordera Selectiva
-
 Curaduría musical para oídos inquietos.
   Explora sonidos fuera de lo habitual: ruido, distorsión, errores, texturas y estructuras anómalas. Cada episodio gira en torno a un eje sonoro /del drone al glitch, del pop intervenido a la música espectral/ entrelazando artistas, contextos históricos y detalles de producción.

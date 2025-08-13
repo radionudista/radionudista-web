@@ -13,7 +13,5 @@ social: ['@karlisalejandra', '@juanarapo']
 logo: 3.png
 ---
 
-# Estrella Distante
-
 Ciencia sin bata, astronomía sin fórmulas.
   Un programa que aterriza temas complejos del universo en lenguaje pop, sin perder el rigor ni la magia. De agujeros negros a teorías del tiempo, hablamos como si estuviéramos en una sobremesa estelar.

@@ -13,7 +13,5 @@ social: ['@memorafilia_']
 logo: 2.png
 ---
 
-# Chicas Malas
-
 Conversaciones con mujeres de moral distraída.
   Compositoras, sex workers, madres radicales, artistas y otras rebeldes: aquí se habla sin tabúes y con el deseo por delante. Una oda a la libertad desde lo íntimo.

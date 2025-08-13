@@ -13,6 +13,4 @@ social: ['@pindoramaradio']
 logo: 8.png
 ---
 
-# Pindorama
-
 Uma hora de música brasileira com alma tropical e curadoria elegante. A cada episódio, uma mixtape temática costurada por sons de fita cassete, da floresta e damemória. Dos grooves esquecidos aos instrumentais raros, Pindorama revela a sofisticação natural de um país moderno por essência.

@@ -13,7 +13,5 @@ social: ['@memorafilia_']
 logo: 2.png
 ---
 
-# Chicas Malas
-
 Conversas com mulheres moralmente desafiadas.
 Compositoras, profissionais do sexo, mães radicais, artistas e outras rebeldes: aqui falamos sem tabus e com o desejo em primeiro plano. Uma ode à liberdade do íntimo.

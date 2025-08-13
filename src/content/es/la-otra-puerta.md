@@ -13,7 +13,5 @@ social: ['@soyfloressolano']
 logo: 6.png
 ---
 
-# La Otra Puerta
-
 Umbral sonoro hacia el arte y sus enigmas.
   Entrevistas, monólogos y piezas híbridas que indagan en el proceso creativo como acto místico. Cada episodio es una entrada a mundos interiores, obsesiones, formas de crear y sobrevivir.
