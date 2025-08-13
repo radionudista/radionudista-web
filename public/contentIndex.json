@@ -31,10 +31,9 @@
       "title": "Checkpoint",
       "slug": "checkpoint",
       "id": "checkpoint",
-      "component": "SimplePage",
+      "component": "ProgramPage",
       "public": true,
-      "menu": "checkpoint",
-      "menu_position": 1,
+      "program_order": 2,
       "date": "2024-01-01T00:00:00.000Z",
       "schedule": "martes 20:00 - ARG",
       "talent": [
@@ -44,8 +43,28 @@
         "@kingtanatv"
       ],
       "logo": "4.png",
-      "descriptionPt": "Um espaço para considerar as linguagens dos animes, os rituais gamers e as dinâmicas dos fandoms como parte de uma identidade compartilhada. Cultura otaku, videogames e comunidades geek; um olhar crítico e emocional sobre os mundos que habitamos na ficção e como eles nos refletem, nos conectam e nos transformam.",
+      "menu": "",
       "markdownfile": "/content/es/checkpoint.md"
+    },
+    "pt": {
+      "language": "pt",
+      "title": "Checkpoint",
+      "slug": "checkpoint",
+      "id": "checkpoint",
+      "component": "ProgramPage",
+      "public": true,
+      "program_order": 2,
+      "date": "2024-01-01T00:00:00.000Z",
+      "schedule": "martes 20:00 - ARG",
+      "talent": [
+        "Julio Quintana"
+      ],
+      "social": [
+        "@kingtanatv"
+      ],
+      "logo": "4.png",
+      "menu": "",
+      "markdownfile": "/content/pt/checkpoint.md"
     }
   },
   "chicas-malas": {
@@ -54,10 +73,9 @@
       "title": "Chicas Malas",
       "slug": "chicas-malas",
       "id": "chicas-malas",
-      "component": "SimplePage",
+      "component": "ProgramPage",
       "public": true,
-      "menu": "chicas-malas",
-      "menu_position": 1,
+      "program_order": 3,
       "date": "2024-01-01T00:00:00.000Z",
       "schedule": "miércoles 20:00 - ESP",
       "talent": [
@@ -67,36 +85,284 @@
         "@memorafilia_"
       ],
       "logo": "2.png",
-      "descriptionPt": "Conversas com mulheres moralmente desafiadas.",
-      "Compositoras, profissionais do sexo, mães radicais, artistas e outras rebeldes": "aqui falamos sem tabus e com o desejo em primeiro plano. Uma ode à liberdade do íntimo.",
+      "menu": "",
       "markdownfile": "/content/es/chicas-malas.md"
-    }
-  },
-  "contenido-prueba-1": {
-    "es": {
-      "language": "es",
-      "title": "Contenido Prueba 1",
-      "slug": "contenido-prueba-1",
-      "id": "contenido-prueba-1",
-      "component": "SimplePage",
-      "public": true,
-      "menu": "prueba",
-      "menu_position": 1,
-      "date": "2024-01-01T00:00:00.000Z",
-      "foo": "bar",
-      "markdownfile": "/content/es/contenido-prueba-1.md"
     },
     "pt": {
       "language": "pt",
-      "title": "Conteúdo Teste 1",
-      "slug": "conteudo-teste-1",
-      "id": "contenido-prueba-1",
-      "component": "SimplePage",
+      "title": "Chicas Malas",
+      "slug": "chicas-malas",
+      "id": "chicas-malas",
+      "component": "ProgramPage",
       "public": true,
-      "menu": "teste",
-      "menu_position": 1,
+      "program_order": 3,
       "date": "2024-01-01T00:00:00.000Z",
-      "markdownfile": "/content/pt/contenido-prueba-1.md"
+      "schedule": "miércoles 20:00 - ESP",
+      "talent": [
+        "Clared Navarro"
+      ],
+      "social": [
+        "@memorafilia_"
+      ],
+      "logo": "2.png",
+      "menu": "",
+      "markdownfile": "/content/pt/chicas-malas.md"
+    }
+  },
+  "estrella-distante": {
+    "es": {
+      "language": "es",
+      "title": "Estrella Distante",
+      "slug": "estrella-distante",
+      "id": "estrella-distante",
+      "component": "ProgramPage",
+      "public": true,
+      "program_order": 4,
+      "date": "2024-01-01T00:00:00.000Z",
+      "schedule": "viernes 17:00 - ARG",
+      "talent": [
+        "Karlis Chirinos",
+        "Juana Rapoport"
+      ],
+      "social": [
+        "@karlisalejandra",
+        "@juanarapo"
+      ],
+      "logo": "3.png",
+      "menu": "",
+      "markdownfile": "/content/es/estrella-distante.md"
+    },
+    "pt": {
+      "language": "pt",
+      "title": "Estrella Distante",
+      "slug": "estrella-distante",
+      "id": "estrella-distante",
+      "component": "ProgramPage",
+      "public": true,
+      "program_order": 4,
+      "date": "2024-01-01T00:00:00.000Z",
+      "schedule": "viernes 17:00 - ARG",
+      "talent": [
+        "Karlis Chirinos",
+        "Juana Rapoport"
+      ],
+      "social": [
+        "@karlisalejandra",
+        "@juanarapo"
+      ],
+      "logo": "3.png",
+      "menu": "",
+      "markdownfile": "/content/pt/estrella-distante.md"
+    }
+  },
+  "la-otra-puerta": {
+    "es": {
+      "language": "es",
+      "title": "La Otra Puerta",
+      "slug": "la-otra-puerta",
+      "id": "la-otra-puerta",
+      "component": "ProgramPage",
+      "public": true,
+      "program_order": 5,
+      "date": "2024-01-01T00:00:00.000Z",
+      "schedule": "sábado 15:00 - ESP",
+      "talent": [
+        "Alberto Flores Solano"
+      ],
+      "social": [
+        "@soyfloressolano"
+      ],
+      "logo": "6.png",
+      "menu": "",
+      "markdownfile": "/content/es/la-otra-puerta.md"
+    },
+    "pt": {
+      "language": "pt",
+      "title": "La Otra Puerta",
+      "slug": "la-otra-puerta",
+      "id": "la-otra-puerta",
+      "component": "ProgramPage",
+      "public": true,
+      "program_order": 5,
+      "date": "2024-01-01T00:00:00.000Z",
+      "schedule": "sábado 15:00 - ESP",
+      "talent": [
+        "Alberto Flores Solano"
+      ],
+      "social": [
+        "@soyfloressolano"
+      ],
+      "logo": "6.png",
+      "menu": "",
+      "markdownfile": "/content/pt/la-otra-puerta.md"
+    }
+  },
+  "misterios": {
+    "es": {
+      "language": "es",
+      "title": "Misterios",
+      "slug": "misterios",
+      "id": "misterios",
+      "component": "ProgramPage",
+      "public": true,
+      "program_order": 1,
+      "date": "2024-01-01T00:00:00.000Z",
+      "schedule": "lunes 22:00 - BRA",
+      "talent": [
+        "Gustavo Perez"
+      ],
+      "social": [
+        "@gustavodesnudo"
+      ],
+      "logo": "5.png",
+      "menu": "",
+      "markdownfile": "/content/es/misterios.md"
+    },
+    "pt": {
+      "language": "pt",
+      "title": "Misterios",
+      "slug": "misterios",
+      "id": "misterios",
+      "component": "ProgramPage",
+      "public": true,
+      "program_order": 1,
+      "date": "2024-01-01T00:00:00.000Z",
+      "schedule": "lunes 22:00 - BRA",
+      "talent": [
+        "Gustavo Perez"
+      ],
+      "social": [
+        "@gustavodesnudo"
+      ],
+      "logo": "5.png",
+      "menu": "",
+      "markdownfile": "/content/pt/misterios.md"
+    }
+  },
+  "pindorama": {
+    "es": {
+      "language": "es",
+      "title": "Pindorama",
+      "slug": "pindorama",
+      "id": "pindorama",
+      "component": "ProgramPage",
+      "public": true,
+      "program_order": 7,
+      "date": "2024-01-01T00:00:00.000Z",
+      "schedule": "domingo 12:00 - BRA",
+      "talent": [
+        "Henrique Sanches"
+      ],
+      "social": [
+        "@pindoramaradio"
+      ],
+      "logo": "8.png",
+      "menu": "",
+      "markdownfile": "/content/es/pindorama.md"
+    },
+    "pt": {
+      "language": "pt",
+      "title": "Pindorama",
+      "slug": "pindorama",
+      "id": "pindorama",
+      "component": "ProgramPage",
+      "public": true,
+      "program_order": 7,
+      "date": "2024-01-01T00:00:00.000Z",
+      "schedule": "domingo 12:00 - BRA",
+      "talent": [
+        "Henrique Sanches"
+      ],
+      "social": [
+        "@pindoramaradio"
+      ],
+      "logo": "8.png",
+      "menu": "",
+      "markdownfile": "/content/pt/pindorama.md"
+    }
+  },
+  "sordera-selectiva": {
+    "es": {
+      "language": "es",
+      "title": "Sordera Selectiva",
+      "slug": "sordera-selectiva",
+      "id": "sordera-selectiva",
+      "component": "ProgramPage",
+      "public": true,
+      "program_order": 6,
+      "date": "2024-01-01T00:00:00.000Z",
+      "schedule": "sábado 18:00 - ESP",
+      "talent": [
+        "Lucho Milazzo"
+      ],
+      "social": [
+        "@luchomy"
+      ],
+      "logo": "7.png",
+      "menu": "",
+      "markdownfile": "/content/es/sordera-selectiva.md"
+    },
+    "pt": {
+      "language": "pt",
+      "title": "Sordera Selectiva",
+      "slug": "sordera-selectiva",
+      "id": "sordera-selectiva",
+      "component": "ProgramPage",
+      "public": true,
+      "program_order": 6,
+      "date": "2024-01-01T00:00:00.000Z",
+      "schedule": "sábado 18:00 - ESP",
+      "talent": [
+        "Lucho Milazzo"
+      ],
+      "social": [
+        "@luchomy"
+      ],
+      "logo": "7.png",
+      "menu": "",
+      "markdownfile": "/content/pt/sordera-selectiva.md"
+    }
+  },
+  "volumen": {
+    "es": {
+      "language": "es",
+      "title": "Volumen",
+      "slug": "volumen",
+      "id": "volumen",
+      "component": "ProgramPage",
+      "public": true,
+      "program_order": 8,
+      "date": "2024-01-01T00:00:00.000Z",
+      "schedule": "domingo 15:00 - BRA",
+      "talent": [
+        "Diana Hung"
+      ],
+      "social": [
+        "@_dianaacarolina"
+      ],
+      "logo": "1.png",
+      "menu": "",
+      "markdownfile": "/content/es/volumen.md"
+    },
+    "pt": {
+      "language": "pt",
+      "title": "Volumen",
+      "slug": "volumen",
+      "id": "volumen",
+      "component": "ProgramPage",
+      "public": true,
+      "program_order": 8,
+      "date": "2024-01-01T00:00:00.000Z",
+      "schedule": "domingo 15:00 - BRA",
+      "talent": [
+        "Diana Hung"
+      ],
+      "social": [
+        "@_dianaacarolina"
+      ],
+      "logo": "1.png",
+      "menu": "",
+      "markdownfile": "/content/pt/volumen.md"
     }
   }
 }

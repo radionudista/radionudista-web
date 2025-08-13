@@ -109,33 +109,6 @@
       "markdownfile": "/content/pt/chicas-malas.md"
     }
   },
-  "contenido-prueba-1": {
-    "es": {
-      "language": "es",
-      "title": "Contenido Prueba 1",
-      "slug": "contenido-prueba-1",
-      "id": "contenido-prueba-1",
-      "component": "SimplePage",
-      "public": true,
-      "menu": "prueba",
-      "menu_position": 1,
-      "date": "2024-01-01T00:00:00.000Z",
-      "foo": "bar",
-      "markdownfile": "/content/es/contenido-prueba-1.md"
-    },
-    "pt": {
-      "language": "pt",
-      "title": "Conteúdo Teste 1",
-      "slug": "conteudo-teste-1",
-      "id": "contenido-prueba-1",
-      "component": "SimplePage",
-      "public": true,
-      "menu": "teste",
-      "menu_position": 1,
-      "date": "2024-01-01T00:00:00.000Z",
-      "markdownfile": "/content/pt/contenido-prueba-1.md"
-    }
-  },
   "estrella-distante": {
     "es": {
       "language": "es",

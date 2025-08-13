@@ -4,7 +4,7 @@ title: Conteúdo Teste 1
 slug: conteudo-teste-1
 id: contenido-prueba-1
 component: SimplePage
-public: true
+public: false
 menu: teste
 menu_position: 1
 date: 2024-01-01

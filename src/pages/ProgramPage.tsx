@@ -1,6 +1,6 @@
 
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import contentIndex from '../contentIndex.json';
 import { env } from '../config/env';
@@ -18,16 +18,50 @@ const ProgramPage = () => {
   };
   const currentLang = getCurrentLang(location.pathname, supportedLangs);
 
-  // Build showList dynamically from contentIndex.json
-  const showList = useMemo(() => {
-    // Flatten all content entries for currentLang
+
+  // Build showList dynamically from contentIndex.json (without description yet)
+  const showListRaw = useMemo(() => {
     const shows = Object.values(contentIndex)
       .map(entry => entry[currentLang])
       .filter(Boolean)
       .filter(entry => entry.component === 'ProgramPage' && (entry.public === true || entry.public === 'true'));
-    // Sort by program_order (required for ProgramPage)
     return shows.sort((a, b) => (a.program_order ?? 9999) - (b.program_order ?? 9999));
   }, [currentLang]);
+
+  // State to hold markdown bodies for each show
+  const [showList, setShowList] = useState<any[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadMarkdowns() {
+      // Load all markdown bodies in parallel
+      const loaded = await Promise.all(
+        showListRaw.map(async (show) => {
+          let description = '';
+          try {
+            // Dynamic import using Vite's import.meta.glob
+            // Remove leading slash if present
+            let mdPath = show.markdownfile;
+            if (mdPath.startsWith('/')) mdPath = mdPath.slice(1);
+            // Vite import expects relative to src/
+            const modules = import.meta.glob('../content/*/*.md', { as: 'raw', eager: false });
+            const matchKey = Object.keys(modules).find(k => k.endsWith(mdPath));
+            if (matchKey && modules[matchKey]) {
+              const raw = await modules[matchKey]();
+              // Remove frontmatter
+              description = raw.replace(/^---[\s\S]*?---\s*/, '').trim();
+            }
+          } catch (e) {
+            description = '';
+          }
+          return { ...show, description };
+        })
+      );
+      if (!cancelled) setShowList(loaded);
+    }
+    loadMarkdowns();
+    return () => { cancelled = true; };
+  }, [showListRaw]);
 
   return (
     <div className='container mx-auto px-6 py-12'>

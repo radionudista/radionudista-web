@@ -94,9 +94,10 @@ export function contentJsonGeneratorPlugin({
               errors.push(`[${lang}] ${file}: Component '${data.component}' does not exist in src/pages.`);
             }
 
-            // 3. No duplicate menu/menu_position in same language (only if both are present)
+            // 3. No duplicate menu/menu_position in same language (only if both are present and public is true)
             if (!menuMap[lang]) menuMap[lang] = {};
-            if (typeof data.menu !== 'undefined' && data.menu !== '' && typeof data.menu_position !== 'undefined' && data.menu_position !== '' && !isNaN(Number(data.menu_position))) {
+            const isPublic = data.public === true || data.public === 'true';
+            if (isPublic && typeof data.menu !== 'undefined' && data.menu !== '' && typeof data.menu_position !== 'undefined' && data.menu_position !== '' && !isNaN(Number(data.menu_position))) {
               const menuKey = `${data.menu}|${data.menu_position}`;
               if (menuMap[lang][menuKey]) {
                 errors.push(`[${lang}] ${file}: Duplicate menu/menu_position ('${data.menu}', ${data.menu_position}) also in ${menuMap[lang][menuKey].file}`);
