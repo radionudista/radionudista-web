@@ -1,6 +1,6 @@
 ---
 language: es
-title: Accerca de Notostros
+title: Acerca de Notostros
 slug: acerca-de-nosotros
 id: acerca-de-nosotros
 component: SimplePage
