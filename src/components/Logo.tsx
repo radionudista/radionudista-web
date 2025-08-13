@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface LogoProps {
   size?: 'small' | 'medium' | 'large';
@@ -34,36 +35,38 @@ const Logo = ({ size = 'medium', className = '' }: LogoProps) => {
   const sizeClasses = getSizeClasses();
 
   return (
-    <div className={`flex items-center space-x-3 ${className}`}>
-      <img 
-        src="/lovable-uploads/ba6f20be-002c-47a0-ab7b-2e545a599205.png" 
-        alt="RadioNudista Logo" 
-        className={sizeClasses.image}
-      />
-      <h1 
-        className={`${sizeClasses.text} text-white`} 
-        style={{ 
-          fontFamily: 'AkzidenzGrotesk, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-          display: 'flex',
-          alignItems: 'baseline',
-          lineHeight: '1',
-          margin: 0,
-          padding: 0
-        }}
-      >
-        <span style={{ 
-          fontWeight: 300, 
-          lineHeight: 'inherit',
-          verticalAlign: 'baseline',
-          fontSize: 'inherit'
-        }}>radio</span><span style={{ 
-          fontWeight: 900, 
-          lineHeight: 'inherit',
-          verticalAlign: 'baseline',
-          fontSize: 'inherit'
-        }}>nudista</span>
-      </h1>
-    </div>
+    <Link to="/" style={{ display: 'inline-block' }}>
+      <div className={`flex items-center space-x-3 ${className}`}> 
+        <img 
+          src="/lovable-uploads/ba6f20be-002c-47a0-ab7b-2e545a599205.png" 
+          alt="RadioNudista Logo" 
+          className={sizeClasses.image}
+        />
+        <h1 
+          className={`${sizeClasses.text} text-white`} 
+          style={{ 
+            fontFamily: 'AkzidenzGrotesk, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+            display: 'flex',
+            alignItems: 'baseline',
+            lineHeight: '1',
+            margin: 0,
+            padding: 0
+          }}
+        >
+          <span style={{ 
+            fontWeight: 300, 
+            lineHeight: 'inherit',
+            verticalAlign: 'baseline',
+            fontSize: 'inherit'
+          }}>radio</span><span style={{ 
+            fontWeight: 900, 
+            lineHeight: 'inherit',
+            verticalAlign: 'baseline',
+            fontSize: 'inherit'
+          }}>nudista</span>
+        </h1>
+      </div>
+    </Link>
   );
 };
 
