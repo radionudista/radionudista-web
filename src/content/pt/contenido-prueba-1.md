@@ -4,7 +4,7 @@ title: Conteúdo Teste 1
 slug: conteudo-teste-1
 id: contenido-prueba-1
 component: SimplePage
-public: true
+public: false
 menu: teste
 menu_position: 1
 date: 2024-01-01
@@ -22,3 +22,9 @@ Esta é a página inicial em português do nosso site estático construído com 
 - **Componentes React**: Integração perfeita com componentes React
 
 Navegue para diferentes seções usando o menu superior, ou mude idiomas para ver o conteúdo no seu idioma preferido.
+
+
+   | Header 1 | Header 2 |
+    |----------|----------|
+    | Content 1| Content 2|
+    : My Table Caption {tbl-colwidths="[50,50]"}
