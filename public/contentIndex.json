@@ -1,54 +1,102 @@
 {
   "acerca-de-nosotros": {
     "es": {
+      "language": "es",
       "title": "Accerca de Notostros",
       "slug": "acerca-de-nosotros",
       "id": "acerca-de-nosotros",
       "component": "SimplePage",
       "public": true,
-      "date": "2024-08-11T00:00:00.000Z",
       "menu": "nosotrxs",
       "menu_position": 2,
-      "markdownfile": "/content/es/acerca-de-nosotros.md",
-      "language": "es"
+      "date": "2024-08-11T00:00:00.000Z",
+      "markdownfile": "/content/es/acerca-de-nosotros.md"
     },
     "pt": {
+      "language": "es",
       "title": "Isto Sobre Nós",
       "slug": "isto-sobre-nós",
       "id": "acerca-de-nosotros",
       "component": "SimplePage",
       "public": true,
-      "date": "2024-08-11T00:00:00.000Z",
       "menu": "nós",
       "menu_position": 2,
-      "markdownfile": "/content/pt/acerca-de-nosotros.md",
-      "language": "es"
+      "date": "2024-08-11T00:00:00.000Z",
+      "markdownfile": "/content/pt/acerca-de-nosotros.md"
+    }
+  },
+  "checkpoint": {
+    "es": {
+      "language": "es",
+      "title": "Checkpoint",
+      "slug": "checkpoint",
+      "id": "checkpoint",
+      "component": "SimplePage",
+      "public": true,
+      "menu": "checkpoint",
+      "menu_position": 1,
+      "date": "2024-01-01T00:00:00.000Z",
+      "schedule": "martes 20:00 - ARG",
+      "talent": [
+        "Julio Quintana"
+      ],
+      "social": [
+        "@kingtanatv"
+      ],
+      "logo": "4.png",
+      "descriptionPt": "Um espaço para considerar as linguagens dos animes, os rituais gamers e as dinâmicas dos fandoms como parte de uma identidade compartilhada. Cultura otaku, videogames e comunidades geek; um olhar crítico e emocional sobre os mundos que habitamos na ficção e como eles nos refletem, nos conectam e nos transformam.",
+      "markdownfile": "/content/es/checkpoint.md"
+    }
+  },
+  "chicas-malas": {
+    "es": {
+      "language": "es",
+      "title": "Chicas Malas",
+      "slug": "chicas-malas",
+      "id": "chicas-malas",
+      "component": "SimplePage",
+      "public": true,
+      "menu": "chicas-malas",
+      "menu_position": 1,
+      "date": "2024-01-01T00:00:00.000Z",
+      "schedule": "miércoles 20:00 - ESP",
+      "talent": [
+        "Clared Navarro"
+      ],
+      "social": [
+        "@memorafilia_"
+      ],
+      "logo": "2.png",
+      "descriptionPt": "Conversas com mulheres moralmente desafiadas.",
+      "Compositoras, profissionais do sexo, mães radicais, artistas e outras rebeldes": "aqui falamos sem tabus e com o desejo em primeiro plano. Uma ode à liberdade do íntimo.",
+      "markdownfile": "/content/es/chicas-malas.md"
     }
   },
   "contenido-prueba-1": {
     "es": {
+      "language": "es",
       "title": "Contenido Prueba 1",
       "slug": "contenido-prueba-1",
       "id": "contenido-prueba-1",
       "component": "SimplePage",
       "public": true,
-      "date": "2024-01-01T00:00:00.000Z",
       "menu": "prueba",
       "menu_position": 1,
-      "markdownfile": "/content/es/contenido-prueba-1.md",
-      "language": "es"
+      "date": "2024-01-01T00:00:00.000Z",
+      "foo": "bar",
+      "markdownfile": "/content/es/contenido-prueba-1.md"
     },
     "pt": {
+      "language": "pt",
       "title": "Conteúdo Teste 1",
       "slug": "conteudo-teste-1",
       "id": "contenido-prueba-1",
       "component": "SimplePage",
       "public": true,
-      "date": "2024-01-01T00:00:00.000Z",
       "menu": "teste",
       "menu_position": 1,
-      "markdownfile": "/content/pt/contenido-prueba-1.md",
-      "language": "pt"
+      "date": "2024-01-01T00:00:00.000Z",
+      "markdownfile": "/content/pt/contenido-prueba-1.md"
     }
   }
 }
