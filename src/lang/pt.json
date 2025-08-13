@@ -11,10 +11,11 @@
     "previous": "Anterior"
   },
   "navigation": {
-    "home": "Início",
-    "about": "Sobre",
-    "contact": "Contato",
-    "radio": "Rádio"
+    "home": "início",
+    "about": "sobre",
+    "contact": "contato",
+    "radio": "rádio",
+    "apoyanos": "nos apoie"
   },
   "contact": {
     "page-title": "Entre em Contato",
@@ -59,5 +60,7 @@
     "something-went-wrong": "Algo deu errado",
     "try-again": "Tentar Novamente"
   }
+  
+
 }
 

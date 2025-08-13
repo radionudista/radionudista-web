@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-
+import { useTranslation } from 'react-i18next';
 interface PatreonButtonProps {
   /**
    * Additional CSS classes for the button
@@ -48,7 +48,7 @@ const PatreonButton = React.forwardRef<
   PatreonButtonProps
 >(({
   className,
-  text = "apóyanos",
+  text = "apoyanos",
   href = "https://www.patreon.com/profile/creators?u=170209343",
   style,
   absolute = true,
@@ -59,7 +59,7 @@ const PatreonButton = React.forwardRef<
     right: 0,
     margin: '0 3rem'
   } : {};
-
+  const { t } = useTranslation();
   return (
     <a
       ref={ref}
@@ -72,7 +72,7 @@ const PatreonButton = React.forwardRef<
         className
       )}
       style={{ ...defaultStyle, ...style }}
-      aria-label={`Support us on Patreon - ${text}`}
+      aria-label={`Support us on Patreon - ${t(`navigation.${text}`)}`}
       {...props}
     >
       <div className="w-6 h-6 mr-3">
@@ -95,7 +95,7 @@ const PatreonButton = React.forwardRef<
           />
         </svg>
       </div>
-      <p>{text}</p>
+      <p>{t(`navigation.${text}`)}</p>
     </a>
   );
 });

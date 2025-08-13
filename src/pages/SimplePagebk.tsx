@@ -28,17 +28,9 @@ const SimplePage: React.FC<SimplePageProps> = ({ title, markdown, meta }) => {
       <div className="max-w-4xl mx-auto">
         <div className="space-y-8">
           <div className="glass-card">
-
-            <div className=" text-gray-200 text-justify" style={ { paddingTop:"3em" }   }>
-              <ReactMarkdown 
-                components={{
-                  p: ({ node, ...props }) => (
-                    <p style={{ marginBottom: '2em' }} {...props} />
-                  )
-                }}
-              >
-                {body}
-              </ReactMarkdown>
+            <h3 className="text-2xl font-bold text-white mb-6">{title}</h3>
+            <div className=" text-gray-200 text-justify">
+              <ReactMarkdown >{body}</ReactMarkdown>
             </div>
           </div>
         </div>
