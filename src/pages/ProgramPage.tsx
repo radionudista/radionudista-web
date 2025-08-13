@@ -68,13 +68,6 @@ const ProgramPage = () => {
       <div className=" max-w-4xl mx-auto">
         <div className="flex flex-col">
 
-          {/*<div className="glass-card">
-            <h3 className="text-2xl font-bold text-white mb-8">Send us a Message</h3>
-            <FormButton type="submit" fullWidth>
-                Send Message
-              </FormButton>
-          </div>*/}
-
           {showList.map((show, index) => (
             <div key={`show_${index}`} className="glass-card mb-8" >
               <div className="flex sm:flex-row flex-col mb-[0.5rem]">
