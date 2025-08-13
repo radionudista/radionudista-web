@@ -21,3 +21,8 @@ Contenido en Markdown: Todo el contenido está escrito en Markdown
 Generación Estática: Construido con Vite para un rendimiento óptimo
 Componentes React: Integración perfecta con componentes React
 Navega a diferentes secciones usando el menú superior, o cambia idiomas para ver el contenido en tu idioma preferido.
+
+   | Header 1 | Header 2 |
+    |----------|----------|
+    | Content 1| Content 2|
+    : My Table Caption {tbl-colwidths="[50,50]"}
