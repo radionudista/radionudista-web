@@ -13,7 +13,5 @@ social: ['@gustavodesnudo']
 logo: 5.png
 ---
 
-# Misterios
-
 Rarezas musicales latinoamericanas en clave de archivo paranormal.
   Inspirado en programas como Archivos del Más Allá, Nuestro Insólito Universo y Escalofríos, este viaje sonoro rescata canciones, leyendas sonoras y pistas olvidadas del inconsciente colectivo latinoamericano. Narrado como un expediente secreto, es una cápsula de terror, historia y placer auditivo con mutaciones horripilantes de latin jazz.

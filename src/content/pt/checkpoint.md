@@ -13,6 +13,4 @@ social: ['@kingtanatv']
 logo: 4.png
 ---
 
-# Checkpoint
-
 Um espaço para considerar as linguagens dos animes, os rituais gamers e as dinâmicas dos fandoms como parte de uma identidade compartilhada. Cultura otaku, videogames e comunidades geek; um olhar crítico e emocional sobre os mundos que habitamos na ficção e como eles nos refletem, nos conectam e nos transformam.
