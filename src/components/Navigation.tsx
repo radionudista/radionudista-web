@@ -7,6 +7,7 @@ import Logo from './Logo';
 import MiniPlayer from './MiniPlayer';
 import { PatreonButton } from './ui/patreon-button';
 import { env } from '../config/env';
+import { useTranslation } from 'react-i18next';
 
 interface NavigationItem {
   id: string;
@@ -36,12 +37,11 @@ interface NavigationProps {
  */
 const Navigation: React.FC<NavigationProps> = ({
   navItems = [
-    { id: 'home', label: 'radio', path: '/' },
-    { id: 'about', label: 'nosotrxs', path: 'about' },
-    { id: 'contact', label: 'Contact', path: 'contact' }
+    { id: 'home', label: 'radio' , path: '/' }
   ],
   className = ''
 }) => {
+    const { t } = useTranslation();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -93,8 +93,13 @@ const Navigation: React.FC<NavigationProps> = ({
     });
   }, [currentLang]);
 
+  // Translate static navItems labels using full key path (e.g., navigation.radio)
+  const translatedNavItems = navItems.map(item => ({
+    ...item,
+    label: t(`navigation.${item.label}`)
+  }));
   // Merge static and dynamic nav items (dynamic after static)
-  const mergedNavItems = [...navItems, ...dynamicNavItems];
+  const mergedNavItems = [...translatedNavItems, ...dynamicNavItems];
 
   const handleMobileNavClick = () => {
     setIsMobileMenuOpen(false);

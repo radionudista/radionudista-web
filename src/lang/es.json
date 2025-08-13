@@ -11,10 +11,11 @@
     "previous": "Anterior"
   },
   "navigation": {
-    "home": "Inicio",
-    "about": "Acerca de",
-    "contact": "Contacto",
-    "radio": "Radio"
+    "home": "inicio",
+    "about": "acerca de",
+    "contact": "contacto",
+    "radio": "radio",
+    "apoyanos": "apóyanos"
   },
   "contact": {
     "page-title": "Ponte en Contacto",

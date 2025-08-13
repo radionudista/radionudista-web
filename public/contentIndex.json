@@ -1,4 +1,30 @@
 {
+  "acerca-de-nosotros": {
+    "es": {
+      "title": "Accerca de Notostros",
+      "slug": "acerca-de-nosotros",
+      "id": "acerca-de-nosotros",
+      "component": "SimplePage",
+      "public": true,
+      "date": "2024-08-11T00:00:00.000Z",
+      "menu": "nosotrxs",
+      "menu_position": 2,
+      "markdownfile": "/content/es/acerca-de-nosotros.md",
+      "language": "es"
+    },
+    "pt": {
+      "title": "Isto Sobre Nós",
+      "slug": "isto-sobre-nós",
+      "id": "acerca-de-nosotros",
+      "component": "SimplePage",
+      "public": true,
+      "date": "2024-08-11T00:00:00.000Z",
+      "menu": "nós",
+      "menu_position": 2,
+      "markdownfile": "/content/pt/acerca-de-nosotros.md",
+      "language": "es"
+    }
+  },
   "contenido-prueba-1": {
     "es": {
       "title": "Contenido Prueba 1",
@@ -22,32 +48,6 @@
       "menu": "teste",
       "menu_position": 1,
       "markdownfile": "/content/pt/contenido-prueba-1.md",
-      "language": "pt"
-    }
-  },
-  "guia-desarrollo-web-moderno": {
-    "es": {
-      "title": "Guía de Desarrollo Web Moderno",
-      "slug": "guia-desarrollo-web-moderno",
-      "id": "guia-desarrollo-web-moderno",
-      "component": "SimplePage",
-      "public": true,
-      "date": "2024-08-11T00:00:00.000Z",
-      "menu": "desarrollo",
-      "menu_position": 2,
-      "markdownfile": "/content/es/guia-desarrollo-web-moderno.md",
-      "language": "es"
-    },
-    "pt": {
-      "title": "Guia de Desenvolvimento Web Moderno",
-      "slug": "guia-desenvolvimento-web-moderno",
-      "id": "guia-desarrollo-web-moderno",
-      "component": "SimplePage",
-      "public": true,
-      "date": "2024-08-11T00:00:00.000Z",
-      "menu": "desenvolvimento",
-      "menu_position": 2,
-      "markdownfile": "/content/pt/guia-desarrollo-web-moderno.md",
       "language": "pt"
     }
   }
