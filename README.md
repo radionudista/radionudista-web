@@ -57,6 +57,55 @@
 - **src/config/env.ts**: Centralized, type-safe environment variable access.
 - **Debug & Contexts**: Debug bar, language, and audio context providers.
 
+
+## Content Management & Dynamic Pages
+
+All site content is managed as Markdown files in `src/content/{lang}/`. Each file starts with a YAML frontmatter block containing required metadata. At build time, all content is auto-indexed and used for navigation and routing.
+
+### Required Frontmatter Fields
+- `title`: Page/program title
+- `slug`: URL slug (unique per language)
+- `id`: Unique identifier
+- `component`: React page component to use (e.g., `SimplePage`, `ProgramPage`)
+- `public`: `true` or `false` (only `true` is indexed and shown)
+- `date`: ISO date string
+- `language`: Language code (e.g., `es`, `pt`)
+
+#### Optional Fields
+- `menu`: Label for navigation (if present, `menu_position` is required)
+- `menu_position`: Number for ordering in navigation
+- Any other custom fields are allowed and will be indexed
+
+### Example: Adding a New Page
+
+```markdown
+---
+title: "Mi Nueva Página"
+slug: mi-nueva-pagina
+id: mi-nueva-pagina
+component: SimplePage
+public: true
+date: 2025-08-13
+language: es
+menu: "nueva"
+menu_position: 3
+---
+
+# Mi Nueva Página
+
+¡Este es el contenido de mi nueva página en español!
+```
+
+Place this file in `src/content/es/mi-nueva-pagina.md` and rebuild. The page will appear in navigation and be routable at `/es/mi-nueva-pagina`.
+
+### Menu & Component Logic
+- Only content with `public: true` and both `menu` and `menu_position` appears in navigation.
+- If `menu` is set, `menu_position` must also be set (otherwise, build fails).
+- Content without `menu`/`menu_position` can still be public and routable, but will not appear in navigation.
+- The `component` field determines which React page component renders the content.
+
+---
+
 ## Documentation
 
 See the [`docs/`](./docs/README.md) folder for:
@@ -66,6 +115,8 @@ See the [`docs/`](./docs/README.md) folder for:
 - [Component Guide](./docs/components-guide.md)
 - [Project Structure](./docs/project-structure.md)
 - [Deployment](./docs/deployment.md)
+- [Content Management (EN)](./docs/en/content-management.md)
+- [Gestión de Contenido (ES)](./docs/es/content-management.md)
 
 ---
 
