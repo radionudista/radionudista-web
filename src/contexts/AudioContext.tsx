@@ -2,7 +2,8 @@ import React, { createContext, useContext, useState, useRef, useEffect, useCallb
 import { MEDIA_CONSTANTS } from '../constants/mediaConstants';
 import { STREAM_CONFIG } from '../constants/streamConstants';
 import { RadioStreamService } from '../services/streamService';
-import { AudioService } from '../services/audioService';
+import { AudioService, AudioValidationResult } from '../services/audioService';
+import { toast } from '../hooks/use-toast';
 
 interface AudioContextType {
   isPlaying: boolean;
@@ -11,10 +12,18 @@ interface AudioContextType {
   coverImageUrl: string | null;
   volume: number;
   isMuted: boolean;
+  currentSource: 'radio' | 'program';
+  currentProgramId: string | null;
+  currentProgramTitle: string | null;
+  error: string | null;
   togglePlayWithPause: () => void;
   togglePlay: () => void;
+  playProgram: (programId: string, audioUrl: string, title: string) => void;
+  stopProgram: () => void;
+  returnToRadio: () => void;
   setVolume: (volume: number) => void;
   toggleMute: () => void;
+  clearError: () => void;
 }
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
@@ -31,13 +40,44 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isLoading, setIsLoading] = useState(false);
   const [currentTrack, setCurrentTrack] = useState<string>(MEDIA_CONSTANTS.STREAM.DEFAULT_TRACK);
   const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
-  
-  // Volume State
-  const [volume, setVolumeState] = useState(80);
-  const [isMuted, setIsMuted] = useState(false);
-  const [previousVolume, setPreviousVolume] = useState(80);
-  
+
+  // Multi-source State
+  const [currentSource, setCurrentSource] = useState<'radio' | 'program'>('radio');
+  const [currentProgramId, setCurrentProgramId] = useState<string | null>(null);
+  const [currentProgramTitle, setCurrentProgramTitle] = useState<string | null>(null);
+
+  // Error State
+  const [error, setError] = useState<string | null>(null);
+
+  // Volume State with persistence
+  const [volume, setVolumeState] = useState(() => {
+    try {
+      const savedVolume = localStorage.getItem('audioVolume');
+      return savedVolume ? parseInt(savedVolume, 10) : 80;
+    } catch {
+      return 80;
+    }
+  });
+  const [isMuted, setIsMuted] = useState(() => {
+    try {
+      const savedMuted = localStorage.getItem('audioMuted');
+      return savedMuted === 'true';
+    } catch {
+      return false;
+    }
+  });
+  const [previousVolume, setPreviousVolume] = useState(() => {
+    try {
+      const savedPrevVolume = localStorage.getItem('audioPreviousVolume');
+      return savedPrevVolume ? parseInt(savedPrevVolume, 10) : 80;
+    } catch {
+      return 80;
+    }
+  });
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const programAudioRef = useRef<HTMLAudioElement | null>(null);
+  const audioInstancesRef = useRef<Set<HTMLAudioElement>>(new Set());
   const streamService = useRef(
     new RadioStreamService(
       STREAM_CONFIG.statusUrl,
@@ -47,64 +87,146 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   );
 
   /**
-   * Audio Event Handlers - DRY principle
+   * Enhanced audio instance management with memory leak prevention
    */
-  const audioEventHandlers = {
-    onLoadStart: () => setIsLoading(true),
-    onCanPlay: () => setIsLoading(false),
-    onWaiting: () => setIsLoading(true),
-    onError: (event: Event) => {
-      setIsLoading(false);
-      setIsPlaying(false);
-      const audioElement = event.target as HTMLAudioElement;
-      const error = audioElement.error;
+  const registerAudioInstance = useCallback((audio: HTMLAudioElement) => {
+    audioInstancesRef.current.add(audio);
+  }, []);
 
-      if (error) {
-        console.error('Audio playback error details:', {
-          code: error.code,
-          message: error.message,
-          networkState: audioElement.networkState,
-          readyState: audioElement.readyState,
-          src: audioElement.src
-        });
+  const unregisterAudioInstance = useCallback((audio: HTMLAudioElement) => {
+    audioInstancesRef.current.delete(audio);
+  }, []);
 
-        // Handle specific error types
-        switch (error.code) {
-          case MediaError.MEDIA_ERR_ABORTED:
-            console.error('Audio playback aborted by user');
-            break;
-          case MediaError.MEDIA_ERR_NETWORK:
-            console.error('Network error while loading audio');
-            break;
-          case MediaError.MEDIA_ERR_DECODE:
-            console.error('Audio decoding error');
-            break;
-          case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
-            console.error('Audio format not supported');
-            break;
-          default:
-            console.error('Unknown audio error');
-        }
-      } else {
-        console.error('Audio playback error: No error details available');
-      }
+  const cleanupAllAudioInstances = useCallback(() => {
+    // Clean up all tracked audio instances
+    audioInstancesRef.current.forEach(audio => {
+      AudioService.cleanupAudio(audio);
+    });
+    audioInstancesRef.current.clear();
+
+    // Clean up main refs
+    if (audioRef.current) {
+      AudioService.cleanupAudio(audioRef.current);
+      audioRef.current = null;
     }
-  };
+    if (programAudioRef.current) {
+      AudioService.cleanupAudio(programAudioRef.current);
+      programAudioRef.current = null;
+    }
+  }, []);
+
+  const safeCleanupAudio = useCallback((audio: HTMLAudioElement | null) => {
+    if (audio) {
+      unregisterAudioInstance(audio);
+      AudioService.cleanupAudio(audio);
+    }
+  }, [unregisterAudioInstance]);
 
   /**
-   * Create audio instance with proper configuration
+   * Audio Event Handlers - DRY principle
+   */
+  const handleAudioLoadStart = useCallback(() => setIsLoading(true), []);
+  const handleAudioCanPlay = useCallback(() => setIsLoading(false), []);
+  const handleAudioWaiting = useCallback(() => setIsLoading(true), []);
+  
+  const handleAudioError = useCallback((event: Event) => {
+    setIsLoading(false);
+    setIsPlaying(false);
+    const audioElement = event.target as HTMLAudioElement;
+    const mediaError = audioElement.error;
+    const isProgramAudio = audioElement === programAudioRef.current;
+
+    if (mediaError) {
+      // Only log detailed errors in development mode
+      if (import.meta.env.DEV) {
+        console.error('Audio playback error details:', {
+          code: mediaError.code,
+          message: mediaError.message,
+          networkState: audioElement.networkState,
+          readyState: audioElement.readyState,
+          src: audioElement.src,
+          sourceType: isProgramAudio ? 'program' : 'radio'
+        });
+      }
+
+      // Get user-friendly error message
+      const errorMessage = AudioService.getErrorMessage(mediaError);
+      setError(errorMessage);
+
+      // Only show toast notifications in development mode
+      if (import.meta.env.DEV) {
+        toast({
+          variant: "destructive",
+          title: isProgramAudio ? "Program Audio Error" : "Radio Stream Error",
+          description: errorMessage,
+        });
+      }
+
+      // If program audio fails, reset to radio state
+      if (isProgramAudio) {
+        if (import.meta.env.DEV) {
+          console.error(`Program audio error: ${errorMessage}`);
+        }
+        
+        // Clean up failed program audio
+        if (programAudioRef.current) {
+          safeCleanupAudio(programAudioRef.current);
+          programAudioRef.current = null;
+        }
+        
+        // Reset to radio state
+        setCurrentSource('radio');
+        setCurrentProgramId(null);
+        setCurrentProgramTitle(null);
+        
+        if (import.meta.env.DEV) {
+          console.error('Program audio failed, returned to radio state');
+        }
+      } else {
+        // For radio errors, try to recover after a delay
+        setTimeout(() => {
+          if (audioRef.current && !audioRef.current.src) {
+            if (import.meta.env.DEV) {
+              console.log('Attempting to recover radio stream...');
+            }
+            audioRef.current.src = STREAM_CONFIG.streamUrl;
+            audioRef.current.load();
+          }
+        }, 3000);
+      }
+    } else {
+      const fallbackMessage = 'Audio playback error: No error details available';
+      setError(fallbackMessage);
+      
+      if (import.meta.env.DEV) {
+        console.error(fallbackMessage);
+        toast({
+          variant: "destructive",
+          title: "Audio Error",
+          description: fallbackMessage,
+        });
+      }
+    }
+  }, [safeCleanupAudio]);
+
+  /**
+   * Create audio instance with proper configuration and registration
    */
   const createConfiguredAudio = useCallback(() => {
-    const audio = AudioService.createAudioInstance(STREAM_CONFIG.streamUrl, volume / 100);
-    
+    const effectiveVolume = isMuted ? 0 : volume / 100;
+    const audio = AudioService.createAudioInstance(STREAM_CONFIG.streamUrl, effectiveVolume);
+
+    // Register the instance for cleanup tracking
+    registerAudioInstance(audio);
+
     // Apply event listeners
-    audio.addEventListener('loadstart', audioEventHandlers.onLoadStart);
-    audio.addEventListener('canplay', audioEventHandlers.onCanPlay);
-    audio.addEventListener('waiting', audioEventHandlers.onWaiting);
-    audio.addEventListener('error', audioEventHandlers.onError);
-    
+    audio.addEventListener('loadstart', handleAudioLoadStart);
+    audio.addEventListener('canplay', handleAudioCanPlay);
+    audio.addEventListener('waiting', handleAudioWaiting);
+    audio.addEventListener('error', handleAudioError);
+
     return audio;
-  }, [volume]);
+  }, [volume, isMuted, handleAudioLoadStart, handleAudioCanPlay, handleAudioWaiting, handleAudioError, registerAudioInstance]);
 
   /**
    * Volume Control - Following SRP
@@ -114,51 +236,449 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (newVolume > 0 && isMuted) {
       setIsMuted(false);
     }
-    AudioService.setAudioVolume(audioRef.current, newVolume / 100);
-  }, [isMuted]);
+    // Apply volume to currently active audio source
+    if (currentSource === 'radio' && audioRef.current) {
+      AudioService.setAudioVolume(audioRef.current, newVolume / 100);
+    } else if (currentSource === 'program' && programAudioRef.current) {
+      AudioService.setAudioVolume(programAudioRef.current, newVolume / 100);
+    }
+    
+    // Persist volume setting
+    try {
+      localStorage.setItem('audioVolume', newVolume.toString());
+    } catch (error) {
+      console.warn('Failed to persist volume setting:', error);
+    }
+  }, [isMuted, currentSource]);
 
   const toggleMute = useCallback(() => {
     if (isMuted) {
       setVolumeState(previousVolume);
       setIsMuted(false);
-      AudioService.setAudioVolume(audioRef.current, previousVolume / 100);
+      // Apply volume to currently active audio source
+      if (currentSource === 'radio' && audioRef.current) {
+        AudioService.setAudioVolume(audioRef.current, previousVolume / 100);
+      } else if (currentSource === 'program' && programAudioRef.current) {
+        AudioService.setAudioVolume(programAudioRef.current, previousVolume / 100);
+      }
     } else {
       setPreviousVolume(volume);
       setVolumeState(0);
       setIsMuted(true);
-      AudioService.setAudioVolume(audioRef.current, 0);
+      // Mute currently active audio source
+      if (currentSource === 'radio' && audioRef.current) {
+        AudioService.setAudioVolume(audioRef.current, 0);
+      } else if (currentSource === 'program' && programAudioRef.current) {
+        AudioService.setAudioVolume(programAudioRef.current, 0);
+      }
     }
-  }, [isMuted, volume, previousVolume]);
+    
+    // Persist mute settings
+    try {
+      localStorage.setItem('audioMuted', (!isMuted).toString());
+      localStorage.setItem('audioPreviousVolume', (isMuted ? volume : previousVolume).toString());
+    } catch (error) {
+      console.warn('Failed to persist mute settings:', error);
+    }
+  }, [isMuted, volume, previousVolume, currentSource]);
 
   /**
    * Playback Control - Following SRP
    */
   const togglePlayWithPause = useCallback(() => {
+    // If program is playing, stop it and switch to radio
+    if (currentSource === 'program') {
+      if (programAudioRef.current) {
+        safeCleanupAudio(programAudioRef.current);
+        programAudioRef.current = null;
+      }
+      setCurrentSource('radio');
+      setCurrentProgramId(null);
+      setCurrentProgramTitle(null);
+    }
+
     if (!audioRef.current) {
       audioRef.current = createConfiguredAudio();
     }
 
-    if (isPlaying) {
+    if (isPlaying && currentSource === 'radio') {
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
-      audioRef.current.play().catch(console.error);
-      setIsPlaying(true);
+      // Use safe play method with autoplay handling
+      AudioService.safePlay(audioRef.current).then(result => {
+        if (result.success) {
+          setIsPlaying(true);
+          setCurrentSource('radio');
+          setError(null); // Clear any previous errors on successful play
+        } else {
+          if (import.meta.env.DEV) {
+            console.error('Radio playback failed:', result.error);
+          }
+          if (result.requiresUserInteraction) {
+            setError('Click play to start audio - autoplay is blocked');
+          } else {
+            setError(result.error || 'Failed to start radio playback');
+          }
+        }
+      });
     }
-  }, [isPlaying, createConfiguredAudio]);
+  }, [isPlaying, currentSource, createConfiguredAudio, safeCleanupAudio]);
 
   const togglePlay = useCallback(() => {
-    if (isPlaying && audioRef.current) {
-      AudioService.cleanupAudio(audioRef.current);
+    // If program is playing, stop it first
+    if (currentSource === 'program') {
+      if (programAudioRef.current) {
+        safeCleanupAudio(programAudioRef.current);
+        programAudioRef.current = null;
+      }
+      setCurrentProgramId(null);
+      setCurrentProgramTitle(null);
+    }
+
+    if (isPlaying && audioRef.current && currentSource === 'radio') {
+      safeCleanupAudio(audioRef.current);
       audioRef.current = null;
       setIsPlaying(false);
       setIsLoading(false);
     } else {
+      // Clean up any existing radio audio
+      if (audioRef.current) {
+        safeCleanupAudio(audioRef.current);
+      }
       audioRef.current = createConfiguredAudio();
-      audioRef.current.play().catch(console.error);
-      setIsPlaying(true);
+      // Use safe play method with autoplay handling
+      AudioService.safePlay(audioRef.current).then(result => {
+        if (result.success) {
+          setIsPlaying(true);
+          setError(null); // Clear any previous errors on successful play
+        } else {
+          if (import.meta.env.DEV) {
+            console.error('Radio playback failed:', result.error);
+          }
+          if (result.requiresUserInteraction) {
+            setError('Click play to start audio - autoplay is blocked');
+          } else {
+            setError(result.error || 'Failed to start radio playback');
+          }
+        }
+      });
     }
-  }, [isPlaying, createConfiguredAudio]);
+
+    setCurrentSource('radio');
+  }, [isPlaying, currentSource, createConfiguredAudio, safeCleanupAudio]);
+
+  /**
+   * Program Audio Control - Following SRP
+   */
+  const playProgram = useCallback(async (programId: string, audioUrl: string, title: string) => {
+    if (import.meta.env.DEV) {
+      console.log(`Starting program playback: ${title} (${programId})`);
+    }
+    
+    // Clear any previous errors
+    setError(null);
+    
+    // Set loading state immediately when switching sources
+    setIsLoading(true);
+    setIsPlaying(false);
+    
+    // Stop any currently playing audio
+    if (audioRef.current) {
+      safeCleanupAudio(audioRef.current);
+      audioRef.current = null;
+    }
+    if (programAudioRef.current) {
+      safeCleanupAudio(programAudioRef.current);
+      programAudioRef.current = null;
+    }
+
+    // Update state to program source immediately
+    setCurrentSource('program');
+    setCurrentProgramId(programId);
+    setCurrentProgramTitle(title);
+
+    try {
+      // Validate audio URL with retry logic for better reliability
+      if (import.meta.env.DEV) {
+        console.log('Validating audio URL with retry logic...');
+      }
+      const validationResult: AudioValidationResult = await AudioService.validateAudioUrlWithRetry(audioUrl, 2, 1500);
+      
+      if (!validationResult.isValid) {
+        const errorMessage = validationResult.error || 'Audio file is not accessible or supported';
+        if (import.meta.env.DEV) {
+          console.error(`Audio validation failed: ${errorMessage} (Code: ${validationResult.errorCode})`);
+        }
+        throw new Error(errorMessage);
+      }
+      
+      if (import.meta.env.DEV) {
+        console.log(`Audio validation successful. Duration: ${validationResult.duration || 'unknown'}s`);
+      }
+
+      // Create new program audio instance with persisted volume settings
+      const effectiveVolume = isMuted ? 0 : volume / 100;
+      
+      // Ensure we have a valid audio URL
+      if (!audioUrl || audioUrl.trim() === '') {
+        throw new Error('Invalid audio URL provided');
+      }
+      
+      if (import.meta.env.DEV) {
+        console.log('Creating program audio with URL:', audioUrl);
+      }
+      
+      programAudioRef.current = AudioService.createAudioInstance(audioUrl, effectiveVolume);
+      registerAudioInstance(programAudioRef.current);
+
+      // Enhanced event listeners for better loading and error handling
+      programAudioRef.current.addEventListener('loadstart', () => {
+        if (import.meta.env.DEV) {
+          console.log('Program audio loading started');
+        }
+        setIsLoading(true);
+        setError(null);
+      });
+      
+      programAudioRef.current.addEventListener('canplay', () => {
+        if (import.meta.env.DEV) {
+          console.log('Program audio ready to play');
+        }
+        setIsLoading(false);
+        setError(null);
+      });
+      
+      programAudioRef.current.addEventListener('waiting', () => {
+        if (import.meta.env.DEV) {
+          console.log('Program audio buffering');
+        }
+        setIsLoading(true);
+      });
+      
+      programAudioRef.current.addEventListener('playing', () => {
+        if (import.meta.env.DEV) {
+          console.log('Program audio started playing');
+        }
+        setIsLoading(false);
+        setIsPlaying(true);
+        setError(null); // Clear any previous errors when playback starts
+      });
+      
+      programAudioRef.current.addEventListener('pause', () => {
+        if (import.meta.env.DEV) {
+          console.log('Program audio paused');
+        }
+        setIsPlaying(false);
+      });
+      
+      programAudioRef.current.addEventListener('stalled', () => {
+        if (import.meta.env.DEV) {
+          console.log('Program audio stalled - network issues');
+          toast({
+            title: "Buffering",
+            description: "Audio is buffering due to network conditions...",
+          });
+        }
+        setIsLoading(true);
+      });
+      
+      programAudioRef.current.addEventListener('suspend', () => {
+        if (import.meta.env.DEV) {
+          console.log('Program audio suspended - loading paused');
+        }
+        setIsLoading(false);
+      });
+      
+      programAudioRef.current.addEventListener('error', handleAudioError);
+
+      // Add ended event listener to auto-return to radio stream
+      programAudioRef.current.addEventListener('ended', () => {
+        if (import.meta.env.DEV) {
+          console.log('Program audio ended, returning to radio stream');
+        }
+        
+        // Clean up program audio
+        if (programAudioRef.current) {
+          safeCleanupAudio(programAudioRef.current);
+          programAudioRef.current = null;
+        }
+        
+        // Reset all program-related state to initial state
+        setCurrentSource('radio');
+        setCurrentProgramId(null);
+        setCurrentProgramTitle(null);
+        setIsPlaying(false);
+        setIsLoading(false);
+        setError(null);
+        
+        if (import.meta.env.DEV) {
+          console.log('Program player states reset to initial state');
+        }
+      });
+
+      // Start playback with enhanced error handling and autoplay support
+      const playResult = await AudioService.safePlay(programAudioRef.current);
+      if (playResult.success) {
+        if (import.meta.env.DEV) {
+          console.log('Program audio playback started successfully');
+        }
+        setIsPlaying(true);
+        setError(null); // Clear any previous errors on successful play
+      } else {
+        throw new Error(playResult.error || 'Failed to start program playback');
+      }
+      
+    } catch (error: unknown) {
+      if (import.meta.env.DEV) {
+        console.error('Failed to start program audio playback:', error);
+      }
+      setIsLoading(false);
+      setIsPlaying(false);
+      
+      let errorMessage = 'Failed to play program audio';
+      
+      // Handle specific error types
+      if (error instanceof Error) {
+        if (error.name === 'NotAllowedError') {
+          errorMessage = 'Autoplay blocked - please click play to start audio';
+          if (import.meta.env.DEV) {
+            console.error('Autoplay blocked - user interaction required');
+          }
+        } else if (error.name === 'NotSupportedError') {
+          errorMessage = 'Audio format not supported by your browser';
+          if (import.meta.env.DEV) {
+            console.error('Audio format not supported');
+          }
+        } else if (error.name === 'AbortError') {
+          errorMessage = 'Audio loading was interrupted';
+          if (import.meta.env.DEV) {
+            console.error('Audio loading aborted');
+          }
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      }
+      
+      setError(errorMessage);
+      
+      // Only show user feedback in development mode
+      if (import.meta.env.DEV) {
+        toast({
+          variant: "destructive",
+          title: "Program Audio Error",
+          description: errorMessage,
+        });
+      }
+      
+      // Reset to radio state on error
+      setCurrentSource('radio');
+      setCurrentProgramId(null);
+      setCurrentProgramTitle(null);
+    }
+  }, [volume, isMuted, handleAudioError, registerAudioInstance, safeCleanupAudio]);
+
+  const stopProgram = useCallback(() => {
+    if (programAudioRef.current) {
+      safeCleanupAudio(programAudioRef.current);
+      programAudioRef.current = null;
+    }
+
+    // Reset program state
+    setCurrentSource('radio');
+    setCurrentProgramId(null);
+    setCurrentProgramTitle(null);
+    setIsPlaying(false);
+    setIsLoading(false);
+    setError(null);
+  }, [safeCleanupAudio]);
+
+  const returnToRadio = useCallback(() => {
+    if (import.meta.env.DEV) {
+      console.log('Returning to radio stream');
+    }
+    
+    // Stop program audio if playing
+    if (programAudioRef.current) {
+      safeCleanupAudio(programAudioRef.current);
+      programAudioRef.current = null;
+    }
+
+    // Reset all program-related state to initial state
+    setCurrentSource('radio');
+    setCurrentProgramId(null);
+    setCurrentProgramTitle(null);
+    setIsPlaying(false);
+    setIsLoading(false);
+    setError(null);
+    
+    if (import.meta.env.DEV) {
+      console.log('All program player states reset to initial state');
+    }
+  }, [safeCleanupAudio]);
+
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
+
+  /**
+   * State persistence utilities for maintaining playback across navigation
+   */
+  const persistAudioState = useCallback(() => {
+    try {
+      const state = {
+        volume,
+        isMuted,
+        previousVolume,
+        currentSource,
+        currentProgramId,
+        currentProgramTitle,
+        isPlaying,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('audioState', JSON.stringify(state));
+      localStorage.setItem('audioVolume', volume.toString());
+      localStorage.setItem('audioMuted', isMuted.toString());
+      localStorage.setItem('audioPreviousVolume', previousVolume.toString());
+    } catch (error) {
+      console.warn('Failed to persist audio state:', error);
+    }
+  }, [volume, isMuted, previousVolume, currentSource, currentProgramId, currentProgramTitle, isPlaying]);
+
+  const restoreAudioState = useCallback(() => {
+    try {
+      const savedState = localStorage.getItem('audioState');
+      if (savedState) {
+        const state = JSON.parse(savedState);
+        const age = Date.now() - (state.timestamp || 0);
+        
+        // Only restore state if it's less than 1 hour old
+        if (age < 3600000) {
+          // Restore volume settings (already handled in useState initializers)
+          // Only restore program state if it was recently active
+          if (state.currentSource === 'program' && state.currentProgramId && age < 300000) { // 5 minutes
+            setCurrentSource(state.currentSource);
+            setCurrentProgramId(state.currentProgramId);
+            setCurrentProgramTitle(state.currentProgramTitle);
+            // Note: We don't restore isPlaying state to avoid auto-resuming
+            // User will need to click play again due to browser autoplay restrictions
+          }
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to restore audio state:', error);
+    }
+  }, []);
+
+  const clearPersistedState = useCallback(() => {
+    try {
+      localStorage.removeItem('audioState');
+    } catch (error) {
+      console.warn('Failed to clear persisted audio state:', error);
+    }
+  }, []);
 
   /**
    * Track Information - Following SRP
@@ -183,6 +703,52 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return () => clearInterval(interval);
   }, [fetchCurrentTrack]);
 
+  // Cleanup effect - ensures all audio instances are properly disposed on unmount
+  useEffect(() => {
+    return () => {
+      if (import.meta.env.DEV) {
+        console.log('AudioProvider unmounting - cleaning up all audio instances');
+      }
+      cleanupAllAudioInstances();
+    };
+  }, [cleanupAllAudioInstances]);
+
+  // State restoration effect - restore audio state on mount
+  useEffect(() => {
+    restoreAudioState();
+  }, [restoreAudioState]);
+
+  // State persistence effect - persist state changes
+  useEffect(() => {
+    persistAudioState();
+  }, [persistAudioState]);
+
+  // Page visibility effect - handle tab switching and maintain audio continuity
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Page is hidden - persist current state
+        persistAudioState();
+      } else {
+        // Page is visible again - audio should continue playing if it was before
+        // No need to restore state as audio elements persist across visibility changes
+      }
+    };
+
+    const handleBeforeUnload = () => {
+      // Persist state before page unload
+      persistAudioState();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [persistAudioState]);
+
   const contextValue: AudioContextType = {
     isPlaying,
     isLoading,
@@ -190,10 +756,18 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     coverImageUrl,
     volume,
     isMuted,
+    currentSource,
+    currentProgramId,
+    currentProgramTitle,
+    error,
     togglePlayWithPause,
     togglePlay,
+    playProgram,
+    stopProgram,
+    returnToRadio,
     setVolume,
     toggleMute,
+    clearError,
   };
 
   return (

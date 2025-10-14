@@ -1,0 +1,6 @@
+Exception: STATUS_ACCESS_VIOLATION at eip=5EE4E25A
+eax=00474E49 ebx=00000000 ecx=00000018 edx=00000000 esi=00000014 edi=0060A8A4
+ebp=00000002 esp=0060A810 program=C:\Program Files\Git\usr\bin\zsh.exe, pid 4280, thread main
+cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
+Stack trace:
+Frame     Function  Args

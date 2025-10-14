@@ -11,6 +11,7 @@ schedule: sábado 18:00 - ESP
 talent: ['Lucho Milazzo']
 social: ['@luchomy']
 logo: 7.png
+audio_source: sordera-selectiva.mp3
 ---
 
 Curadoria musical para ouvidos curiosos.

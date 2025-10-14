@@ -11,6 +11,7 @@ schedule: miércoles 20:00 - ESP
 talent: ['Clared Navarro']
 social: ['@memorafilia_']
 logo: 2.png
+audio_source: chicas-malas.mp3
 ---
 
 Conversas com mulheres moralmente desafiadas.

@@ -5,10 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "build:dev": "vite build --mode development",
-    "build:feature": "vite build --mode feature",
-    "build:production": "vite build --mode production",
+    "build": "npm run validate:frontmatter && vite build",
+    "build:dev": "npm run validate:frontmatter && vite build --mode development",
+    "build:feature": "npm run validate:frontmatter && vite build --mode feature",
+    "build:production": "npm run validate:frontmatter && vite build --mode production",
+    "validate:frontmatter": "node scripts/validate-frontmatter.js",
+    "fix:frontmatter": "node scripts/fix-frontmatter.js",
+    "fix:frontmatter:dry": "node scripts/fix-frontmatter.js --dry-run",
     "lint": "eslint .",
     "preview": "vite preview"
   },

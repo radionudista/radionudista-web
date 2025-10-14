@@ -1,0 +1,53 @@
+name: Validate Frontmatter
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'src/content/**/*.md'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'src/content/**/*.md'
+
+jobs:
+  validate-frontmatter:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Validate frontmatter
+      run: npm run validate:frontmatter
+      
+    - name: Comment on PR (if validation fails)
+      if: failure() && github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `❌ **Frontmatter Validation Failed**
+            
+            The frontmatter validation check failed for this PR. Please check the markdown files in \`src/content/\` for formatting issues.
+            
+            Common issues:
+            - Extra spaces after colons in frontmatter (e.g., \`key:  value\` should be \`key: value\`)
+            - Missing required fields
+            - Invalid Google Drive URLs
+            - Malformed YAML syntax
+            
+            Run \`npm run validate:frontmatter\` locally to see detailed error messages.`
+          })

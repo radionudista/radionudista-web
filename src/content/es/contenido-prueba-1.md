@@ -9,6 +9,7 @@ menu: prueba
 menu_position: 1
 date: 2024-01-01
 foo: bar
+audio_source: test-audio.mp3
 ---
 
 # Bienvenido a Nuestro Sitio Mltilingüe

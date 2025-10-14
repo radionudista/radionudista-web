@@ -6,6 +6,9 @@ import matter from 'gray-matter';
 // For component existence validation
 import { readdirSync } from 'fs';
 
+// Note: We keep original Google Drive URLs in the index for runtime conversion
+// This ensures URLs stay fresh and don't expire
+
 
 interface ContentEntry {
   [lang: string]: {
@@ -38,6 +41,9 @@ async function getMarkdownFiles(dir: string): Promise<string[]> {
 function getIdFromFilename(filename: string): string {
   return path.basename(filename, '.md');
 }
+
+// Removed processAudioSource function - we'll handle URL conversion at runtime
+// to ensure Google Drive URLs stay fresh and don't expire
 
 export function contentJsonGeneratorPlugin({
   contentDir,
@@ -119,7 +125,7 @@ export function contentJsonGeneratorPlugin({
             // Compute the markdown file path relative to the project root (starting from /content/...)
             const relPath = path.relative(process.cwd(), file).replace(/^src\//, '/').replace(/^src\//, '/');
             content[id][lang] = {
-              ...data, // include all frontmatter variables (required and extra)
+              ...data, // include all frontmatter variables (required and extra) - keep original URLs
               // Overwrite/ensure required fields are present and normalized
               title: data.title || '',
               slug: data.slug || getIdFromFilename(file),
@@ -130,7 +136,9 @@ export function contentJsonGeneratorPlugin({
               menu: data.menu || '',
               menu_position: typeof data.menu_position === 'number' ? data.menu_position : (data.menu_position ? Number(data.menu_position) : undefined),
               markdownfile: relPath.replace(/^\/src\//, '/content/'),
-              language: data.language || lang
+              language: data.language || lang,
+              // Include the markdown content at build time
+              content: mdBody.trim()
             };
             langContentCount[lang] = (langContentCount[lang] || 0) + 1;
           }

@@ -11,6 +11,7 @@ schedule: domingo 15:00 - BRA
 talent: ['Diana Hung']
 social: ['@_dianaacarolina']
 logo: 1.png
+audio_source: volumen.mp3
 ---
 
 Arquitectura que suena. Música que construye.
