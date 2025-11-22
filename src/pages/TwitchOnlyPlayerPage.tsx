@@ -56,10 +56,7 @@ const TwitchOnlyPlayerPage = () => {
 
       {/* Centered content with logo overlay */}
       <div className="absolute inset-0 flex items-center justify-center z-10">
-        {/* Logo positioned at top center */}
-        <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
-          <Logo size="small" className="opacity-80" />
-        </div>
+
 
         {/* Twitch Player Container - Centered */}
         <div className="relative">

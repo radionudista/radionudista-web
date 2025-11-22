@@ -11,9 +11,9 @@ import AboutPage from '../pages/AboutPage';
 import ContactPage from '../pages/ContactPage';
 import NotFound from '../pages/NotFound';
 import SimplePage from '../pages/SimplePage';
-import TwitchOnlyPlayerPage from '../pages/TwitchOnlyPlayerPage';
 import { getContent } from '../lib/contentLoader';
 import ProgramPage from '@/pages/ProgramPage';
+import TwitchOnlyPlayerPage from '@/pages/TwitchOnlyPlayerPage';
 
 /**
  * Language Router Component
@@ -104,7 +104,7 @@ const AppRoutes: React.FC = () => {
       {/* Routes for all supported languages at /{lang} */}
       {env.SUPPORTED_LANGUAGES.map(lang => (
         <Route key={lang} path={`/${lang}`} element={<PagesLayout />}>
-          <Route index element={<HomePage />} />
+          <Route index element={<TwitchOnlyPlayerPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="programacion" element={<ProgramPage />} />
           {/* Dynamic content pages: /{lang}/{slug} */}
@@ -150,7 +150,9 @@ const RedirectToLang: React.FC = () => {
 const LanguageRouter: React.FC = () => {
   return (
     <BrowserRouter>
-      <TwitchOnlyPlayerPage></TwitchOnlyPlayerPage>
+      <LanguageDetector>
+        <AppRoutes />
+      </LanguageDetector>
     </BrowserRouter>
   );
 };
