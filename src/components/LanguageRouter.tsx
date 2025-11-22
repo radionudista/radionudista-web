@@ -11,6 +11,7 @@ import AboutPage from '../pages/AboutPage';
 import ContactPage from '../pages/ContactPage';
 import NotFound from '../pages/NotFound';
 import SimplePage from '../pages/SimplePage';
+import TwitchOnlyPlayerPage from '../pages/TwitchOnlyPlayerPage';
 import { getContent } from '../lib/contentLoader';
 import ProgramPage from '@/pages/ProgramPage';
 
@@ -149,9 +150,7 @@ const RedirectToLang: React.FC = () => {
 const LanguageRouter: React.FC = () => {
   return (
     <BrowserRouter>
-      <LanguageDetector>
-        <AppRoutes />
-      </LanguageDetector>
+      <TwitchOnlyPlayerPage></TwitchOnlyPlayerPage>
     </BrowserRouter>
   );
 };
