@@ -2,12 +2,18 @@
 
 /**
  * Frontmatter Validation Script
- * 
+ *
  * This script validates all markdown files in the content directory
  * to ensure proper frontmatter formatting and required fields.
- * 
+ *
+ * Audio hosting validation supports multiple CORS-friendly services:
+ * - Archive.org (recommended)
+ * - SoundCloud
+ * - Dropbox
+ * - Google Drive (backward compatibility)
+ *
  * Usage: node scripts/validate-frontmatter.js
- * 
+ *
  * Exit codes:
  * 0 - All files valid
  * 1 - Validation errors found
@@ -24,10 +30,20 @@ const __dirname = path.dirname(__filename);
 const CONTENT_DIR = path.join(__dirname, '..', 'src', 'content');
 const REQUIRED_FIELDS = {
   ProgramPage: ['language', 'title', 'slug', 'id', 'component', 'public', 'program_order', 'schedule', 'talent', 'social', 'logo'],
+  SimplePage: ['language', 'title', 'slug', 'id', 'component', 'public'],
   // Add other component types as needed
 };
 
 const OPTIONAL_FIELDS = ['date', 'audio_source', 'description'];
+
+// Allowed audio hosting services (CORS-friendly)
+const ALLOWED_AUDIO_HOSTS = [
+  'archive.org',
+  'soundcloud.com',
+  'dropbox.com',
+  'drive.google.com', // Keep for backward compatibility
+  // Add custom domains as needed
+];
 
 // Validation results
 let totalFiles = 0;
@@ -113,17 +129,19 @@ function parseFrontmatter(content, filePath) {
     } else if (/^\d+$/.test(value)) {
       frontmatter[key] = parseInt(value, 10);
     } else if (value.startsWith('[') && value.endsWith(']')) {
-      // Parse array
-      try {
-        frontmatter[key] = JSON.parse(value);
-      } catch (e) {
-        return {
-          isValid: false,
-          error: `Invalid array syntax at line ${i + 2}: "${value}"`,
-          frontmatter: null,
-          body
-        };
-      }
+       // Parse array - handle both single and double quotes
+       try {
+         // Convert single quotes to double quotes for JSON parsing
+         const jsonValue = value.replace(/'/g, '"');
+         frontmatter[key] = JSON.parse(jsonValue);
+       } catch (e) {
+         return {
+           isValid: false,
+           error: `Invalid array syntax at line ${i + 2}: "${value}"`,
+           frontmatter: null,
+           body
+         };
+       }
     } else {
       // String value - remove quotes if present
       if ((value.startsWith('"') && value.endsWith('"')) || 
@@ -173,22 +191,30 @@ function validateFields(frontmatter, filePath) {
   // Validate specific field formats
   if (frontmatter.audio_source) {
     const audioSource = frontmatter.audio_source.toString().trim();
-    
-    // Check for Google Drive URL format
-    if (audioSource && !audioSource.startsWith('http')) {
-      errors.push(`Invalid audio_source format: "${audioSource}" (must be a valid URL)`);
-    }
-    
-    // Check for Google Drive domain
-    if (audioSource && !audioSource.includes('drive.google.com')) {
-      errors.push(`Invalid audio_source: "${audioSource}" (must be a Google Drive URL)`);
-    }
 
-    // Check for proper Google Drive file ID
-    const fileIdPattern = /\/file\/d\/([a-zA-Z0-9_-]{25,})/;
-    if (audioSource && !fileIdPattern.test(audioSource)) {
-      errors.push(`Invalid Google Drive URL format: "${audioSource}" (cannot extract file ID)`);
+    // Allow local files (for development/testing) and validate URLs
+    if (audioSource && audioSource.startsWith('http')) {
+      // Check for allowed hosting services for URLs
+      try {
+        const url = new URL(audioSource);
+        const isAllowedHost = ALLOWED_AUDIO_HOSTS.some(host => url.hostname.includes(host));
+
+        if (!isAllowedHost) {
+          errors.push(`Invalid audio_source host: "${url.hostname}" (must be one of: ${ALLOWED_AUDIO_HOSTS.join(', ')})`);
+        }
+
+        // Special validation for Google Drive URLs (backward compatibility)
+        if (url.hostname.includes('drive.google.com')) {
+          const fileIdPattern = /\/file\/d\/([a-zA-Z0-9_-]{25,})/;
+          if (!fileIdPattern.test(audioSource)) {
+            errors.push(`Invalid Google Drive URL format: "${audioSource}" (cannot extract file ID)`);
+          }
+        }
+      } catch (e) {
+        errors.push(`Invalid URL format: "${audioSource}"`);
+      }
     }
+    // Local files (not starting with http) are allowed for development
   }
 
   // Validate array fields
