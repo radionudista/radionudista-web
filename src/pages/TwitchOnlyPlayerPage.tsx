@@ -51,8 +51,8 @@ const TwitchOnlyPlayerPage = () => {
   const playerHeight = `${(playerSizePercent * 100) * (9 / 16)}vw`; // 16:9 aspect ratio
 
   return (
-    <div className="min-h-screen w-full overflow-hidden relative">
-      <BackgroundVideo overlayOpacity={0.3} />
+    <div className=" w-full  ">
+      
 
       {/* Centered content with logo overlay */}
       <div className="absolute inset-0 flex items-center justify-center z-10">
