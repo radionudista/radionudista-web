@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAudio } from '../contexts/AudioContext';
 import { useNewsTicker } from '../hooks/useTextScrolling';
 import MediaButton from './ui/MediaButton';
@@ -19,9 +18,14 @@ import MediaButton from './ui/MediaButton';
 const MiniPlayer = () => {
   const audioContext = useAudio();
 
+  // Get display text based on current source
+  const displayText = audioContext.currentSource === 'program' && audioContext.currentProgramTitle
+    ? `Program: ${audioContext.currentProgramTitle}`
+    : audioContext.currentTrack;
+
   // Use simple news ticker effect - only when playing
   const { containerRef, textRef } = useNewsTicker({
-    text: audioContext.currentTrack,
+    text: displayText,
     isActive: audioContext.isPlaying,
     speed: 60 // 60 pixels per second for MiniPlayer
   });
@@ -98,9 +102,18 @@ const MiniPlayer = () => {
             lineHeight: '1.2rem'
           }}
         >
-          {audioContext.currentTrack || 'RadioNudista - Live Stream'}
+          {displayText || 'RadioNudista - Live Stream'}
         </div>
       </div>
+
+      {/* Error indicator */}
+      {audioContext.error && (
+        <div 
+          className="w-2 h-2 bg-red-400 rounded-full animate-pulse flex-shrink-0" 
+          title={`Error: ${audioContext.error}`}
+          aria-label={`Audio error: ${audioContext.error}`}
+        />
+      )}
     </div>
   );
 };

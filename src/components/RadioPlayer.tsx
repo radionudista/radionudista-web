@@ -24,15 +24,20 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
   const audioContext = useAudio();
   const { isMobile } = useResponsive();
 
+  // Get display text based on current source
+  const displayText = audioContext.currentSource === 'program' && audioContext.currentProgramTitle
+    ? `Program: ${audioContext.currentProgramTitle}`
+    : audioContext.currentTrack;
+
   // Separate ticker instances for mobile and desktop
   const mobileTicker = useNewsTicker({
-    text: audioContext.currentTrack,
+    text: displayText,
     isActive: audioContext.isPlaying,
     speed: 80
   });
 
   const desktopTicker = useNewsTicker({
-    text: audioContext.currentTrack,
+    text: displayText,
     isActive: audioContext.isPlaying,
     speed: 80
   });
@@ -104,13 +109,13 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
                   className="absolute inset-y-0 left-0 flex items-center text-white font-medium whitespace-nowrap text-sm leading-none"
                   style={{ paddingLeft: '0rem', paddingRight: '0.5rem' }}
                 >
-                  {audioContext.currentTrack}
+                  {displayText}
                 </div>
               </div>
             </div>
 
-            {/* Play/Pause Button - Left aligned below scrolling text */}
-            <div className="flex justify-start">
+            {/* Play/Pause Button and Error Indicator - Left aligned below scrolling text */}
+            <div className="flex items-center gap-2">
               <PlayPauseButton
                 isPlaying={audioContext.isPlaying}
                 isLoading={audioContext.isLoading}
@@ -118,6 +123,14 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
                 size={size}
                 isMobile={isMobile}
               />
+              {/* Error indicator */}
+              {audioContext.error && (
+                <div 
+                  className="w-3 h-3 bg-red-400 rounded-full animate-pulse" 
+                  title={`Error: ${audioContext.error}`}
+                  aria-label={`Audio error: ${audioContext.error}`}
+                />
+              )}
             </div>
           </section>
         </div>
@@ -201,13 +214,13 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
                   className="absolute inset-y-0 left-0 flex items-center text-lg text-white font-medium whitespace-nowrap leading-relaxed"
                   style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
                 >
-                  {audioContext.currentTrack}
+                  {displayText}
                 </div>
               </div>
             </header>
 
-            {/* Play/Pause Button - Desktop */}
-            <div className="flex justify-start">
+            {/* Play/Pause Button and Error Indicator - Desktop */}
+            <div className="flex items-center gap-3">
               <PlayPauseButton
                 isPlaying={audioContext.isPlaying}
                 isLoading={audioContext.isLoading}
@@ -215,6 +228,14 @@ const RadioPlayer: React.FC<RadioPlayerProps> = ({
                 size={size}
                 isMobile={isMobile}
               />
+              {/* Error indicator */}
+              {audioContext.error && (
+                <div 
+                  className="w-4 h-4 bg-red-400 rounded-full animate-pulse" 
+                  title={`Error: ${audioContext.error}`}
+                  aria-label={`Audio error: ${audioContext.error}`}
+                />
+              )}
             </div>
           </section>
         </div>

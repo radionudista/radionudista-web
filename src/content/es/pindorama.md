@@ -11,6 +11,7 @@ schedule: domingo 12:00 - BRA
 talent: ['Henrique Sanches']
 social: ['@pindoramaradio']
 logo: 8.png
+audio_source: pindorama.mp3
 ---
 
 Una hora de música brasileña con alma tropical y una cuidada selección musical. Cada episodio incluye un mixtape temático, creado con sonidos de casetes, el bosque y la memoria. Desde ritmos olvidados hasta instrumentales excepcionales, Pindorama revela la sofisticación natural de un país con una esencia moderna.

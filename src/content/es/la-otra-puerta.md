@@ -11,6 +11,7 @@ schedule: sábado 15:00 - ESP
 talent: ['Alberto Flores Solano']
 social: ['@soyfloressolano']
 logo: 6.png
+audio_source: la-otra-puerta.mp3
 ---
 
 Umbral sonoro hacia el arte y sus enigmas.

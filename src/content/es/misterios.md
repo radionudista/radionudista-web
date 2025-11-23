@@ -11,6 +11,7 @@ schedule: lunes 22:00 - BRA
 talent: ['Gustavo Perez']
 social: ['@gustavodesnudo']
 logo: 5.png
+audio_source: misterios.mp3
 ---
 
 Rarezas musicales latinoamericanas en clave de archivo paranormal.

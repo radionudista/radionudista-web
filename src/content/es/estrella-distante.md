@@ -11,6 +11,7 @@ schedule: viernes 17:00 - ARG
 talent: ['Karlis Chirinos', 'Juana Rapoport']
 social: ['@karlisalejandra', '@juanarapo']
 logo: 3.png
+audio_source: estrella-distante.mp3
 ---
 
 Ciencia sin bata, astronomía sin fórmulas.

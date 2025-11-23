@@ -11,6 +11,7 @@ schedule: sábado 15:00 - ESP
 talent: ['Alberto Flores Solano']
 social: ['@soyfloressolano']
 logo: 6.png
+audio_source: la-otra-puerta.mp3
 ---
 
 Um limiar sonoro em direção à arte e seus enigmas.
