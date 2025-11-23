@@ -104,7 +104,7 @@ const AppRoutes: React.FC = () => {
       {/* Routes for all supported languages at /{lang} */}
       {env.SUPPORTED_LANGUAGES.map(lang => (
         <Route key={lang} path={`/${lang}`} element={<PagesLayout />}>
-          <Route index element={<TwitchOnlyPlayerPage />} />
+          <Route index element={<HomePage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="programacion" element={<ProgramPage />} />
           {/* Dynamic content pages: /{lang}/{slug} */}
